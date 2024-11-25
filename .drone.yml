@@ -32,6 +32,49 @@ steps:
       cpu: 150
       memory: 150M
 
+- name: email-notification
+  environment:
+    SMTP_FROM_ADDRESS:
+      from_secret: smtp_from_address
+    SMTP_FROM_NAME:
+      from_secret: smtp_from_name
+    SMTP_HOST:
+      from_secret: smtp_host
+    SMTP_USERNAME:
+      from_secret: smtp_username
+    SMTP_PASSWORD:
+      from_secret: smtp_password
+  image: git.cryptic.systems/volker.raschek/drone-email:0.1.5
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+  when:
+    status:
+    - changed
+    - failure
+
+trigger:
+  event:
+    exclude:
+    - tag
+
+---
+kind: pipeline
+type: kubernetes
+name: unittest
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
+
 - name: helm unittest
   commands:
   - helm unittest --strict --file 'unittests/**/*.yaml' ./
@@ -41,17 +84,64 @@ steps:
       cpu: 150
       memory: 150M
 
+- name: email-notification
+  environment:
+    SMTP_FROM_ADDRESS:
+      from_secret: smtp_from_address
+    SMTP_FROM_NAME:
+      from_secret: smtp_from_name
+    SMTP_HOST:
+      from_secret: smtp_host
+    SMTP_USERNAME:
+      from_secret: smtp_username
+    SMTP_PASSWORD:
+      from_secret: smtp_password
+  image: git.cryptic.systems/volker.raschek/drone-email:0.1.5
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+  when:
+    status:
+    - changed
+    - failure
+
+trigger:
+  event:
+    exclude:
+    - tag
+
+---
+kind: pipeline
+type: kubernetes
+name: generate readme
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
+
 - name: generate README
   commands:
   - npm install
   - npm run readme:parameters
   - npm run readme:lint
-  - git diff --exit-code --name-only README.md
   image: docker.io/library/node:22.9.0-alpine
   resources:
     limits:
       cpu: 150
       memory: 150M
+
+- name: detect diff
+  commands:
+  - git diff --exit-code --name-only README.md
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: email-notification
   environment:
