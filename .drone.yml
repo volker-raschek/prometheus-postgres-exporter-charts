@@ -12,7 +12,7 @@ platform:
 
 steps:
 - name: clone repository
-  image: git.cryptic.systems/volker.raschek/git:1.3.1
+  image: git.cryptic.systems/volker.raschek/git:1.4.0
 
 - name: helm lint
   commands:
@@ -73,7 +73,7 @@ platform:
 
 steps:
 - name: clone repository
-  image: git.cryptic.systems/volker.raschek/git:1.3.1
+  image: git.cryptic.systems/volker.raschek/git:1.4.0
 
 - name: helm unittest
   commands:
@@ -125,7 +125,7 @@ platform:
 
 steps:
 - name: clone repository
-  image: git.cryptic.systems/volker.raschek/git:1.3.1
+  image: git.cryptic.systems/volker.raschek/git:1.4.0
 
 - name: generate README
   commands:
@@ -141,7 +141,7 @@ steps:
 - name: detect diff
   commands:
   - git diff --exit-code --name-only README.md
-  image: git.cryptic.systems/volker.raschek/git:1.3.1
+  image: git.cryptic.systems/volker.raschek/git:1.4.0
 
 - name: email-notification
   environment:
@@ -183,7 +183,7 @@ platform:
 
 steps:
 - name: clone repository
-  image: git.cryptic.systems/volker.raschek/git:1.3.1
+  image: git.cryptic.systems/volker.raschek/git:1.4.0
 
 - name: release-helm-chart
   commands:
