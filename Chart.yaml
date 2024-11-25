@@ -10,8 +10,9 @@ appVersion: "0.15.0"
 
 keywords:
 - prometheus
-- prometheus exporter
-- postgres
+- prometheus-exporter
+- postgres-postgres-exporter
+- postgres-exporter
 
 sources:
 - https://github.com/prometheus-community/postgres_exporter
