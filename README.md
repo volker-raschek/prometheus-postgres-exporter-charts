@@ -67,8 +67,8 @@ The first example shows how to deploy the metric exporter with TLS encryption. T
 certification will be skipped by Prometheus.
 
 > [!WARNING]
-> A TLS secret with the name `prometheus-postgresql-exporter-http` containing a `ca.crt`, `tls.key` and `tls.crt` is
-> already present.
+> The secret `prometheus-postgresql-exporter-http` containing the TLS certificate is already present. The keys `ca.crt`,
+> `tls.key` and `tls.crt` of the secret can be mounted into the container filesystem for TLS authentication / encryption.
 
 ```bash
 helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
