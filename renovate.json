@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "assignees": [ "volker.raschek" ],
+  "customManagers": [
+    {
+      "description": "Update container image reference",
+      "fileMatch": [
+        "^Chart\\.yaml$"
+      ],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "prometheus-postgres-exporter",
+      "lookupNameTemplate": "quay.io/prometheuscommunity/postgres-exporter"
+    }
+  ],
+  "labels": [ "renovate" ],
+  "packageRules": [
+    {
+      "addLabels": [ "renovate/droneci", "renovate/automerge" ],
+      "automerge": true,
+      "matchManagers": "droneci",
+      "matchUpdateTypes": [ "minor", "patch"]
+    },
+    {
+      "addLabels": [ "renovate/prometheus-postgres-exporter", "renovate/automerge" ],
+      "automerge": true,
+      "matchPackageNames": [ "prometheus-postgres-exporter" ],
+      "matchManagers": [ "regex" ],
+      "matchUpdateTypes": [ "minor", "patch"]
+    }
+  ],
+  "rebaseLabel": "renovate/rebase",
+  "rebaseWhen": "behind-base-branch"
+}
