@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: kubernetes
-name: linter
+name: Linters
 
 clone:
   disable: true
@@ -11,7 +11,7 @@ platform:
   arch: amd64
 
 steps:
-- name: clone
+- name: clone repository
   image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: helm lint
@@ -62,7 +62,7 @@ trigger:
 ---
 kind: pipeline
 type: kubernetes
-name: unittest
+name: Unit tests
 
 clone:
   disable: true
@@ -72,7 +72,7 @@ platform:
   arch: amd64
 
 steps:
-- name: clone
+- name: clone repository
   image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: helm unittest
@@ -114,7 +114,7 @@ trigger:
 ---
 kind: pipeline
 type: kubernetes
-name: generate readme
+name: Generate README.md
 
 clone:
   disable: true
@@ -124,7 +124,7 @@ platform:
   arch: amd64
 
 steps:
-- name: clone
+- name: clone repository
   image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: generate README
@@ -173,7 +173,7 @@ trigger:
 ---
 kind: pipeline
 type: kubernetes
-name: release
+name: Release
 
 clone:
   disable: true
@@ -182,7 +182,7 @@ platform:
   os: linux
 
 steps:
-- name: clone
+- name: clone repository
   image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: release-helm-chart
