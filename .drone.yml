@@ -41,6 +41,27 @@ steps:
       cpu: 150
       memory: 150M
 
+- name: helm unittest
+  commands:
+  - helm unittest --strict --file 'unittests/**/*.yaml' ./
+  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
+- name: generate README
+  commands:
+  - npm install
+  - npm run readme:parameters
+  - npm run readme:lint
+  - git diff --exit-code --name-only README.md
+  image: docker.io/library/node:22.9.0-alpine
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
 - name: email-notification
   environment:
     SMTP_FROM_ADDRESS:
