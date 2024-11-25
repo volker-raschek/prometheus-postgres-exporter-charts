@@ -1,0 +1,106 @@
+---
+kind: pipeline
+type: kubernetes
+name: linter
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
+
+- name: helm lint
+  commands:
+  - helm lint
+  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
+- name: markdown lint
+  commands:
+  - markdownlint *.md
+  image: git.cryptic.systems/volker.raschek/markdownlint:0.41.0
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
+- name: helm template
+  commands:
+  - helm template .
+  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
+- name: email-notification
+  environment:
+    SMTP_FROM_ADDRESS:
+      from_secret: smtp_from_address
+    SMTP_FROM_NAME:
+      from_secret: smtp_from_name
+    SMTP_HOST:
+      from_secret: smtp_host
+    SMTP_USERNAME:
+      from_secret: smtp_username
+    SMTP_PASSWORD:
+      from_secret: smtp_password
+  image: git.cryptic.systems/volker.raschek/drone-email:0.1.5
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+  when:
+    status:
+    - changed
+    - failure
+
+trigger:
+  event:
+    exclude:
+    - tag
+
+---
+kind: pipeline
+type: kubernetes
+name: release
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
+
+- name: release-helm-chart
+  commands:
+  - helm repo add prometheus-exporter https://charts.cryptic.systems/prometheus-exporter
+  - helm package --version ${DRONE_TAG} .
+  - helm cm-push ${DRONE_REPO_NAME}-${DRONE_TAG}.tgz prometheus-exporter
+  environment:
+    HELM_REPO_PASSWORD:
+      from_secret: helm_repo_password
+    HELM_REPO_USERNAME:
+      from_secret: helm_repo_username
+  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
+trigger:
+  event:
+  - tag
+  repo:
+  - volker.raschek/prometheus-postgres-exporter
