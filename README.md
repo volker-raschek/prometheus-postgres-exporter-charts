@@ -1,5 +1,7 @@
 # Prometheus PostgreSQL exporter
 
+[![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/prometheus-postgres-exporter/status.svg)](https://drone.cryptic.systems/volker.raschek/prometheus-postgres-exporter)
+
 This helm chart enables the deployment of a Prometheus metrics exporter for PostgreSQL databases and allows the
 individual configuration of additional containers/initContainers, mounting of volumes, defining additional environment
 variables, apply a user-defined web-config.yaml and much more.
