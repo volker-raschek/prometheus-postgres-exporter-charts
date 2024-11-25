@@ -43,3 +43,82 @@ tests:
       content:
         secretRef:
           name: custom-database-secret
+
+- it: Test mount exporterConfig.yaml
+  set:
+    config.exporterConfig.existingSecret.enabled: false
+    config.exporterConfig.secret.exporterConfig:
+      foo: bar
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].args
+      value:
+      - --config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml
+      - --web.listen-address=:9187
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: config.d
+        secret:
+          secretName: prometheus-postgres-exporter-unittest-exporter-config
+
+- it: Test mount exporterConfig.yaml from secret
+  set:
+    config.exporterConfig.existingSecret.enabled: true
+    config.exporterConfig.existingSecret.secretName: my-secret
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].args
+      value:
+      - --config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml
+      - --web.listen-address=:9187
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: config.d
+        secret:
+          secretName: my-secret
+
+- it: Test mount webConfig.yaml
+  set:
+    config.webConfig.existingSecret.enabled: false
+    config.webConfig.secret.webConfig:
+      foo: bar
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].args
+      value:
+      - --web.config.file=/etc/prometheus-postgres-exporter/config.d/webConfig.yaml
+      - --web.listen-address=:9187
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: config.d
+        secret:
+          secretName: prometheus-postgres-exporter-unittest-web-config
+
+# - it: Test mount webConfig.yaml from secret
+#   set:
+#     config.webConfig.existingSecret.enabled: true
+#     config.webConfig.existingSecret.secretName: my-secret
+#   asserts:
+#   - equal:
+#       path: spec.template.spec.containers[0].args
+#       value:
+#       - --web.config.file=/etc/prometheus-postgres-exporter/config.d/webConfig.yaml
+#       - --web.listen-address=:9187
