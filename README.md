@@ -19,7 +19,7 @@ chart is tested for deployment scenarios with ArgoCD.
 1. A helm chart repository must be configured, to pull the helm charts from.
 2. All available parameters are [here](#parameters). The parameters can be defined via the helm `--set` flag or directly
    as part of a `values.yaml` file. The following example defines the `prometheus-exporter` repository and use the
-   `--set` flag for a basic deployment.
+   `--set` flag for a basic deployment. By default is neither a serviceMonitor nor a podMonitor enabled.
 
 ```bash
 helm repo add prometheus-exporter https://charts.cryptic.systems/prometheus-exporter
@@ -27,7 +27,9 @@ helm repo update
 helm install prometheus-exporter/prometheus-postgres-exporter prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
-  --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"'
+  --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
+  --set 'prometheus.metrics.enabled=true' \
+  --set 'prometheus.metrics.serviceMonitor.enabled=true'
 ```
 
 Instead of passing all parameters via the *set* flag, it is also possible to define them as part of the `values.yaml`.
@@ -44,6 +46,9 @@ A complete list of available helm chart versions can be displayed via the follow
 ```bash
 helm search repo prometheus-postgres-exporter --versions
 ```
+
+The helm chart also contains some prometheusRules. These are deactivated by default and serve as examples/inspiration
+for customizations. These can be configured in more detail via `values.yaml`.
 
 ### Examples
 
@@ -71,9 +76,10 @@ helm install prometheus-exporter/prometheus-postgres-exporter prometheus-postgre
   --set 'deployment.postgresExporter.volumeMounts[0].name=tls' \
   --set 'deployment.postgresExporter.volumeMounts[0].mountPath=/etc/prometheus-postgres-exporter/tls' \
   --set 'deployment.postgresExporter.volumeMounts[0].readOnly=true' \
-  --set 'prometheus.serviceMonitor.enabled=true' \
-  --set 'prometheus.serviceMonitor.scheme=https' \
-  --set 'prometheus.serviceMonitor.tlsConfig.insecureSkipVerify=true'
+  --set 'prometheus.metrics.enabled=true' \
+  --set 'prometheus.metrics.serviceMonitor.enabled=true' \
+  --set 'prometheus.metrics.serviceMonitor.scheme=https' \
+  --set 'prometheus.metrics.serviceMonitor.tlsConfig.insecureSkipVerify=true'
 ```
 
 If the Prometheus pod has a TLS certificate mounted and is also signed by the private key of the CA which issued the TLS
@@ -93,12 +99,13 @@ replaced:
     --set 'deployment.postgresExporter.volumeMounts[0].name=tls' \
     --set 'deployment.postgresExporter.volumeMounts[0].mountPath=/etc/prometheus-postgres-exporter/tls' \
     --set 'deployment.postgresExporter.volumeMounts[0].readOnly=true' \
-    --set 'prometheus.serviceMonitor.enabled=true' \
-    --set 'prometheus.serviceMonitor.scheme=https' \
--   --set 'prometheus.serviceMonitor.tlsConfig.insecureSkipVerify=true' \
-+   --set 'prometheus.serviceMonitor.tlsConfig.caFile=/etc/prometheus/tls/ca.crt' \
-+   --set 'prometheus.serviceMonitor.tlsConfig.certFile=/etc/prometheus/tls/tls.crt' \
-+   --set 'prometheus.serviceMonitor.tlsConfig.keyFile=/etc/prometheus/tls/tls.key'
+    --set 'prometheus.metrics.enabled=true' \
+    --set 'prometheus.metrics.serviceMonitor.enabled=true' \
+    --set 'prometheus.metrics.serviceMonitor.scheme=https' \
+-   --set 'prometheus.metrics.serviceMonitor.tlsConfig.insecureSkipVerify=true' \
++   --set 'prometheus.metrics.serviceMonitor.tlsConfig.caFile=/etc/prometheus/tls/ca.crt' \
++   --set 'prometheus.metrics.serviceMonitor.tlsConfig.certFile=/etc/prometheus/tls/tls.crt' \
++   --set 'prometheus.metrics.serviceMonitor.tlsConfig.keyFile=/etc/prometheus/tls/tls.key'
 ```
 
 ## Parameters
