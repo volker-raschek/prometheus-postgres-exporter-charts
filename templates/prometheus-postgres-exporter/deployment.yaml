@@ -23,12 +23,7 @@ spec:
       containers:
       - name: postgres-exporter
         args:
-        {{- if or .Values.config.exporterConfig.existingSecret.enabled .Values.config.exporterConfig.secret.exporterConfig }}
         - "--config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml"
-        {{- end }}
-        {{- if or .Values.config.webConfig.existingSecret.enabled .Values.config.webConfig.secret.webConfig }}
-        - "--web.config.file=/etc/prometheus-postgres-exporter/config.d/webConfig.yaml"
-        {{- end }}
         - "--web.listen-address=:9187"
         {{- range .Values.deployment.postgresExporter.args }}
         - {{ . | quote }}
