@@ -29,9 +29,9 @@ chart is tested for deployment scenarios with ArgoCD.
 > time is not possible.
 
 ```bash
-helm repo add prometheus-exporter https://charts.cryptic.systems/prometheus-exporter
+helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
 helm repo update
-helm install prometheus-exporter/prometheus-postgres-exporter prometheus-postgres-exporter \
+helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
@@ -45,7 +45,7 @@ version of the chart must be in sync with the `values.yaml`. Newer *minor* versi
 versions can break something!
 
 ```bash
-helm show values prometheus-exporter/prometheus-postgres-exporter --version 0.1.0 > values.yaml
+helm show values prometheus-exporters/prometheus-postgres-exporter --version 0.1.0 > values.yaml
 ```
 
 A complete list of available helm chart versions can be displayed via the following command:
@@ -71,7 +71,7 @@ certification will be skipped by Prometheus.
 > already present.
 
 ```bash
-helm install prometheus-exporter/prometheus-postgres-exporter prometheus-postgres-exporter \
+helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
@@ -94,7 +94,7 @@ certificate for the metrics exporter - TLS certificate verification can be enabl
 replaced:
 
 ```diff
-  helm install prometheus-exporter/prometheus-postgres-exporter prometheus-postgres-exporter \
+  helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
     --set 'config.database.secret.databaseUsername=postgres' \
     --set 'config.database.secret.databasePassword=postgres' \
     --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
