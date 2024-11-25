@@ -187,9 +187,9 @@ steps:
 
 - name: release-helm-chart
   commands:
-  - helm repo add prometheus-exporter https://charts.cryptic.systems/prometheus-exporter
+  - helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporter
   - helm package --version ${DRONE_TAG} .
-  - helm cm-push ${DRONE_REPO_NAME}-${DRONE_TAG}.tgz prometheus-exporter
+  - helm cm-push ${DRONE_REPO_NAME}-${DRONE_TAG}.tgz prometheus-exporters
   environment:
     HELM_REPO_PASSWORD:
       from_secret: helm_repo_password
