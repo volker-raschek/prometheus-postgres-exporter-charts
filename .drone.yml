@@ -32,9 +32,9 @@ steps:
       cpu: 150
       memory: 150M
 
-- name: helm template
+- name: helm unittest
   commands:
-  - helm template .
+  - helm unittest --strict --file 'unittests/**/*.yaml' ./
   image: git.cryptic.systems/volker.raschek/helm:3.16.1
   resources:
     limits:
