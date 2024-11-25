@@ -66,7 +66,7 @@ The following examples serve as individual configurations and as inspiration for
 The first example shows how to deploy the metric exporter with TLS encryption. The verification of the custom TLS
 certification will be skipped by Prometheus.
 
-> [!WARN]
+> [!WARNING]
 > A TLS secret with the name `prometheus-postgresql-exporter-http` containing a `ca.crt`, `tls.key` and `tls.crt` is
 > already present.
 
