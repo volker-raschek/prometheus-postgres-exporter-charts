@@ -1,0 +1,172 @@
+chart:
+  appVersion: 0.1.0
+  version: 0.1.0
+suite: ServiceMonitor http template (basic)
+release:
+  name: prometheus-postgres-exporter-unittest
+  namespace: testing
+templates:
+- templates/prometheus-postgres-exporter/serviceMonitorHTTP.yaml
+tests:
+- it: Skip serviceMonitor when service is disabled.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+    services.http.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Skip serviceMonitor when metrics are disabled.
+  set:
+    prometheus.metrics.enabled: false
+    prometheus.metrics.serviceMonitor.enabled: true
+    services.http.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Skip serviceMonitor when serviceMonitor is disabled.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: false
+    services.http.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Rendering serviceMonitor with default values - enabled manually.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 1
+  - containsDocument:
+      apiVersion: monitoring.coreos.com/v1
+      kind: ServiceMonitor
+      name: prometheus-postgres-exporter-unittest-http
+      namespace: testing
+  - notExists:
+      path: metadata.annotations
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - equal:
+      path: spec.endpoints[0].enableHttp2
+      value: false
+  - equal:
+      path: spec.endpoints[0].followRedirects
+      value: false
+  - equal:
+      path: spec.endpoints[0].honorLabels
+      value: false
+  - equal:
+      path: spec.endpoints[0].interval
+      value: 60s
+  - equal:
+      path: spec.endpoints[0].path
+      value: /metrics
+  - notExists:
+      path: spec.endpoints[0].relabelings
+  - equal:
+      path: spec.endpoints[0].scrapeTimeout
+      value: 30s
+  - equal:
+      path: spec.endpoints[0].scheme
+      value: http
+  - equal:
+      path: spec.endpoints[0].targetPort
+      value: 9187
+  - contains:
+      path: spec.namespaceSelector.matchNames
+      content:
+        testing
+  - equal:
+      path: spec.selector.matchLabels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/service-name: http
+
+- it: Render serviceMonitor with custom annotations and labels.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+    prometheus.metrics.serviceMonitor.annotations:
+      foo: bar
+    prometheus.metrics.serviceMonitor.labels:
+      bar: foo
+  asserts:
+  - equal:
+      path: metadata.annotations
+      value:
+        foo: bar
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        bar: foo
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+
+- it: Change defaults
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+    prometheus.metrics.serviceMonitor.enableHttp2: true
+    prometheus.metrics.serviceMonitor.followRedirects: true
+    prometheus.metrics.serviceMonitor.honorLabels: true
+    prometheus.metrics.serviceMonitor.interval: "180s"
+    prometheus.metrics.serviceMonitor.path: "/my-metrics"
+    prometheus.metrics.serviceMonitor.relabelings:
+    - sourceLabels: [ container ]
+      separator: ";"
+      regex: "app"
+      replacement: "$1"
+      action: "drop"
+    prometheus.metrics.serviceMonitor.scrapeTimeout: "5s"
+    prometheus.metrics.serviceMonitor.scheme: "http"
+    prometheus.metrics.serviceMonitor.port: 10443
+  asserts:
+  - hasDocuments:
+      count: 1
+  - equal:
+      path: spec.endpoints[0].enableHttp2
+      value: true
+  - equal:
+      path: spec.endpoints[0].followRedirects
+      value: true
+  - equal:
+      path: spec.endpoints[0].honorLabels
+      value: true
+  - equal:
+      path: spec.endpoints[0].interval
+      value: 180s
+  - equal:
+      path: spec.endpoints[0].path
+      value: /my-metrics
+  - contains:
+      path: spec.endpoints[0].relabelings
+      content:
+        sourceLabels: [ container ]
+        separator: ";"
+        regex: "app"
+        replacement: "$1"
+        action: "drop"
+  - equal:
+      path: spec.endpoints[0].scrapeTimeout
+      value: 5s
+  - equal:
+      path: spec.endpoints[0].scheme
+      value: http
+  - equal:
+      path: spec.endpoints[0].targetPort
+      value: 10443

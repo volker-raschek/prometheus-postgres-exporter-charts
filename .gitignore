@@ -1,0 +1,6 @@
+charts
+node_modules
+target
+values2.yml
+values2.yaml
+*.tgz

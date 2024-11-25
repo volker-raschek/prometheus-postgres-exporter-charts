@@ -1,0 +1,45 @@
+chart:
+  appVersion: 0.1.0
+  version: 0.1.0
+suite: Deployment template (basic)
+release:
+  name: prometheus-postgres-exporter-unittest
+  namespace: testing
+templates:
+- templates/prometheus-postgres-exporter/deployment.yaml
+tests:
+- it: Rendering default
+  asserts:
+  - hasDocuments:
+      count: 1
+  - containsDocument:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: prometheus-postgres-exporter-unittest
+      namespace: testing
+  - notExists:
+      path: metadata.annotations
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - contains:
+      path: spec.template.spec.containers[0].envFrom
+      content:
+        secretRef:
+          name: prometheus-postgres-exporter-unittest-database-env
+
+- it: Test custom database secret
+  set:
+    config.database.existingSecret.enabled: true
+    config.database.existingSecret.secretName: custom-database-secret
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].envFrom
+      content:
+        secretRef:
+          name: custom-database-secret

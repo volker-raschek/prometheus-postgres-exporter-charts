@@ -1,0 +1,521 @@
+# Default values for qu-seed.
+# This is a YAML-formatted file.
+
+# Declare variables to be passed into your templates.
+## @section Global
+## @param nameOverride Individual release name suffix.
+## @param fullnameOverride Override the complete release name logic.
+nameOverride: ""
+fullnameOverride: ""
+
+## @section Configuration
+config:
+  database:
+    ## @param config.database.existingSecret.enabled Mount an existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.
+    ## @param config.database.existingSecret.secretName Name of the existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.
+    existingSecret:
+      enabled: false
+      secretName: ""
+
+    ## @param config.database.secret.annotations Additional annotations of the secret containing the database credentials.
+    ## @param config.database.secret.labels Additional labels of the secret containing the database credentials.
+    ## @param config.database.secret.databaseUsername Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.
+    ## @param config.database.secret.databasePassword Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.
+    ## @param config.database.secret.databaseConnectionUrl Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.
+    secret:
+      annotations: {}
+      labels: {}
+      databaseUsername: ""
+      databasePassword: ""
+      databaseConnectionUrl: ""
+
+  exporterConfig:
+    ## @param config.exporterConfig.existingSecret.enabled Mount an existing secret containing the key `exporter_config.yaml`.
+    ## @param config.exporterConfig.existingSecret.secretName Name of the existing secret containing the key `exporter_config.yaml`.
+    existingSecret:
+      enabled: false
+      secretName: ""
+
+    ## @param config.exporterConfig.secret.annotations Additional annotations of the secret containing the `exporterConfig.yaml`.
+    ## @param config.exporterConfig.secret.labels Additional labels of the secret containing the `exporterConfig.yaml`.
+    ## @param config.exporterConfig.secret.exporterConfig Content of the `exporterConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).
+    ## @skip config.exporterConfig.secret.exporterConfig Skip individual postgres exporter configuration.
+    secret:
+      annotations: {}
+      labels: {}
+      exporterConfig: {}
+      # auth_modules:
+      #   first:
+      #     options:
+      #       sslmode: disable
+      #     type: userpass
+      #     userpass:
+      #       password: first_password
+      #       username: first_username
+
+  webConfig:
+    ## @param config.webConfig.existingSecret.enabled Mount an existing secret containing the key `webConfig.yaml`.
+    ## @param config.webConfig.existingSecret.secretName Name of the existing secret containing the key `webConfig.yaml`.
+    existingSecret:
+      enabled: false
+      secretName: ""
+
+    ## @param config.webConfig.secret.annotations Additional annotations of the secret containing the `webConfig.yaml`.
+    ## @param config.webConfig.secret.labels Additional labels of the secret containing the `webConfig.yaml`.
+    ## @param config.webConfig.secret.webConfig Content of the `webConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).
+    ## @skip config.webConfig.secret.webConfig Skip individual web configuration.
+    secret:
+      annotations: {}
+      labels: {}
+      webConfig: {}
+        # basic_auth_users:
+        #   prom: <bcrypted password>
+        # http_server_config:
+        #   http2: true
+        # tls_server_config:
+        #   cert_file: /path/to/cert.pem
+        #   client_allowed_sans:
+        #   - postgres.example.local
+        #   client_ca_file: /path/to/ca.pem
+        #   key_file: /path/to/key.pem
+        #   max_version: TLS13
+        #   min_version: TLS12
+
+## @section Deployment
+deployment:
+  ## @param deployment.annotations Additional deployment annotations.
+  ## @param deployment.labels Additional ingress labels.
+  annotations: {}
+  labels: {}
+
+  ## @param deployment.additionalContainers List of additional containers.
+  additionalContainers: []
+  # - command: [ "sh", "-c", "echo hello world" ]
+  #   image: "docker.io/library/busybox:latest"
+  #   name: side-car
+
+  ## @param deployment.affinity Affinity for the postgres-exporter deployment.
+  affinity: {}
+
+  ## @param deployment.initContainers List of additional init containers.
+  initContainers: []
+  # - command: [ "sh", "-c", "echo hello world" ]
+  #   image: "docker.io/library/busybox:latest"
+  #   name: init
+
+  ## @param deployment.dnsConfig dnsConfig of the postgres-exporter deployment.
+  dnsConfig: {}
+    # nameservers:
+    # - 192.0.2.1 # this is an example
+    # searches:
+    # - ns1.svc.cluster-domain.example
+    # - my.dns.search.suffix
+    # options:
+    # - name: ndots
+    #   value: "2"
+    # - name: edns0
+
+  ## @param deployment.dnsPolicy dnsPolicy of the postgres-exporter deployment.
+  dnsPolicy: ""
+
+  ## @param deployment.hostname Individual hostname of the pod.
+  ## @param deployment.subdomain Individual domain of the pod.
+  hostname: ""
+  subdomain: ""
+
+  ## @param deployment.hostNetwork Use the kernel network namespace of the host system.
+  hostNetwork: false
+
+  ## @param deployment.imagePullSecrets Secret to use for pulling the image.
+  imagePullSecrets: []
+  # - name: "my-custom-secret"
+
+  postgresExporter:
+    ## @param deployment.postgresExporter.args Arguments passed to the postgres-exporter container.
+    args: []
+
+    ## @param deployment.postgresExporter.env List of environment variables for the postgres-exporter container.
+    env: []
+    # - name: SPECIAL_ENV_A
+    #   value: special-key
+    # - name: SPECIAL_ENV
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: special-config
+    #       key: special-key
+    # - name: SPECIAL_ENV
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: special-secret
+    #       key: special-key
+
+    ## @param deployment.postgresExporter.envFrom List of environment variables mounted from configMaps or secrets for the postgres-exporter container.
+    envFrom: []
+    # - configMapRef:
+    #     name: special-config
+    # - secretRef:
+    #     name: special-secret
+
+    ## @param deployment.postgresExporter.image.registry Image registry, eg. `docker.io`.
+    ## @param deployment.postgresExporter.image.repository Image repository, eg. `library/busybox`.
+    ## @param deployment.postgresExporter.image.tag Custom image tag, eg. `0.1.0`. Defaults to `appVersion`.
+    ## @param deployment.postgresExporter.image.pullPolicy Image pull policy.
+    image:
+      registry: quay.io
+      repository: prometheuscommunity/postgres-exporter
+      tag: ""
+      pullPolicy: IfNotPresent
+
+    ## @param deployment.postgresExporter.resources CPU and memory resources of the pod.
+    resources: {}
+      # limits:
+      #   cpu:
+      #   ephemeral-storage:
+      #   memory:
+      # requests:
+      #   cpu:
+      #   ephemeral-storage:
+      #   memory:
+
+    ## @param deployment.postgresExporter.securityContext Security context of the container of the deployment.
+    securityContext: {}
+      # capabilities:
+      #   add:
+      #   - NET_RAW
+      #   drop:
+      #   - ALL
+      # privileged: false
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 1000
+
+    ## @param deployment.postgresExporter.volumeMounts Additional volume mounts.
+    volumeMounts: {}
+    # - name: my-configmap-volume
+    #   mountPath: /configmap
+    #   readOnly: true
+
+  ## @param deployment.nodeSelector NodeSelector of the postgres-exporter deployment.
+  nodeSelector: {}
+
+  ## @param deployment.priorityClassName PriorityClassName of the postgres-exporter deployment.
+  priorityClassName: ""
+
+  ## @param deployment.replicaCount Number of replicas for the postgres-exporter deployment.
+  replicaCount: 1
+
+  ## @param deployment.securityContext Security context of the postgres-exporter deployment.
+  securityContext: {}
+    # fsGroup: 2000
+
+  ## @param deployment.strategy.type Strategy type - `Recreate` or `Rollingupdate`.
+  ## @param deployment.strategy.rollingUpdate.maxSurge The maximum number of pods that can be scheduled above the desired number of pods during a rolling update.
+  ## @param deployment.strategy.rollingUpdate.maxUnavailable The maximum number of pods that can be unavailable during a rolling update.
+  strategy:
+    type: "Recreate"
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+
+  ## @param deployment.terminationGracePeriodSeconds How long to wait until forcefully kill the pod.
+  terminationGracePeriodSeconds: 60
+
+  ## @param deployment.tolerations Tolerations of the postgres-exporter deployment.
+  tolerations: []
+
+  ## @param deployment.topologySpreadConstraints TopologySpreadConstraints of the postgres-exporter deployment.
+  topologySpreadConstraints: []
+  # - topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/instance: prometheus-postgres-exporter
+
+  ## @param deployment.volumes Additional volumes to mount into the pods of the prometheus-exporter deployment.
+  volumes: []
+  # - name: my-configmap-volume
+  #   config:
+  #     name: my-configmap
+  # - name: my-secret-volume
+  #   secret:
+  #     secretName: my-secret
+
+## @section Grafana
+## @param grafana.enabled Enable integration into Grafana.
+## @param grafana.dashboards.businessMetrics Enable deployment of Grafana dashboard `businessMetrics`.
+grafana:
+  enabled: false
+  dashboards:
+    businessMetrics: true
+
+## @section Ingress
+ingress:
+  ## @param ingress.enabled Enable creation of an ingress resource. Requires, that the http service is also enabled.
+  ## @param ingress.className Ingress class.
+  ## @param ingress.annotations Additional ingress annotations.
+  ## @param ingress.labels Additional ingress labels.
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  labels: {}
+
+  ## @param ingress.hosts Ingress specific configuration. Specification only required when another ingress controller is used instead of `t1k.
+  ## @skip ingress.hosts Skip individual host configuration.
+  hosts: []
+  # - host: postgres-exporter.example.local
+  #   paths:
+  #   - path: /
+  #     pathType: Prefix
+
+  ## @param ingress.tls Ingress TLS settings. Specification only required when another ingress controller is used instead of `t1k``.
+  ## @skip ingress.tls Skip individual TLS configuration.
+  tls: []
+  # - secretName: postgres-exporter-http-tls
+  #   hosts:
+  #   - postgres-exporter.example.local
+
+## @section Pod disruption
+## @param podDisruptionBudget Pod disruption budget.
+podDisruptionBudget: {}
+#  maxUnavailable: 1
+#  minAvailable: 1
+
+## @section Network
+## @param networkPolicies Deploy network policies based on the used container network interface (CNI) implementation - like calico or weave.
+networkPolicies: {}
+
+## @section Prometheus
+prometheus:
+  ## @param prometheus.metrics.enabled Enable of scraping metrics by Prometheus.
+  metrics:
+    enabled: true
+
+    ## @param prometheus.metrics.podMonitor.enabled Enable creation of a podMonitor. Excludes the existence of a serviceMonitor resource.
+    ## @param prometheus.metrics.podMonitor.annotations Additional podMonitor annotations.
+    ## @param prometheus.metrics.podMonitor.enableHttp2 Enable HTTP2.
+    ## @param prometheus.metrics.podMonitor.followRedirects FollowRedirects configures whether scrape requests follow HTTP 3xx redirects.
+    ## @param prometheus.metrics.podMonitor.honorLabels Honor labels.
+    ## @param prometheus.metrics.podMonitor.labels Additional podMonitor labels.
+    ## @param prometheus.metrics.podMonitor.interval Interval at which metrics should be scraped. If not specified Prometheus' global scrape interval is used.
+    ## @param prometheus.metrics.podMonitor.path HTTP path for scraping prometheus metrics.
+    ## @param prometheus.metrics.podMonitor.relabelings RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields.
+    ## @param prometheus.metrics.podMonitor.scrapeTimeout Timeout after which the scrape is ended. If not specified, global Prometheus scrape timeout is used.
+    ## @param prometheus.metrics.podMonitor.scheme HTTP scheme to use for scraping. For example `http` or `https`.
+    ## @param prometheus.metrics.podMonitor.tlsConfig TLS configuration to use when scraping the metric endpoint by Prometheus.
+    ## @skip prometheus.metrics.podMonitor.tlsConfig Skip individual TLS configuration.
+    podMonitor:
+      enabled: false
+      annotations: {}
+      enableHttp2: false
+      followRedirects: false
+      honorLabels: false
+      labels: {}
+      interval: "60s"
+      path: "/metrics"
+      relabelings: []
+      scrapeTimeout: "30s"
+      scheme: "http"
+      tlsConfig: {}
+
+    ## @param prometheus.metrics.serviceMonitor.enabled Enable creation of a serviceMonitor. Excludes the existence of a podMonitor resource.
+    ## @param prometheus.metrics.serviceMonitor.annotations Additional serviceMonitor annotations.
+    ## @param prometheus.metrics.serviceMonitor.labels Additional serviceMonitor labels.
+    ## @param prometheus.metrics.serviceMonitor.enableHttp2 Enable HTTP2.
+    ## @param prometheus.metrics.serviceMonitor.followRedirects FollowRedirects configures whether scrape requests follow HTTP 3xx redirects.
+    ## @param prometheus.metrics.serviceMonitor.honorLabels Honor labels.
+    ## @param prometheus.metrics.serviceMonitor.interval Interval at which metrics should be scraped. If not specified Prometheus' global scrape interval is used.
+    ## @param prometheus.metrics.serviceMonitor.path HTTP path for scraping prometheus metrics.
+    ## @param prometheus.metrics.serviceMonitor.port HTTP port for scraping prometheus metrics.
+    ## @param prometheus.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields.
+    ## @param prometheus.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended. If not specified, global Prometheus scrape timeout is used.
+    ## @param prometheus.metrics.serviceMonitor.scheme HTTP scheme to use for scraping. For example `http` or `https`.
+    ## @param prometheus.metrics.serviceMonitor.tlsConfig TLS configuration to use when scraping the metric endpoint by Prometheus.
+    ## @skip prometheus.metrics.serviceMonitor.tlsConfig Skip individual TLS configuration.
+    serviceMonitor:
+      enabled: false
+      annotations: {}
+      labels: {}
+      enableHttp2: false
+      followRedirects: false
+      honorLabels: false
+      interval: "60s"
+      path: "/metrics"
+      port: 9187
+      relabelings: []
+      scrapeTimeout: "30s"
+      scheme: "http"
+      tlsConfig: {}
+
+  ## @param prometheus.rules Array of prometheus rules for monitoring the application and triggering alerts.
+  ## @skip prometheus.rules Skip individual prometheus rules.
+  rules: []
+  # - alert: ExporterErrors
+  #   expr: pg_exporter_last_scrape_error == 1
+  #   for: 10m
+  #   labels:
+  #     service: PostgreSQL
+  #     severity: critical
+  #   annotations:
+  #     description: The Postgres Exporter is not running or it is showing errors {{ $labels.instance }}
+  #     summary: Postgres Exporter is down or is showing errors
+  # - alert: InstanceDown
+  #   expr: pg_up == 0
+  #   for: 1m
+  #   labels:
+  #     service: PostgreSQL
+  #     severity: critical
+  #   annotations:
+  #     description: Postgres server has not been responding for the past 1 minutes on {{ $labels.instance }}
+  #     summary: Postgres server instance is down
+  #     title: Postgres server instance {{ $labels.instance}} is down
+  # - alert: InactiveReplicationSlots
+  #   expr: pg_replication_slots_active == 0
+  #   for: 30m
+  #   labels:
+  #     severity: warning
+  #     service: PostgreSQL
+  #   annotations:
+  #     summary: There are inactive replications slots
+  #     description: The are some inactive replication slots on {{$labels.instance}} in cluster {{$labels.cluster_name}}
+  # - alert: NotEnoughConnections
+  #   expr: sum by (datname) (pg_stat_activity_count{datname!~"template.*|postgres"}) < 5
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     summary: Postgresql not enough connections (instance {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  #     description: "PostgreSQL instance should have more connections (> 5)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  # - alert: PromotedNode
+  #   expr: pg_replication_is_replica and changes(pg_replication_is_replica[1m]) > 0
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     summary: Postgresql promoted node (instance {{ $labels.instance }}, cluster {{ $labels.cluster_name }})
+  #     description: "Postgresql standby server has been promoted as primary node\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  # - alert: ReplicationLagSizeTooLarge
+  #   expr: pg_replication_status_lag_size > 1e+09
+  #   for: 5m
+  #   labels:
+  #     service: PostgreSQL
+  #     severity: critical
+  #   annotations:
+  #     summary: Postgres replication lag size is to large
+  #     description: Replication lag size on server {{ $labels.instance }} ({{ $labels.application_name }}) is currently {{ $value }} behind the leader in cluster {{ $labels.cluster_name }}
+  # - alert: TooManyDeadTuples
+  #   expr: ((pg_stat_user_tables_n_dead_tup > 1e+06) / (pg_stat_user_tables_n_live_tup + pg_stat_user_tables_n_dead_tup)) >= 0.05
+  #   for: 30m
+  #   labels:
+  #     service: PostgreSQL
+  #     severity: warning
+  #   annotations:
+  #     description: The dead tuple ratio of {{ $labels.relname }} on database {{ $labels.datname }} is greater than 5% in cluster {{ $labels.cluster_name }}
+  #     summary: PostgreSQL dead tuples is too large
+  # - alert: TooManyConnections
+  #   expr: sum by (datname) (pg_stat_activity_count{datname!~"template.*|postgres"}) > pg_settings_max_connections * 0.9
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     summary: Postgresql too many connections (instance {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  #     description: "PostgreSQL instance has too many connections\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+  ## Connection Pooling alerts
+  ####
+
+  # - alert: BouncerAvgWaitTimeTooHigh
+  #   expr: pgbouncer_show_stats_avg_wait_time > 1e+6
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: "PgBouncer wait for a server connections is too high = {{ $value }}"
+  #     summary: PgBouncer time spent by clients waiting for a connections is too high on {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  # - alert: BouncerNotEnoughConnections
+  #   expr: (sum by (database,instance) (pgbouncer_show_pools_cl_active{database!~"template.*|postgres|pgbouncer"}) + sum by (database, instance) (pgbouncer_show_pools_cl_waiting{database!~"template.*|postgres|pgbouncer"}))  - on (database,instance) (pgbouncer_show_databases_pool_size{database!~"template.*|postgres|pgbouncer"}) > 0
+  #   for: 10m
+  #   labels:
+  #     severity: critical
+  #   annotations:
+  #     description: "PgBouncer is getting more connections than the pool size, extra connections = {{ $value }}"
+  #     summary: PgBouncer pool size is not enough for the current connections on {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  # - alert: BouncerPoolFillingUp
+  #   expr: (sum by (database,instance) (pgbouncer_show_databases_pool_size{database!~"template.*|postgres|pgbouncer"})  - on (database,instance) pgbouncer_show_databases_current_connections)  <= 15
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: "PgBouncer pool is filling up, remaining connections = {{ $value }}"
+  #     summary: PgBouncer pool is filling up on {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  # - alert: BouncerQueryTimeTooHigh
+  #   expr: pgbouncer_show_stats_avg_query_time > 5e+6
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: "PgBouncer average query duration more than 5 seconds = {{ $value }}"
+  #     summary: PgBouncer average query duration more than 5 seconds on {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+  # - alert: BouncerWaitingClients
+  #   expr: pgbouncer_show_pools_cl_waiting > 0
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: "PgBouncer instance has waiting clients\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  #     summary: PgBouncer has waiting clients on instance {{ $labels.instance }} in cluster {{$labels.cluster_name}})
+
+## @section Service
+## @param services.http.enabled Enable the service.
+## @param services.http.annotations Additional service annotations.
+## @param services.http.externalIPs External IPs for the service.
+## @param services.http.externalTrafficPolicy If `service.type` is `NodePort` or `LoadBalancer`, set this to `Local` to tell kube-proxy to only use node local endpoints for cluster external traffic. Furthermore, this enables source IP preservation.
+## @param services.http.internalTrafficPolicy If `service.type` is `NodePort` or `LoadBalancer`, set this to `Local` to tell kube-proxy to only use node local endpoints for cluster internal traffic.
+## @param services.http.ipFamilies IPFamilies is list of IP families (e.g. `IPv4`, `IPv6`) assigned to this service. This field is usually assigned automatically based on cluster configuration and only required for customization.
+## @param services.http.labels Additional service labels.
+## @param services.http.loadBalancerClass LoadBalancerClass is the class of the load balancer implementation this Service belongs to. Requires service from type `LoadBalancer`.
+## @param services.http.loadBalancerIP LoadBalancer will get created with the IP specified in this field. Requires service from type `LoadBalancer`.
+## @param services.http.loadBalancerSourceRanges Source range filter for LoadBalancer. Requires service from type `LoadBalancer`.
+## @param services.http.port Port to forward the traffic to.
+## @param services.http.sessionAffinity Supports `ClientIP` and `None`. Enable client IP based session affinity via `ClientIP`.
+## @param services.http.sessionAffinityConfig Contains the configuration of the session affinity.
+## @param services.http.type Kubernetes service type for the traffic.
+services:
+  http:
+    enabled: true
+    annotations: {}
+    externalIPs: []
+    externalTrafficPolicy: "Cluster"
+    internalTrafficPolicy: "Cluster"
+    ipFamilies: []
+    labels: {}
+    loadBalancerClass: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    port: 9187
+    sessionAffinity: "None"
+    sessionAffinityConfig: {}
+    type: "ClusterIP"
+
+## @section ServiceAccount
+serviceAccount:
+  ## @param serviceAccount.existing.enabled Use an existing service account instead of creating a new one. Assumes that the user has all the necessary kubernetes API authorizations.
+  ## @param serviceAccount.existing.serviceAccountName Name of the existing service account.
+  existing:
+    enabled: false
+    serviceAccountName: ""
+
+  ## @param serviceAccount.new.annotations Additional service account annotations.
+  ## @param serviceAccount.new.labels Additional service account labels.
+  ## @param serviceAccount.new.automountServiceAccountToken Enable/disable auto mounting of the service account token.
+  ## @param serviceAccount.new.imagePullSecrets ImagePullSecrets is a list of references to secrets in the same namespace to use for pulling any images in pods that reference this serviceAccount.
+  ## @param serviceAccount.new.secrets Secrets is the list of secrets allowed to be used by pods running using this ServiceAccount.
+  new:
+    annotations: {}
+    labels: {}
+    automountServiceAccountToken: true
+    imagePullSecrets: []
+    # - name: "my-image-pull-secret"
+    secrets: []
+    # - name: "my-secret"
+    #   namespace: "my-namespace"
+    #   fieldPath: "my-field"

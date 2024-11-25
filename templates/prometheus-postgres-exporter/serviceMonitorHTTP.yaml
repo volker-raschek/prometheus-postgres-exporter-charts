@@ -1,0 +1,40 @@
+{{- if and .Values.services.http.enabled .Values.prometheus.metrics.enabled .Values.prometheus.metrics.serviceMonitor.enabled (not .Values.prometheus.metrics.podMonitor.enabled)}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  {{- with (include "prometheus-postgres-exporter.serviceMonitors.http.annotations" . | fromYaml) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (include "prometheus-postgres-exporter.serviceMonitors.http.labels" . | fromYaml) }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ include "prometheus-postgres-exporter.fullname" . }}-http
+  namespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+  - enableHttp2: {{ required "The enableHttp2 option of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.enableHttp2 }}
+    followRedirects: {{ required "The followRedirects option of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.followRedirects }}
+    honorLabels: {{ required "The honorLabels option of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.honorLabels }}
+    interval: {{ required "The scrape interval of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.interval }}
+    path: {{ required "The metric path of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.path }}
+    {{- with .Values.prometheus.metrics.serviceMonitor.relabelings }}
+    relabelings:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    scrapeTimeout: {{ required "The scrape timeout of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.scrapeTimeout }}
+    scheme: {{ required "The scheme of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.scheme}}
+    targetPort: {{ required "The port of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.port }}
+    {{- with .Values.prometheus.metrics.serviceMonitor.tlsConfig }}
+    tlsConfig:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "prometheus-postgres-exporter.serviceMonitors.http.selectorLabels" . | nindent 6 }}
+{{- end }}

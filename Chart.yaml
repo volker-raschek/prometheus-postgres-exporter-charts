@@ -1,0 +1,18 @@
+apiVersion: v2
+name: prometheus-postgres-exporter
+description: Prometheus metric exporter for PostgreSQL
+type: application
+kubeVersion: ">=1.20.0"
+version: "0.1.0"
+appVersion: "0.15.0"
+
+# icon: https://annotations.example.com/icon.png
+
+keywords:
+- prometheus
+- prometheus exporter
+- postgres
+
+sources:
+- https://github.com/prometheus-community/postgres_exporter
+- https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter

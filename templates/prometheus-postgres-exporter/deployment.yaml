@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- with (include "prometheus-postgres-exporter.deployment.annotations" . | fromYaml) }}
+  annotations:
+    {{- tpl (. | toYaml) $ | nindent 4 }}
+  {{- end }}
+  {{- with (include "prometheus-postgres-exporter.deployment.labels" . | fromYaml) }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ include "prometheus-postgres-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "prometheus-postgres-exporter.pod.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "prometheus-postgres-exporter.pod.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: postgres-exporter
+        args:
+        - "--config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml"
+        - "--web.listen-address=:9187"
+        {{- range .Values.deployment.postgresExporter.args }}
+        - {{ . | quote }}
+        {{- end }}
+        {{- with .Values.deployment.postgresExporter.env }}
+        env:
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- $envFrom := (include "prometheus-postgres-exporter.deployment.envFrom" . | fromYaml) }}
+        {{- if hasKey $envFrom "envFrom" }}
+        envFrom:
+        {{- toYaml $envFrom.envFrom | nindent 8 }}
+        {{- end }}
+        image: {{ include "prometheus-postgres-exporter.deployment.images.postgres-exporter.fqin" . | quote }}
+        imagePullPolicy: {{ .Values.deployment.postgresExporter.image.pullPolicy }}
+        livenessProbe:
+          tcpSocket:
+            port: 9187
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        readinessProbe:
+          tcpSocket:
+            port: 9187
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 3
+        ports:
+        - name: http
+          containerPort: 9187
+          protocol: TCP
+        {{- with .Values.deployment.containerResources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.deployment.postgresExporter.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- $volumeMounts := (include "prometheus-postgres-exporter.deployment.volumeMounts" . | fromYaml) }}
+        {{- if hasKey $volumeMounts "volumeMounts" }}
+        volumeMounts:
+        {{- toYaml $volumeMounts.volumeMounts | nindent 8 }}
+        {{- end }}
+      {{- with .Values.deployment.dnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.deployment.dnsPolicy }}
+      dnsPolicy: {{ .Values.deployment.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.deployment.hostname }}
+      hostname: {{ .Values.batch.dbUpdate.hostname }}
+      {{- end }}
+      hostNetwork: {{ .Values.deployment.hostNetwork }}
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.deployment.priorityClassName }}
+      priorityClassName: {{ .Values.deployment.priorityClassName }}
+      {{- end }}
+      restartPolicy: {{ .Values.deployment.restartPolicy }}
+      {{- with .Values.deployment.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccount: {{ include "prometheus-postgres-exporter.deployment.serviceAccount" . }}
+      {{- if .Values.deployment.subdomain }}
+      subdomain: {{ .Values.deployment.subdomain }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- $volumes := (include "prometheus-postgres-exporter.deployment.volumes" . | fromYaml) }}
+      {{- if hasKey $volumes "volumes" }}
+      volumes:
+      {{- toYaml $volumes.volumes | nindent 6 }}
+      {{- end }}

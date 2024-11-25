@@ -1,0 +1,172 @@
+chart:
+  appVersion: 0.1.0
+  version: 0.1.0
+suite: PodMonitor http template (basic)
+release:
+  name: prometheus-postgres-exporter-unittest
+  namespace: testing
+templates:
+- templates/prometheus-postgres-exporter/podMonitor.yaml
+tests:
+- it: Skip podMonitor when metrics are disabled.
+  set:
+    prometheus.metrics.enabled: false
+    prometheus.metrics.podMonitor.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Skip podMonitor when podMonitor is disabled.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.podMonitor.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Skip podMonitor when both monitor types are enabled.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.podMonitor.enabled: true
+    prometheus.metrics.serviceMonitor.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Rendering podMonitor with default values - enabled manually.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.podMonitor.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 1
+  - containsDocument:
+      apiVersion: monitoring.coreos.com/v1
+      kind: PodMonitor
+      name: prometheus-postgres-exporter-unittest-http
+      namespace: testing
+  - notExists:
+      path: metadata.annotations
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - equal:
+      path: spec.podMetricsEndpoints[0].enableHttp2
+      value: false
+  - equal:
+      path: spec.podMetricsEndpoints[0].followRedirects
+      value: false
+  - equal:
+      path: spec.podMetricsEndpoints[0].honorLabels
+      value: false
+  - equal:
+      path: spec.podMetricsEndpoints[0].interval
+      value: 60s
+  - equal:
+      path: spec.podMetricsEndpoints[0].path
+      value: /metrics
+  - equal:
+      path: spec.podMetricsEndpoints[0].port
+      value: http
+  - notExists:
+      path: spec.podMetricsEndpoints[0].relabelings
+  - equal:
+      path: spec.podMetricsEndpoints[0].scrapeTimeout
+      value: 30s
+  - equal:
+      path: spec.podMetricsEndpoints[0].scheme
+      value: http
+  - contains:
+      path: spec.namespaceSelector.matchNames
+      content:
+        testing
+  - equal:
+      path: spec.selector.matchLabels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+
+- it: Render podMonitor with custom annotations and labels.
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.podMonitor.enabled: true
+    prometheus.metrics.podMonitor.annotations:
+      foo: bar
+    prometheus.metrics.podMonitor.labels:
+      bar: foo
+  asserts:
+  - equal:
+      path: metadata.annotations
+      value:
+        foo: bar
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        bar: foo
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+
+- it: Change defaults
+  set:
+    prometheus.metrics.enabled: true
+    prometheus.metrics.podMonitor.enabled: true
+    prometheus.metrics.podMonitor.enableHttp2: true
+    prometheus.metrics.podMonitor.followRedirects: true
+    prometheus.metrics.podMonitor.honorLabels: true
+    prometheus.metrics.podMonitor.interval: "180s"
+    prometheus.metrics.podMonitor.path: "/my-metrics"
+    prometheus.metrics.podMonitor.relabelings:
+    - sourceLabels: [ container ]
+      separator: ";"
+      regex: "app"
+      replacement: "$1"
+      action: "drop"
+    prometheus.metrics.podMonitor.scrapeTimeout: "5s"
+    prometheus.metrics.podMonitor.scheme: "http"
+  asserts:
+  - hasDocuments:
+      count: 1
+  - equal:
+      path: spec.podMetricsEndpoints[0].enableHttp2
+      value: true
+  - equal:
+      path: spec.podMetricsEndpoints[0].followRedirects
+      value: true
+  - equal:
+      path: spec.podMetricsEndpoints[0].honorLabels
+      value: true
+  - equal:
+      path: spec.podMetricsEndpoints[0].interval
+      value: 180s
+  - equal:
+      path: spec.podMetricsEndpoints[0].path
+      value: /my-metrics
+  - equal:
+      path: spec.podMetricsEndpoints[0].port
+      value: http
+  - contains:
+      path: spec.podMetricsEndpoints[0].relabelings
+      content:
+        sourceLabels: [ container ]
+        separator: ";"
+        regex: "app"
+        replacement: "$1"
+        action: "drop"
+  - equal:
+      path: spec.podMetricsEndpoints[0].scrapeTimeout
+      value: 5s
+  - equal:
+      path: spec.podMetricsEndpoints[0].scheme
+      value: http

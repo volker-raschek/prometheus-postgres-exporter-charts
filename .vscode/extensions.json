@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "DavidAnson.vscode-markdownlint",
+    "esbenp.prettier-vscode",
+    "Tim-Koehler.helm-intellisense",
+    "yzhang.markdown-all-in-one"
+  ]
+}

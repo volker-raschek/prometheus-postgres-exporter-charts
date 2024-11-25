@@ -1,0 +1,23 @@
+{{- if gt (len .Values.prometheus.rules) 0 }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  {{- with (include "prometheus-postgres-exporter.prometheusRules.annotations" . | fromYaml) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (include "prometheus-postgres-exporter.prometheusRules.labels" . | fromYaml) }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ include "prometheus-postgres-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- with .Values.prometheus.rules }}
+  groups:
+  - name: {{ template "prometheus-postgres-exporter.name" $ }}
+    rules:
+    {{ toYaml . | nindent 4 }}
+{{- end }}
+{{- end }}

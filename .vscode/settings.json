@@ -1,0 +1,8 @@
+{
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v0.5.2/schema/helm-testsuite.json": [
+      "/unittests/**/*.yaml"
+    ]
+  },
+  "yaml.schemaStore.enable": true
+}

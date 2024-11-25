@@ -1,0 +1,40 @@
+{{- if and .Values.prometheus.metrics.enabled .Values.prometheus.metrics.podMonitor.enabled (not .Values.prometheus.metrics.serviceMonitor.enabled) }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  {{- with (include "prometheus-postgres-exporter.podMonitors.http.annotations" . | fromYaml) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (include "prometheus-postgres-exporter.podMonitors.http.labels" . | fromYaml) }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: {{ include "prometheus-postgres-exporter.fullname" . }}-http
+  namespace: {{ .Release.Namespace }}
+spec:
+  podMetricsEndpoints:
+  - enableHttp2: {{ required "The enableHttp2 option of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.enableHttp2 }}
+    followRedirects: {{ required "The followRedirects option of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.followRedirects }}
+    honorLabels: {{ required "The honorLabels option of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.honorLabels }}
+    interval: {{ required "The scrape interval of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.interval }}
+    path: {{ required "The metric path of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.path }}
+    port: "http"
+    {{- with .Values.prometheus.metrics.podMonitor.relabelings }}
+    relabelings:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    scrapeTimeout: {{ required "The scrape timeout of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.scrapeTimeout }}
+    scheme: {{ required "The scheme of the podMonitor is not defined!" .Values.prometheus.metrics.podMonitor.scheme}}
+    {{- with .Values.prometheus.metrics.podMonitor.tlsConfig }}
+    tlsConfig:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "prometheus-postgres-exporter.pod.selectorLabels" . | nindent 6 }}
+{{- end }}
