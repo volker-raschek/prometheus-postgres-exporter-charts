@@ -64,6 +64,8 @@ tests:
       path: spec.template.spec.containers[0].resources
   - notExists:
       path: spec.template.spec.containers[0].securityContext
+  - notExists:
+      path: spec.template.spec.nodeSelector
 
 - it: Test additional arguments
   set:
@@ -197,6 +199,16 @@ tests:
         readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 1000
+
+- it: Test nodeSelector
+  set:
+    deployment.nodeSelector:
+      foo: bar
+  asserts:
+  - equal:
+      path: spec.template.spec.nodeSelector
+      value:
+        foo: bar
 
 - it: Test additional volumeMounts and volumes
   set:
