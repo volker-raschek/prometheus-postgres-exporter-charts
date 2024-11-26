@@ -104,7 +104,7 @@ tests:
         secretRef:
           name: custom-database-secret
 
-- it: Test exporterConfig with own secret
+- it: Test config.exporterConfig.existingSecret
   set:
     config.exporterConfig.existingSecret.enabled: true
     config.exporterConfig.existingSecret.secretName: exporter-config-secret
@@ -126,7 +126,7 @@ tests:
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
 
-- it: Test webConfig with own secret
+- it: Test config.webConfig.existingSecret
   set:
     config.webConfig.existingSecret.enabled: true
     config.webConfig.existingSecret.secretName: web-config-secret
@@ -147,3 +147,25 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: web-config-secret
+
+- it: Test additional volumeMounts and volumes
+  set:
+    deployment.postgresExporter.volumeMounts:
+    - name: data
+      mountPath: /usr/lib/prometheus-postgres-exporter/data
+    deployment.volumes:
+    - name: data
+      hostPath:
+        path: /usr/lib/prometheus-postgres-exporter/data
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        name: data
+        mountPath: /usr/lib/prometheus-postgres-exporter/data
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: data
+        hostPath:
+          path: /usr/lib/prometheus-postgres-exporter/data
