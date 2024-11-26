@@ -88,6 +88,8 @@ tests:
       value: 60
   - notExists:
       path: spec.template.spec.tolerations
+  - notExists:
+      path: spec.template.spec.topologySpreadConstraints
 
 - it: Test additional arguments
   set:
@@ -321,6 +323,24 @@ tests:
         operator: Equal
         value: postgres
         effect: NoSchedule
+
+- it: Test topologySpreadConstraints
+  set:
+    deployment.topologySpreadConstraints:
+    - topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/instance: prometheus-postgres-exporter
+  asserts:
+  - equal:
+      path: spec.template.spec.topologySpreadConstraints
+      value:
+      - topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: prometheus-postgres-exporter
 
 - it: Test additional volumeMounts and volumes
   set:
