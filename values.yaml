@@ -313,7 +313,7 @@ prometheus:
     podMonitor:
       enabled: false
       annotations: {}
-      enableHttp2: false
+      enableHttp2: true
       followRedirects: false
       honorLabels: false
       labels: {}
@@ -341,7 +341,7 @@ prometheus:
       enabled: false
       annotations: {}
       labels: {}
-      enableHttp2: false
+      enableHttp2: true
       followRedirects: false
       honorLabels: false
       interval: "60s"

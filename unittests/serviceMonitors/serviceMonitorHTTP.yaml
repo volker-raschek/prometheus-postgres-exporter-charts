@@ -59,7 +59,7 @@ tests:
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
   - equal:
       path: spec.endpoints[0].enableHttp2
-      value: false
+      value: true
   - equal:
       path: spec.endpoints[0].followRedirects
       value: false
@@ -121,7 +121,7 @@ tests:
   set:
     prometheus.metrics.enabled: true
     prometheus.metrics.serviceMonitor.enabled: true
-    prometheus.metrics.serviceMonitor.enableHttp2: true
+    prometheus.metrics.serviceMonitor.enableHttp2: false
     prometheus.metrics.serviceMonitor.followRedirects: true
     prometheus.metrics.serviceMonitor.honorLabels: true
     prometheus.metrics.serviceMonitor.interval: "180s"
@@ -139,7 +139,7 @@ tests:
       count: 1
   - equal:
       path: spec.endpoints[0].enableHttp2
-      value: true
+      value: false
   - equal:
       path: spec.endpoints[0].followRedirects
       value: true

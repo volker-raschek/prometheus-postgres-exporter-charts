@@ -25,7 +25,7 @@ spec:
       {{- toYaml . | nindent 6 }}
     {{- end }}
     scrapeTimeout: {{ required "The scrape timeout of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.scrapeTimeout }}
-    scheme: {{ required "The scheme of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.scheme}}
+    scheme: {{ required "The scheme of the serviceMonitor is not defined!" .Values.prometheus.metrics.serviceMonitor.scheme }}
     targetPort: {{ required "The port of the service is not defined!" .Values.services.http.port }}
     {{- with .Values.prometheus.metrics.serviceMonitor.tlsConfig }}
     tlsConfig:
