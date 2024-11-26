@@ -52,15 +52,15 @@
 {{/* volumeMounts */}}
 
 {{- define "prometheus-postgres-exporter.deployment.volumeMounts" -}}
-{{- $volumeMounts := dict "volumeMounts" (.Values.deployment.postgresExporter.volumeMounts | default (list) ) }}
-{{- $volumeMounts = merge $volumeMounts (dict "volumeMounts" (list (dict "name" "config-d" "mountPath" "/etc/prometheus-postgres-exporter/config.d" ))) }}
-{{ toYaml $volumeMounts }}
+{{- $volumeMounts := .Values.deployment.postgresExporter.volumeMounts | default list  }}
+{{- $volumeMounts = concat $volumeMounts (list (dict "name" "config-d" "mountPath" "/etc/prometheus-postgres-exporter/config.d" )) }}
+{{ toYaml (dict "volumeMounts" $volumeMounts) }}
 {{- end -}}
 
 {{/* volumes */}}
 
 {{- define "prometheus-postgres-exporter.deployment.volumes" -}}
-{{- $volumes := dict "volumes" (.Values.deployment.volumes | default (list) ) }}
+{{- $volumes := .Values.deployment.volumes | default list }}
 
 {{- $exporterSecretName := .Values.config.exporterConfig.existingSecret.secretName -}}
 {{- if not .Values.config.exporterConfig.existingSecret.enabled }}
@@ -72,8 +72,8 @@
 {{- $webConfigSecretName = printf "%s-web-config" (include "prometheus-postgres-exporter.fullname" . ) }}
 {{- end }}
 
-{{- $volumes = merge $volumes (dict "volumes" (list (dict "name" "config-d" "projected" (dict "defaultMode" 444 "sources" (list (dict "secret" (dict "name" $exporterSecretName)) (dict "secret" (dict "name" $webConfigSecretName))))))) }}
+{{- $volumes = concat $volumes (list (dict "name" "config-d" "projected" (dict "defaultMode" 444 "sources" (list (dict "secret" (dict "name" $exporterSecretName)) (dict "secret" (dict "name" $webConfigSecretName)))))) }}
 
-{{ toYaml $volumes }}
+{{ toYaml (dict "volumes" $volumes) }}
 
 {{- end -}}

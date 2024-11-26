@@ -352,14 +352,24 @@ tests:
       hostPath:
         path: /usr/lib/prometheus-postgres-exporter/data
   asserts:
-  - contains:
+  - equal:
       path: spec.template.spec.containers[0].volumeMounts
-      content:
-        name: data
+      value:
+      - name: data
         mountPath: /usr/lib/prometheus-postgres-exporter/data
-  - contains:
+      - name: config-d
+        mountPath: /etc/prometheus-postgres-exporter/config.d
+  - equal:
       path: spec.template.spec.volumes
-      content:
-        name: data
+      value:
+      - name: data
         hostPath:
           path: /usr/lib/prometheus-postgres-exporter/data
+      - name: config-d
+        projected:
+          defaultMode: 444
+          sources:
+          - secret:
+              name: prometheus-postgres-exporter-unittest-exporter-config
+          - secret:
+              name: prometheus-postgres-exporter-unittest-web-config
