@@ -12,7 +12,7 @@ and use it to deploy the exporter. It also contains further configuration exampl
 Furthermore, this helm chart unit tests to detect regressions and stabilize the deployment. Additionally, this helm
 chart is tested for deployment scenarios with ArgoCD.
 
-> ![NOTE]
+> [!NOTE]
 > This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. You can
 > find the official community chart [here](https://github.com/prometheus-community/helm-charts).
 
