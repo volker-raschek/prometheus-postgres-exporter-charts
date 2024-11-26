@@ -62,6 +62,8 @@ tests:
       value: IfNotPresent
   - notExists:
       path: spec.template.spec.containers[0].resources
+  - notExists:
+      path: spec.template.spec.containers[0].securityContext
 
 - it: Test additional arguments
   set:
@@ -169,6 +171,32 @@ tests:
         requests:
           cpu: 25m
           memory: 100MB
+
+- it: Test custom securityContext
+  set:
+    deployment.postgresExporter.securityContext:
+      capabilities:
+        add:
+        - NET_RAW
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 1000
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].securityContext
+      value:
+        capabilities:
+          add:
+          - NET_RAW
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1000
 
 - it: Test additional volumeMounts and volumes
   set:
