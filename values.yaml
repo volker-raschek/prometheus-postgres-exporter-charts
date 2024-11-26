@@ -332,7 +332,6 @@ prometheus:
     ## @param prometheus.metrics.serviceMonitor.honorLabels Honor labels.
     ## @param prometheus.metrics.serviceMonitor.interval Interval at which metrics should be scraped. If not specified Prometheus' global scrape interval is used.
     ## @param prometheus.metrics.serviceMonitor.path HTTP path for scraping prometheus metrics.
-    ## @param prometheus.metrics.serviceMonitor.port HTTP port for scraping prometheus metrics.
     ## @param prometheus.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields.
     ## @param prometheus.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended. If not specified, global Prometheus scrape timeout is used.
     ## @param prometheus.metrics.serviceMonitor.scheme HTTP scheme to use for scraping. For example `http` or `https`.
@@ -347,7 +346,6 @@ prometheus:
       honorLabels: false
       interval: "60s"
       path: "/metrics"
-      port: 9187
       relabelings: []
       scrapeTimeout: "30s"
       scheme: "http"
