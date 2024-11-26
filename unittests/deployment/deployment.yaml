@@ -67,6 +67,8 @@ tests:
   - notExists:
       path: spec.template.spec.dnsConfig
   - notExists:
+      path: spec.template.spec.dnsPolicy
+  - notExists:
       path: spec.template.spec.nodeSelector
   - notExists:
       path: spec.template.spec.priorityClassName
@@ -217,6 +219,14 @@ tests:
         nameservers:
         - "8.8.8.8"
         - "8.8.4.4"
+
+- it: Test dnsPolicy
+  set:
+    deployment.dnsPolicy: ClusterFirst
+  asserts:
+  - equal:
+      path: spec.template.spec.dnsPolicy
+      value: ClusterFirst
 
 - it: Test nodeSelector
   set:
