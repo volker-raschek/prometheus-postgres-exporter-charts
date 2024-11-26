@@ -24,10 +24,10 @@
       "matchUpdateTypes": [ "minor", "patch"]
     },
     {
-      "addLabels": [ "renovate/prometheus-postgres-exporter", "renovate/automerge" ],
+      "addLabels": [ "renovate/markdownlint", "renovate/automerge" ],
       "automerge": true,
-      "matchPackageNames": [ "prometheus-postgres-exporter" ],
-      "matchManagers": [ "regex" ],
+      "matchPackageNames": [ "markdownlint-cli", "@bitnami/readme-generator-for-helm" ],
+      "matchManagers": [ "npm" ],
       "matchUpdateTypes": [ "minor", "patch"]
     }
   ],
