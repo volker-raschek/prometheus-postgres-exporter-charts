@@ -13,5 +13,5 @@
 {{- end }}
 
 {{- define "prometheus-postgres-exporter.pod.selectorLabels" -}}
-{{ include "prometheus-postgres-exporter.pod.labels" . }}
+{{ include "prometheus-postgres-exporter.selectorLabels" . }}
 {{- end }}
