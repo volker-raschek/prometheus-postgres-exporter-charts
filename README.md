@@ -2,19 +2,19 @@
 
 [![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/prometheus-postgres-exporter/status.svg)](https://drone.cryptic.systems/volker.raschek/prometheus-postgres-exporter)
 
+> [!NOTE]
+> This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. You can
+> find the official community chart [here](https://github.com/prometheus-community/helm-charts).
+
 This helm chart enables the deployment of a Prometheus metrics exporter for PostgreSQL databases and allows the
 individual configuration of additional containers/initContainers, mounting of volumes, defining additional environment
-variables, apply a user-defined web-config.yaml and much more.
+variables, apply a user-defined `webConfig.yaml` and much more.
 
 Chapter [configuration and installation](#helm-configuration-and-installation) describes the basics how to configure helm
 and use it to deploy the exporter. It also contains further configuration examples.
 
-Furthermore, this helm chart unit tests to detect regressions and stabilize the deployment. Additionally, this helm
-chart is tested for deployment scenarios with ArgoCD.
-
-> [!NOTE]
-> This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. You can
-> find the official community chart [here](https://github.com/prometheus-community/helm-charts).
+Furthermore, this helm chart contains unit tests to detect regressions and stabilize the deployment. Additionally, this
+helm chart is tested for deployment scenarios with **ArgoCD**.
 
 ## Helm: configuration and installation
 
