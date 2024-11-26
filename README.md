@@ -31,7 +31,7 @@ chart is tested for deployment scenarios with ArgoCD.
 ```bash
 helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
 helm repo update
-helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
+helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
@@ -71,7 +71,7 @@ certification will be skipped by Prometheus.
 > `tls.key` and `tls.crt` of the secret can be mounted into the container filesystem for TLS authentication / encryption.
 
 ```bash
-helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
+helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
@@ -94,7 +94,7 @@ certificate for the metrics exporter - TLS certificate verification can be enabl
 replaced:
 
 ```diff
-  helm install prometheus-exporters/prometheus-postgres-exporter prometheus-postgres-exporter \
+  helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
     --set 'config.database.secret.databaseUsername=postgres' \
     --set 'config.database.secret.databasePassword=postgres' \
     --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
