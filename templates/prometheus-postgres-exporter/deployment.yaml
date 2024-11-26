@@ -81,7 +81,7 @@ spec:
       dnsPolicy: {{ .Values.deployment.dnsPolicy }}
       {{- end }}
       {{- if .Values.deployment.hostname }}
-      hostname: {{ .Values.batch.dbUpdate.hostname }}
+      hostname: {{ .Values.deployment.hostname }}
       {{- end }}
       hostNetwork: {{ .Values.deployment.hostNetwork }}
       {{- with .Values.deployment.imagePullSecrets }}

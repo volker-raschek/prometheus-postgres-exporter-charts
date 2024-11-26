@@ -69,9 +69,16 @@ tests:
   - notExists:
       path: spec.template.spec.dnsPolicy
   - notExists:
+      path: spec.template.spec.hostname
+  - equal:
+      path: spec.template.spec.hostNetwork
+      value: false
+  - notExists:
       path: spec.template.spec.nodeSelector
   - notExists:
       path: spec.template.spec.priorityClassName
+  - notExists:
+      path: spec.template.spec.subdomain
 
 - it: Test additional arguments
   set:
@@ -227,6 +234,22 @@ tests:
   - equal:
       path: spec.template.spec.dnsPolicy
       value: ClusterFirst
+
+- it: Test hostNetwork, hostname, subdomain
+  set:
+    deployment.hostNetwork: true
+    deployment.hostname: pg-exporter
+    deployment.subdomain: exporters.internal
+  asserts:
+  - equal:
+      path: spec.template.spec.hostNetwork
+      value: true
+  - equal:
+      path: spec.template.spec.hostname
+      value: pg-exporter
+  - equal:
+      path: spec.template.spec.subdomain
+      value: exporters.internal
 
 - it: Test nodeSelector
   set:
