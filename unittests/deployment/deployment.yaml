@@ -74,6 +74,8 @@ tests:
       path: spec.template.spec.hostNetwork
       value: false
   - notExists:
+      path: spec.template.spec.imagePullSecrets
+  - notExists:
       path: spec.template.spec.nodeSelector
   - notExists:
       path: spec.template.spec.priorityClassName
@@ -250,6 +252,18 @@ tests:
   - equal:
       path: spec.template.spec.subdomain
       value: exporters.internal
+
+- it: Test imagePullSecrets
+  set:
+    deployment.imagePullSecrets:
+    - name: my-pull-secret
+    - name: my-special-secret
+  asserts:
+  - equal:
+      path: spec.template.spec.imagePullSecrets
+      value:
+      - name: my-pull-secret
+      - name: my-special-secret
 
 - it: Test nodeSelector
   set:
