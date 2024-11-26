@@ -53,7 +53,7 @@
 
 {{- define "prometheus-postgres-exporter.deployment.volumeMounts" -}}
 {{- $volumeMounts := dict "volumeMounts" (.Values.deployment.postgresExporter.volumeMounts | default (list) ) }}
-{{- $volumeMounts = merge $volumeMounts (dict "volumeMounts" (list (dict "name" "config.d" "mountPath" "/etc/prometheus-postgres-exporter/config.d" ))) }}
+{{- $volumeMounts = merge $volumeMounts (dict "volumeMounts" (list (dict "name" "config-d" "mountPath" "/etc/prometheus-postgres-exporter/config.d" ))) }}
 {{ toYaml $volumeMounts }}
 {{- end -}}
 
@@ -72,7 +72,7 @@
 {{- $webConfigSecretName = printf "%s-web-config" (include "prometheus-postgres-exporter.fullname" . ) }}
 {{- end }}
 
-{{- $volumes = merge $volumes (dict "volumes" (list (dict "name" "config.d" "projected" (dict "defaultMode" "0444" "sources" (list (dict "secret" (dict "name" $exporterSecretName)) (dict "secret" (dict "name" $webConfigSecretName))))))) }}
+{{- $volumes = merge $volumes (dict "volumes" (list (dict "name" "config-d" "projected" (dict "defaultMode" 444 "sources" (list (dict "secret" (dict "name" $exporterSecretName)) (dict "secret" (dict "name" $webConfigSecretName))))))) }}
 
 {{ toYaml $volumes }}
 

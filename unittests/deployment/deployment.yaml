@@ -42,13 +42,13 @@ tests:
       path: spec.template.spec.containers[0].volumeMounts
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
-        name: config.d
+        name: config-d
   - equal:
       path: spec.template.spec.volumes
       value:
-      - name: config.d
+      - name: config-d
         projected:
-          defaultMode: "0444"
+          defaultMode: 444
           sources:
           - secret:
               name: prometheus-postgres-exporter-unittest-exporter-config
@@ -143,13 +143,13 @@ tests:
       path: spec.template.spec.containers[0].volumeMounts
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
-        name: config.d
+        name: config-d
   - equal:
       path: spec.template.spec.volumes
       value:
-      - name: config.d
+      - name: config-d
         projected:
-          defaultMode: "0444"
+          defaultMode: 444
           sources:
           - secret:
               name: exporter-config-secret
@@ -165,13 +165,13 @@ tests:
       path: spec.template.spec.containers[0].volumeMounts
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
-        name: config.d
+        name: config-d
   - equal:
       path: spec.template.spec.volumes
       value:
-      - name: config.d
+      - name: config-d
         projected:
-          defaultMode: "0444"
+          defaultMode: 444
           sources:
           - secret:
               name: prometheus-postgres-exporter-unittest-exporter-config
