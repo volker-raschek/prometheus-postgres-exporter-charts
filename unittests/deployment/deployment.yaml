@@ -83,6 +83,9 @@ tests:
       path: spec.template.spec.restartPolicy
   - notExists:
       path: spec.template.spec.subdomain
+  - equal:
+      path: spec.template.spec.terminationGracePeriodSeconds
+      value: 60
 
 - it: Test additional arguments
   set:
@@ -292,6 +295,14 @@ tests:
   - equal:
       path: spec.template.spec.restartPolicy
       value: Always
+
+- it: Test terminationGracePeriodSeconds
+  set:
+    deployment.terminationGracePeriodSeconds: 120
+  asserts:
+  - equal:
+      path: spec.template.spec.terminationGracePeriodSeconds
+      value: 120
 
 - it: Test additional volumeMounts and volumes
   set:
