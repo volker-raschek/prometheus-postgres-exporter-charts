@@ -54,6 +54,12 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
+  - equal:
+      path: spec.template.spec.containers[0].image
+      value: quay.io/prometheuscommunity/postgres-exporter:v0.1.0
+  - equal:
+      path: spec.template.spec.containers[0].imagePullPolicy
+      value: IfNotPresent
 
 - it: Test additional arguments
   set:
@@ -70,7 +76,24 @@ tests:
       - --foo=bar
       - --bar=foo
 
-- it: Test custom database secret
+- it: Test custom imageRegistry and imageRepository
+  set:
+    deployment.postgresExporter.image.registry: registry.example.local
+    deployment.postgresExporter.image.repository: path/special/prometheus-postgres-exporter
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].image
+      value: registry.example.local/path/special/prometheus-postgres-exporter:v0.1.0
+
+- it: Test custom imagePullPolicy
+  set:
+    deployment.postgresExporter.image.pullPolicy: Always
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].imagePullPolicy
+      value: Always
+
+- it: Test config.database.existingSecret
   set:
     config.database.existingSecret.enabled: true
     config.database.existingSecret.secretName: custom-database-secret
