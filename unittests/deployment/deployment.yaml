@@ -66,6 +66,8 @@ tests:
       path: spec.template.spec.containers[0].securityContext
   - notExists:
       path: spec.template.spec.nodeSelector
+  - notExists:
+      path: spec.template.spec.priorityClassName
 
 - it: Test additional arguments
   set:
@@ -209,6 +211,14 @@ tests:
       path: spec.template.spec.nodeSelector
       value:
         foo: bar
+
+- it: Test priorityClassName
+  set:
+    deployment.priorityClassName: my-priority
+  asserts:
+  - equal:
+      path: spec.template.spec.priorityClassName
+      value: my-priority
 
 - it: Test additional volumeMounts and volumes
   set:
