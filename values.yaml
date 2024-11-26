@@ -38,7 +38,7 @@ config:
 
     ## @param config.exporterConfig.secret.annotations Additional annotations of the secret containing the `exporterConfig.yaml`.
     ## @param config.exporterConfig.secret.labels Additional labels of the secret containing the `exporterConfig.yaml`.
-    ## @param config.exporterConfig.secret.exporterConfig Content of the `exporterConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).
+    ## @param config.exporterConfig.secret.exporterConfig Content of the `exporterConfig.yaml`. Further information can be found [here](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta).
     ## @skip config.exporterConfig.secret.exporterConfig Skip individual postgres exporter configuration.
     secret:
       annotations: {}
