@@ -16,7 +16,7 @@ metadata:
 spec:
 {{- with .Values.prometheus.rules }}
   groups:
-  - name: {{ template "prometheus-postgres-exporter.name" $ }}
+  - name: {{ template "prometheus-postgres-exporter.fullname" $ }}
     rules:
     {{ toYaml . | nindent 4 }}
 {{- end }}

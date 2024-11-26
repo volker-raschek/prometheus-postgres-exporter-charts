@@ -126,25 +126,25 @@ replaced:
 
 ### Configuration
 
-| Name                                              | Description                                                                                                                                       | Value   |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `config.database.existingSecret.enabled`          | Mount an existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                       | `false` |
-| `config.database.existingSecret.secretName`       | Name of the existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                    | `""`    |
-| `config.database.secret.annotations`              | Additional annotations of the secret containing the database credentials.                                                                         | `{}`    |
-| `config.database.secret.labels`                   | Additional labels of the secret containing the database credentials.                                                                              | `{}`    |
-| `config.database.secret.databaseUsername`         | Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.                                                                 | `""`    |
-| `config.database.secret.databasePassword`         | Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.                                                                 | `""`    |
-| `config.database.secret.databaseConnectionUrl`    | Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.                                                    | `""`    |
-| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporterConfig.yaml`.                                                                                | `false` |
-| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporterConfig.yaml`.                                                                             | `""`    |
-| `config.exporterConfig.secret.annotations`        | Additional annotations of the secret containing the `exporterConfig.yaml`.                                                                        | `{}`    |
-| `config.exporterConfig.secret.labels`             | Additional labels of the secret containing the `exporterConfig.yaml`.                                                                             | `{}`    |
-| `config.exporterConfig.secret.exporterConfig`     | Content of the `exporterConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/). | `{}`    |
-| `config.webConfig.existingSecret.enabled`         | Mount an existing secret containing the key `webConfig.yaml`.                                                                                     | `false` |
-| `config.webConfig.existingSecret.secretName`      | Name of the existing secret containing the key `webConfig.yaml`.                                                                                  | `""`    |
-| `config.webConfig.secret.annotations`             | Additional annotations of the secret containing the `webConfig.yaml`.                                                                             | `{}`    |
-| `config.webConfig.secret.labels`                  | Additional labels of the secret containing the `webConfig.yaml`.                                                                                  | `{}`    |
-| `config.webConfig.secret.webConfig`               | Content of the `webConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).      | `{}`    |
+| Name                                              | Description                                                                                                                                                                            | Value   |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `config.database.existingSecret.enabled`          | Mount an existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                            | `false` |
+| `config.database.existingSecret.secretName`       | Name of the existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                         | `""`    |
+| `config.database.secret.annotations`              | Additional annotations of the secret containing the database credentials.                                                                                                              | `{}`    |
+| `config.database.secret.labels`                   | Additional labels of the secret containing the database credentials.                                                                                                                   | `{}`    |
+| `config.database.secret.databaseUsername`         | Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.                                                                                                      | `""`    |
+| `config.database.secret.databasePassword`         | Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.                                                                                                      | `""`    |
+| `config.database.secret.databaseConnectionUrl`    | Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.                                                                                         | `""`    |
+| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporterConfig.yaml`.                                                                                                                     | `false` |
+| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporterConfig.yaml`.                                                                                                                  | `""`    |
+| `config.exporterConfig.secret.annotations`        | Additional annotations of the secret containing the `exporterConfig.yaml`.                                                                                                             | `{}`    |
+| `config.exporterConfig.secret.labels`             | Additional labels of the secret containing the `exporterConfig.yaml`.                                                                                                                  | `{}`    |
+| `config.exporterConfig.secret.exporterConfig`     | Content of the `exporterConfig.yaml`. Further information can be found [here](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta). | `{}`    |
+| `config.webConfig.existingSecret.enabled`         | Mount an existing secret containing the key `webConfig.yaml`.                                                                                                                          | `false` |
+| `config.webConfig.existingSecret.secretName`      | Name of the existing secret containing the key `webConfig.yaml`.                                                                                                                       | `""`    |
+| `config.webConfig.secret.annotations`             | Additional annotations of the secret containing the `webConfig.yaml`.                                                                                                                  | `{}`    |
+| `config.webConfig.secret.labels`                  | Additional labels of the secret containing the `webConfig.yaml`.                                                                                                                       | `{}`    |
+| `config.webConfig.secret.webConfig`               | Content of the `webConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).                                           | `{}`    |
 
 ### Deployment
 
