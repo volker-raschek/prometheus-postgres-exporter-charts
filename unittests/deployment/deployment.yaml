@@ -80,6 +80,8 @@ tests:
   - notExists:
       path: spec.template.spec.priorityClassName
   - notExists:
+      path: spec.template.spec.restartPolicy
+  - notExists:
       path: spec.template.spec.subdomain
 
 - it: Test additional arguments
@@ -282,6 +284,14 @@ tests:
   - equal:
       path: spec.template.spec.priorityClassName
       value: my-priority
+
+- it: Test restartPolicy
+  set:
+    deployment.restartPolicy: Always
+  asserts:
+  - equal:
+      path: spec.template.spec.restartPolicy
+      value: Always
 
 - it: Test additional volumeMounts and volumes
   set:

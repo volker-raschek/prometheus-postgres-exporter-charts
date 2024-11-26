@@ -204,6 +204,9 @@ deployment:
   ## @param deployment.replicaCount Number of replicas for the postgres-exporter deployment.
   replicaCount: 1
 
+  ## @param deployment.restartPolicy Restart policy of the postgres-exporter deployment.
+  restartPolicy: ""
+
   ## @param deployment.securityContext Security context of the postgres-exporter deployment.
   securityContext: {}
     # fsGroup: 2000

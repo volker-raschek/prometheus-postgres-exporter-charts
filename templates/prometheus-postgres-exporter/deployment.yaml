@@ -95,7 +95,9 @@ spec:
       {{- if .Values.deployment.priorityClassName }}
       priorityClassName: {{ .Values.deployment.priorityClassName }}
       {{- end }}
+      {{- if .Values.deployment.restartPolicy }}
       restartPolicy: {{ .Values.deployment.restartPolicy }}
+      {{- end }}
       {{- with .Values.deployment.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
