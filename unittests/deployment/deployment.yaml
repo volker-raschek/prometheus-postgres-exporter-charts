@@ -65,6 +65,8 @@ tests:
   - notExists:
       path: spec.template.spec.containers[0].securityContext
   - notExists:
+      path: spec.template.spec.dnsConfig
+  - notExists:
       path: spec.template.spec.nodeSelector
   - notExists:
       path: spec.template.spec.priorityClassName
@@ -201,6 +203,20 @@ tests:
         readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 1000
+
+- it: Test dnsConfig
+  set:
+    deployment.dnsConfig:
+      nameservers:
+      - "8.8.8.8"
+      - "8.8.4.4"
+  asserts:
+  - equal:
+      path: spec.template.spec.dnsConfig
+      value:
+        nameservers:
+        - "8.8.8.8"
+        - "8.8.4.4"
 
 - it: Test nodeSelector
   set:
