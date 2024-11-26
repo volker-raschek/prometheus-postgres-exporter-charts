@@ -190,7 +190,7 @@ deployment:
       # runAsUser: 1000
 
     ## @param deployment.postgresExporter.volumeMounts Additional volume mounts.
-    volumeMounts: {}
+    volumeMounts: []
     # - name: my-configmap-volume
     #   mountPath: /configmap
     #   readOnly: true
