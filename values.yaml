@@ -30,8 +30,8 @@ config:
       databaseConnectionUrl: ""
 
   exporterConfig:
-    ## @param config.exporterConfig.existingSecret.enabled Mount an existing secret containing the key `exporter_config.yaml`.
-    ## @param config.exporterConfig.existingSecret.secretName Name of the existing secret containing the key `exporter_config.yaml`.
+    ## @param config.exporterConfig.existingSecret.enabled Mount an existing secret containing the key `exporterConfig.yaml`.
+    ## @param config.exporterConfig.existingSecret.secretName Name of the existing secret containing the key `exporterConfig.yaml`.
     existingSecret:
       enabled: false
       secretName: ""

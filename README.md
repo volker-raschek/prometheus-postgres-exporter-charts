@@ -135,8 +135,8 @@ replaced:
 | `config.database.secret.databaseUsername`         | Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.                                                                 | `""`    |
 | `config.database.secret.databasePassword`         | Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.                                                                 | `""`    |
 | `config.database.secret.databaseConnectionUrl`    | Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.                                                    | `""`    |
-| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporter_config.yaml`.                                                                               | `false` |
-| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporter_config.yaml`.                                                                            | `""`    |
+| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporterConfig.yaml`.                                                                                | `false` |
+| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporterConfig.yaml`.                                                                             | `""`    |
 | `config.exporterConfig.secret.annotations`        | Additional annotations of the secret containing the `exporterConfig.yaml`.                                                                        | `{}`    |
 | `config.exporterConfig.secret.labels`             | Additional labels of the secret containing the `exporterConfig.yaml`.                                                                             | `{}`    |
 | `config.exporterConfig.secret.exporterConfig`     | Content of the `exporterConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/). | `{}`    |
@@ -170,7 +170,7 @@ replaced:
 | `deployment.postgresExporter.image.pullPolicy`     | Image pull policy.                                                                                         | `IfNotPresent`                          |
 | `deployment.postgresExporter.resources`            | CPU and memory resources of the pod.                                                                       | `{}`                                    |
 | `deployment.postgresExporter.securityContext`      | Security context of the container of the deployment.                                                       | `{}`                                    |
-| `deployment.postgresExporter.volumeMounts`         | Additional volume mounts.                                                                                  | `{}`                                    |
+| `deployment.postgresExporter.volumeMounts`         | Additional volume mounts.                                                                                  | `[]`                                    |
 | `deployment.nodeSelector`                          | NodeSelector of the postgres-exporter deployment.                                                          | `{}`                                    |
 | `deployment.priorityClassName`                     | PriorityClassName of the postgres-exporter deployment.                                                     | `""`                                    |
 | `deployment.replicaCount`                          | Number of replicas for the postgres-exporter deployment.                                                   | `1`                                     |
