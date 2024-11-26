@@ -38,6 +38,22 @@ tests:
       - --config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml
       - --web.config.file=/etc/prometheus-postgres-exporter/config.d/web-config.yaml
       - --web.listen-address=:9187
+  - equal:
+      path: spec.template.spec.containers[0].volumeMounts
+      value:
+      - mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - equal:
+      path: spec.template.spec.volumes
+      value:
+      - name: config.d
+        projected:
+          defaultMode: "0444"
+          sources:
+          - secret:
+              name: prometheus-postgres-exporter-unittest-exporter-config
+          - secret:
+              name: prometheus-postgres-exporter-unittest-web-config
 
 - it: Test additional arguments
   set:
@@ -64,3 +80,47 @@ tests:
       content:
         secretRef:
           name: custom-database-secret
+
+- it: Test exporterConfig with own secret
+  set:
+    config.exporterConfig.existingSecret.enabled: true
+    config.exporterConfig.existingSecret.secretName: exporter-config-secret
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].volumeMounts
+      value:
+      - mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - equal:
+      path: spec.template.spec.volumes
+      value:
+      - name: config.d
+        projected:
+          defaultMode: "0444"
+          sources:
+          - secret:
+              name: exporter-config-secret
+          - secret:
+              name: prometheus-postgres-exporter-unittest-web-config
+
+- it: Test webConfig with own secret
+  set:
+    config.webConfig.existingSecret.enabled: true
+    config.webConfig.existingSecret.secretName: web-config-secret
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].volumeMounts
+      value:
+      - mountPath: /etc/prometheus-postgres-exporter/config.d
+        name: config.d
+  - equal:
+      path: spec.template.spec.volumes
+      value:
+      - name: config.d
+        projected:
+          defaultMode: "0444"
+          sources:
+          - secret:
+              name: prometheus-postgres-exporter-unittest-exporter-config
+          - secret:
+              name: web-config-secret
