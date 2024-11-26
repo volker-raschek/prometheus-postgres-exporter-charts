@@ -132,7 +132,7 @@ steps:
   - npm install
   - npm run readme:parameters
   - npm run readme:lint
-  image: docker.io/library/node:22.11.0-alpine
+  image: docker.io/library/node:23.3.0-alpine
   resources:
     limits:
       cpu: 150
