@@ -60,6 +60,8 @@ tests:
   - equal:
       path: spec.template.spec.containers[0].imagePullPolicy
       value: IfNotPresent
+  - notExists:
+      path: spec.template.spec.containers[0].resources
 
 - it: Test additional arguments
   set:
@@ -147,6 +149,26 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: web-config-secret
+
+- it: Test custom resource limits and requests
+  set:
+    deployment.postgresExporter.resources:
+      limits:
+        cpu: 100m
+        memory: 250MB
+      requests:
+        cpu: 25m
+        memory: 100MB
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].resources
+      value:
+        limits:
+          cpu: 100m
+          memory: 250MB
+        requests:
+          cpu: 25m
+          memory: 100MB
 
 - it: Test additional volumeMounts and volumes
   set:
