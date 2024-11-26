@@ -225,6 +225,10 @@ deployment:
 
   ## @param deployment.tolerations Tolerations of the postgres-exporter deployment.
   tolerations: []
+  # - key: database/type
+  #   operator: Equal
+  #   value: postgres
+  #   effect: NoSchedule
 
   ## @param deployment.topologySpreadConstraints TopologySpreadConstraints of the postgres-exporter deployment.
   topologySpreadConstraints: []

@@ -86,6 +86,8 @@ tests:
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 60
+  - notExists:
+      path: spec.template.spec.tolerations
 
 - it: Test additional arguments
   set:
@@ -303,6 +305,22 @@ tests:
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 120
+
+- it: Test tolerations
+  set:
+    deployment.tolerations:
+    - key: database/type
+      operator: Equal
+      value: postgres
+      effect: NoSchedule
+  asserts:
+  - equal:
+      path: spec.template.spec.tolerations
+      value:
+      - key: database/type
+        operator: Equal
+        value: postgres
+        effect: NoSchedule
 
 - it: Test additional volumeMounts and volumes
   set:
