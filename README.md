@@ -1,6 +1,7 @@
 # Prometheus PostgreSQL exporter
 
 [![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/prometheus-postgres-exporter/status.svg)](https://drone.cryptic.systems/volker.raschek/prometheus-postgres-exporter)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/prometheus-exporters)](https://artifacthub.io/packages/search?repo=prometheus-exporters)
 
 > [!NOTE]
 > This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. You can
