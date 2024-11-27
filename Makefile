@@ -19,12 +19,6 @@ NODE_IMAGE_REPOSITORY=library/node
 NODE_IMAGE_VERSION?=22.9.0-alpine # renovate: datasource=docker registryUrl=https://docker.io depName=library/node
 NODE_IMAGE_FULLY_QUALIFIED=${NODE_IMAGE_REGISTRY_HOST}/${NODE_IMAGE_REPOSITORY}:${NODE_IMAGE_VERSION}
 
-# CHART_SERVER
-CHART_SERVER_HOST?=charts.u.orbis-healthcare.com
-CHART_SERVER_NAMESPACE?=orbis-u
-CHART_SERVER_REPOSITORY?=qu-seed
-CHART_VERSION?=0.1.0
-
 # MISSING DOT
 # ==============================================================================
 missing-dot:
@@ -66,19 +60,6 @@ container-run/helm-update-dependencies:
 		--workdir $(shell pwd) \
 			${HELM_IMAGE_FULLY_QUALIFIED} \
 				dependency update
-
-# CONTAINER RUN - DEPLOY2CHART-REPO
-# ==============================================================================
-container-run/deploy2chart-repo:
-	${CONTAINER_RUNTIME} run \
-		--env HELM_REPO_PASSWORD=${CHART_SERVER_PASSWORD} \
-		--env HELM_REPO_USERNAME=${CHART_SERVER_USERNAME} \
-		--entrypoint /bin/bash \
-		--rm \
-		--volume $(shell pwd):$(shell pwd) \
-		--workdir $(shell pwd) \
-			${HELM_IMAGE_FULLY_QUALIFIED} \
-				-c "helm repo add ${CHART_SERVER_NAMESPACE} http://${CHART_SERVER_HOST}/${CHART_SERVER_NAMESPACE} && helm package --version ${CHART_VERSION} . && helm cm-push ./${CHART_SERVER_REPOSITORY}-${CHART_VERSION}.tgz ${CHART_SERVER_NAMESPACE}"
 
 # CONTAINER RUN - MARKDOWN-LINT
 # ==============================================================================
