@@ -14,6 +14,6 @@
   },
   "devDependencies": {
     "@bitnami/readme-generator-for-helm": "^2.5.0",
-    "markdownlint-cli": "^0.41.0"
+    "markdownlint-cli": "^0.43.0"
   }
 }
