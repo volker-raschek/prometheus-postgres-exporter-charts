@@ -26,7 +26,7 @@
 .vscode/
 
 # drone
-.drone.ya?ml
+.drone.yml
 
 # editorconfig
 .editorconfig
@@ -37,13 +37,24 @@ values2.yaml
 
 # helm packages
 *.tgz
+.helmignore
+unittests
 
 # markdownlint
 .markdownlint.yml
 .markdownlint.yaml
+.markdownlintignore
 
-# maven
-target
+# npm
+.prettierignore
+.npmrc
+package*
 
-# serviceDescriptor (uctl-cluster)
-serviceDescriptor.yaml
+# yamllint
+.yamllint.yaml
+
+# Others
+CONTRIBUTING.md
+CODEOWNERS
+Makefile
+renovate.json
