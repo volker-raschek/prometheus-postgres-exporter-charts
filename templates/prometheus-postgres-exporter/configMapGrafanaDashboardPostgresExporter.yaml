@@ -14,7 +14,7 @@ metadata:
   name: {{ include "prometheus-postgres-exporter.fullname" . }}-grafana-dashboard-postgres-exporter
   namespace: {{ .Release.Namespace }}
 data:
-  postgresExporter.yaml: |-
+  postgresExporter.json: |-
     {{`{
       "__inputs": [
         {

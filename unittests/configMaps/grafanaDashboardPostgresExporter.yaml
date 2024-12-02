@@ -36,7 +36,7 @@ tests:
         grafana_dashboard: "1"
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
   - exists:
-      path: data["postgresExporter.yaml"]
+      path: data["postgresExporter.json"]
 
 - it: Test custom annotations and labels
   set:
