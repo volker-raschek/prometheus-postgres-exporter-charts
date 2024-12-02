@@ -187,10 +187,13 @@ replaced:
 
 ### Grafana
 
-| Name                                 | Description                                               | Value   |
-| ------------------------------------ | --------------------------------------------------------- | ------- |
-| `grafana.enabled`                    | Enable integration into Grafana.                          | `false` |
-| `grafana.dashboards.businessMetrics` | Enable deployment of Grafana dashboard `businessMetrics`. | `true`  |
+| Name                                              | Description                                                                                              | Value       |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------- |
+| `grafana.enabled`                                 | Enable integration into Grafana. Require the Prometheus operator deployment.                             | `false`     |
+| `grafana.dashboardDiscoveryLabels`                | Labels that Grafana uses to discover resources. The labels may vary depending on the Grafana deployment. | `undefined` |
+| `grafana.dashboards.postgresExporter.enabled`     | Enable deployment of Grafana dashboard `postgresExporter`.                                               | `true`      |
+| `grafana.dashboards.postgresExporter.annotations` | Additional configmap annotations.                                                                        | `{}`        |
+| `grafana.dashboards.postgresExporter.labels`      | Additional configmap labels.                                                                             | `{}`        |
 
 ### Ingress
 

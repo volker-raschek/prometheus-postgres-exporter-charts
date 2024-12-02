@@ -1,0 +1,79 @@
+chart:
+  appVersion: 0.1.0
+  version: 0.1.0
+suite: ConfigMap template (Grafana Dashboard PostgresExporter)
+release:
+  name: prometheus-postgres-exporter-unittest
+  namespace: testing
+templates:
+- templates/prometheus-postgres-exporter/configMapGrafanaDashboardPostgresExporter.yaml
+tests:
+- it: Rendering postgresExporter
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Rendering
+  set:
+    grafana.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 1
+  - containsDocument:
+      apiVersion: v1
+      kind: ConfigMap
+      name: prometheus-postgres-exporter-unittest-grafana-dashboard-postgres-exporter
+      namespace: testing
+  - notExists:
+      path: metadata.annotations
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        grafana_dashboard: "1"
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - exists:
+      path: data["postgresExporter.yaml"]
+
+- it: Test custom annotations and labels
+  set:
+    grafana.enabled: true
+    grafana.dashboards.postgresExporter.annotations:
+      foo: bar
+    grafana.dashboards.postgresExporter.labels:
+      bar: foo
+  asserts:
+  - equal:
+      path: metadata.annotations
+      value:
+        foo: bar
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        grafana_dashboard: "1"
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+        bar: foo
+
+- it: Test custom grafana discovery labels
+  set:
+    grafana.enabled: true
+    grafana.dashboardDiscoveryLabels:
+      grafana_dashboard: null
+      my-custom-discovery-label: my-value
+  asserts:
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        my-custom-discovery-label: my-value
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0

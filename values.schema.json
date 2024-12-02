@@ -1,1790 +1,700 @@
 {
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "default": {},
-    "title": "Root Schema",
-    "required": [
-        "nameOverride",
-        "fullnameOverride",
-        "config",
-        "deployment",
-        "grafana",
-        "ingress",
-        "podDisruptionBudget",
-        "networkPolicies",
-        "prometheus",
-        "services",
-        "serviceAccount"
-    ],
-    "properties": {
-        "nameOverride": {
-            "type": "string",
-            "default": "",
-            "title": "The nameOverride Schema",
-            "examples": [
-                ""
-            ]
-        },
-        "fullnameOverride": {
-            "type": "string",
-            "default": "",
-            "title": "The fullnameOverride Schema",
-            "examples": [
-                ""
-            ]
-        },
-        "config": {
-            "type": "object",
-            "default": {},
-            "title": "The config Schema",
-            "required": [
-                "database",
-                "exporterConfig",
-                "webConfig"
-            ],
-            "properties": {
-                "database": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The database Schema",
-                    "required": [
-                        "existingSecret",
-                        "secret"
-                    ],
-                    "properties": {
-                        "existingSecret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The existingSecret Schema",
-                            "required": [
-                                "enabled",
-                                "secretName"
-                            ],
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enabled Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "secretName": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The secretName Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "enabled": false,
-                                "secretName": ""
-                            }]
-                        },
-                        "secret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The secret Schema",
-                            "required": [
-                                "annotations",
-                                "labels",
-                                "databaseUsername",
-                                "databasePassword",
-                                "databaseConnectionUrl"
-                            ],
-                            "properties": {
-                                "annotations": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The annotations Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The labels Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "databaseUsername": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The databaseUsername Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                },
-                                "databasePassword": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The databasePassword Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                },
-                                "databaseConnectionUrl": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The databaseConnectionUrl Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "annotations": {},
-                                "labels": {},
-                                "databaseUsername": "",
-                                "databasePassword": "",
-                                "databaseConnectionUrl": ""
-                            }]
-                        }
-                    },
-                    "examples": [{
-                        "existingSecret": {
-                            "enabled": false,
-                            "secretName": ""
-                        },
-                        "secret": {
-                            "annotations": {},
-                            "labels": {},
-                            "databaseUsername": "",
-                            "databasePassword": "",
-                            "databaseConnectionUrl": ""
-                        }
-                    }]
-                },
-                "exporterConfig": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The exporterConfig Schema",
-                    "required": [
-                        "existingSecret",
-                        "secret"
-                    ],
-                    "properties": {
-                        "existingSecret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The existingSecret Schema",
-                            "required": [
-                                "enabled",
-                                "secretName"
-                            ],
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enabled Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "secretName": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The secretName Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "enabled": false,
-                                "secretName": ""
-                            }]
-                        },
-                        "secret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The secret Schema",
-                            "required": [
-                                "annotations",
-                                "labels",
-                                "exporterConfig"
-                            ],
-                            "properties": {
-                                "annotations": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The annotations Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The labels Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "exporterConfig": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The exporterConfig Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                }
-                            },
-                            "examples": [{
-                                "annotations": {},
-                                "labels": {},
-                                "exporterConfig": {}
-                            }]
-                        }
-                    },
-                    "examples": [{
-                        "existingSecret": {
-                            "enabled": false,
-                            "secretName": ""
-                        },
-                        "secret": {
-                            "annotations": {},
-                            "labels": {},
-                            "exporterConfig": {}
-                        }
-                    }]
-                },
-                "webConfig": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The webConfig Schema",
-                    "required": [
-                        "existingSecret",
-                        "secret"
-                    ],
-                    "properties": {
-                        "existingSecret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The existingSecret Schema",
-                            "required": [
-                                "enabled",
-                                "secretName"
-                            ],
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enabled Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "secretName": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The secretName Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "enabled": false,
-                                "secretName": ""
-                            }]
-                        },
-                        "secret": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The secret Schema",
-                            "required": [
-                                "annotations",
-                                "labels",
-                                "webConfig"
-                            ],
-                            "properties": {
-                                "annotations": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The annotations Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The labels Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "webConfig": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The webConfig Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                }
-                            },
-                            "examples": [{
-                                "annotations": {},
-                                "labels": {},
-                                "webConfig": {}
-                            }]
-                        }
-                    },
-                    "examples": [{
-                        "existingSecret": {
-                            "enabled": false,
-                            "secretName": ""
-                        },
-                        "secret": {
-                            "annotations": {},
-                            "labels": {},
-                            "webConfig": {}
-                        }
-                    }]
-                }
-            },
-            "examples": [{
-                "database": {
-                    "existingSecret": {
-                        "enabled": false,
-                        "secretName": ""
-                    },
-                    "secret": {
-                        "annotations": {},
-                        "labels": {},
-                        "databaseUsername": "",
-                        "databasePassword": "",
-                        "databaseConnectionUrl": ""
-                    }
-                },
-                "exporterConfig": {
-                    "existingSecret": {
-                        "enabled": false,
-                        "secretName": ""
-                    },
-                    "secret": {
-                        "annotations": {},
-                        "labels": {},
-                        "exporterConfig": {}
-                    }
-                },
-                "webConfig": {
-                    "existingSecret": {
-                        "enabled": false,
-                        "secretName": ""
-                    },
-                    "secret": {
-                        "annotations": {},
-                        "labels": {},
-                        "webConfig": {}
-                    }
-                }
-            }]
-        },
-        "deployment": {
-            "type": "object",
-            "default": {},
-            "title": "The deployment Schema",
-            "required": [
-                "annotations",
-                "labels",
-                "additionalContainers",
-                "affinity",
-                "initContainers",
-                "dnsConfig",
-                "dnsPolicy",
-                "hostname",
-                "subdomain",
-                "hostNetwork",
-                "imagePullSecrets",
-                "postgresExporter",
-                "nodeSelector",
-                "priorityClassName",
-                "replicaCount",
-                "restartPolicy",
-                "securityContext",
-                "strategy",
-                "terminationGracePeriodSeconds",
-                "tolerations",
-                "topologySpreadConstraints",
-                "volumes"
-            ],
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The annotations Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "labels": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The labels Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "additionalContainers": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The additionalContainers Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "affinity": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The affinity Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "initContainers": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The initContainers Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "dnsConfig": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The dnsConfig Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "dnsPolicy": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The dnsPolicy Schema",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "hostname": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The hostname Schema",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "subdomain": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The subdomain Schema",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "hostNetwork": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The hostNetwork Schema",
-                    "examples": [
-                        false
-                    ]
-                },
-                "imagePullSecrets": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The imagePullSecrets Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "postgresExporter": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The postgresExporter Schema",
-                    "required": [
-                        "args",
-                        "env",
-                        "envFrom",
-                        "image",
-                        "resources",
-                        "securityContext",
-                        "volumeMounts"
-                    ],
-                    "properties": {
-                        "args": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The args Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "env": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The env Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "envFrom": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The envFrom Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "image": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The image Schema",
-                            "required": [
-                                "registry",
-                                "repository",
-                                "tag",
-                                "pullPolicy"
-                            ],
-                            "properties": {
-                                "registry": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The registry Schema",
-                                    "examples": [
-                                        "quay.io"
-                                    ]
-                                },
-                                "repository": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The repository Schema",
-                                    "examples": [
-                                        "prometheuscommunity/postgres-exporter"
-                                    ]
-                                },
-                                "tag": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The tag Schema",
-                                    "examples": [
-                                        ""
-                                    ]
-                                },
-                                "pullPolicy": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The pullPolicy Schema",
-                                    "examples": [
-                                        "IfNotPresent"
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "registry": "quay.io",
-                                "repository": "prometheuscommunity/postgres-exporter",
-                                "tag": "",
-                                "pullPolicy": "IfNotPresent"
-                            }]
-                        },
-                        "resources": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The resources Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "securityContext": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The securityContext Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "volumeMounts": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The volumeMounts Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "args": [],
-                        "env": [],
-                        "envFrom": [],
-                        "image": {
-                            "registry": "quay.io",
-                            "repository": "prometheuscommunity/postgres-exporter",
-                            "tag": "",
-                            "pullPolicy": "IfNotPresent"
-                        },
-                        "resources": {},
-                        "securityContext": {},
-                        "volumeMounts": []
-                    }]
-                },
-                "nodeSelector": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The nodeSelector Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "priorityClassName": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The priorityClassName Schema",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "replicaCount": {
-                    "type": "integer",
-                    "default": 0,
-                    "title": "The replicaCount Schema",
-                    "examples": [
-                        1
-                    ]
-                },
-                "restartPolicy": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The restartPolicy Schema",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "securityContext": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The securityContext Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "strategy": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The strategy Schema",
-                    "required": [
-                        "type",
-                        "rollingUpdate"
-                    ],
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The type Schema",
-                            "examples": [
-                                "Recreate"
-                            ]
-                        },
-                        "rollingUpdate": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The rollingUpdate Schema",
-                            "required": [
-                                "maxSurge",
-                                "maxUnavailable"
-                            ],
-                            "properties": {
-                                "maxSurge": {
-                                    "type": "integer",
-                                    "default": 0,
-                                    "title": "The maxSurge Schema",
-                                    "examples": [
-                                        1
-                                    ]
-                                },
-                                "maxUnavailable": {
-                                    "type": "integer",
-                                    "default": 0,
-                                    "title": "The maxUnavailable Schema",
-                                    "examples": [
-                                        1
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "maxSurge": 1,
-                                "maxUnavailable": 1
-                            }]
-                        }
-                    },
-                    "examples": [{
-                        "type": "Recreate",
-                        "rollingUpdate": {
-                            "maxSurge": 1,
-                            "maxUnavailable": 1
-                        }
-                    }]
-                },
-                "terminationGracePeriodSeconds": {
-                    "type": "integer",
-                    "default": 0,
-                    "title": "The terminationGracePeriodSeconds Schema",
-                    "examples": [
-                        60
-                    ]
-                },
-                "tolerations": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The tolerations Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "topologySpreadConstraints": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The topologySpreadConstraints Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "volumes": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The volumes Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                }
-            },
-            "examples": [{
-                "annotations": {},
-                "labels": {},
-                "additionalContainers": [],
-                "affinity": {},
-                "initContainers": [],
-                "dnsConfig": {},
-                "dnsPolicy": "",
-                "hostname": "",
-                "subdomain": "",
-                "hostNetwork": false,
-                "imagePullSecrets": [],
-                "postgresExporter": {
-                    "args": [],
-                    "env": [],
-                    "envFrom": [],
-                    "image": {
-                        "registry": "quay.io",
-                        "repository": "prometheuscommunity/postgres-exporter",
-                        "tag": "",
-                        "pullPolicy": "IfNotPresent"
-                    },
-                    "resources": {},
-                    "securityContext": {},
-                    "volumeMounts": []
-                },
-                "nodeSelector": {},
-                "priorityClassName": "",
-                "replicaCount": 1,
-                "restartPolicy": "",
-                "securityContext": {},
-                "strategy": {
-                    "type": "Recreate",
-                    "rollingUpdate": {
-                        "maxSurge": 1,
-                        "maxUnavailable": 1
-                    }
-                },
-                "terminationGracePeriodSeconds": 60,
-                "tolerations": [],
-                "topologySpreadConstraints": [],
-                "volumes": []
-            }]
-        },
-        "grafana": {
-            "type": "object",
-            "default": {},
-            "title": "The grafana Schema",
-            "required": [
-                "enabled",
-                "dashboards"
-            ],
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The enabled Schema",
-                    "examples": [
-                        false
-                    ]
-                },
-                "dashboards": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The dashboards Schema",
-                    "required": [
-                        "businessMetrics"
-                    ],
-                    "properties": {
-                        "businessMetrics": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "The businessMetrics Schema",
-                            "examples": [
-                                true
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "businessMetrics": true
-                    }]
-                }
-            },
-            "examples": [{
-                "enabled": false,
-                "dashboards": {
-                    "businessMetrics": true
-                }
-            }]
-        },
-        "ingress": {
-            "type": "object",
-            "default": {},
-            "title": "The ingress Schema",
-            "required": [
-                "enabled",
-                "className",
-                "annotations",
-                "labels",
-                "hosts",
-                "tls"
-            ],
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The enabled Schema",
-                    "examples": [
-                        false
-                    ]
-                },
-                "className": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The className Schema",
-                    "examples": [
-                        "nginx"
-                    ]
-                },
-                "annotations": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The annotations Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "labels": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The labels Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
-                },
-                "hosts": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The hosts Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                },
-                "tls": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The tls Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                }
-            },
-            "examples": [{
-                "enabled": false,
-                "className": "nginx",
-                "annotations": {},
-                "labels": {},
-                "hosts": [],
-                "tls": []
-            }]
-        },
-        "podDisruptionBudget": {
-            "type": "object",
-            "default": {},
-            "title": "The podDisruptionBudget Schema",
-            "required": [],
-            "properties": {},
-            "examples": [{}]
-        },
-        "networkPolicies": {
-            "type": "object",
-            "default": {},
-            "title": "The networkPolicies Schema",
-            "required": [],
-            "properties": {},
-            "examples": [{}]
-        },
-        "prometheus": {
-            "type": "object",
-            "default": {},
-            "title": "The prometheus Schema",
-            "required": [
-                "metrics",
-                "rules"
-            ],
-            "properties": {
-                "metrics": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The metrics Schema",
-                    "required": [
-                        "enabled",
-                        "podMonitor",
-                        "serviceMonitor"
-                    ],
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "The enabled Schema",
-                            "examples": [
-                                true
-                            ]
-                        },
-                        "podMonitor": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The podMonitor Schema",
-                            "required": [
-                                "enabled",
-                                "annotations",
-                                "enableHttp2",
-                                "followRedirects",
-                                "honorLabels",
-                                "labels",
-                                "interval",
-                                "path",
-                                "relabelings",
-                                "scrapeTimeout",
-                                "scheme",
-                                "tlsConfig"
-                            ],
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enabled Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The annotations Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "enableHttp2": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enableHttp2 Schema",
-                                    "examples": [
-                                        true
-                                    ]
-                                },
-                                "followRedirects": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The followRedirects Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "honorLabels": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The honorLabels Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The labels Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "interval": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The interval Schema",
-                                    "examples": [
-                                        "60s"
-                                    ]
-                                },
-                                "path": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The path Schema",
-                                    "examples": [
-                                        "/metrics"
-                                    ]
-                                },
-                                "relabelings": {
-                                    "type": "array",
-                                    "default": [],
-                                    "title": "The relabelings Schema",
-                                    "items": {},
-                                    "examples": [
-                                        []
-                                    ]
-                                },
-                                "scrapeTimeout": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The scrapeTimeout Schema",
-                                    "examples": [
-                                        "30s"
-                                    ]
-                                },
-                                "scheme": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The scheme Schema",
-                                    "examples": [
-                                        "http"
-                                    ]
-                                },
-                                "tlsConfig": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The tlsConfig Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                }
-                            },
-                            "examples": [{
-                                "enabled": false,
-                                "annotations": {},
-                                "enableHttp2": true,
-                                "followRedirects": false,
-                                "honorLabels": false,
-                                "labels": {},
-                                "interval": "60s",
-                                "path": "/metrics",
-                                "relabelings": [],
-                                "scrapeTimeout": "30s",
-                                "scheme": "http",
-                                "tlsConfig": {}
-                            }]
-                        },
-                        "serviceMonitor": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The serviceMonitor Schema",
-                            "required": [
-                                "enabled",
-                                "annotations",
-                                "labels",
-                                "enableHttp2",
-                                "followRedirects",
-                                "honorLabels",
-                                "interval",
-                                "path",
-                                "relabelings",
-                                "scrapeTimeout",
-                                "scheme",
-                                "tlsConfig"
-                            ],
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enabled Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The annotations Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The labels Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                },
-                                "enableHttp2": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The enableHttp2 Schema",
-                                    "examples": [
-                                        true
-                                    ]
-                                },
-                                "followRedirects": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The followRedirects Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "honorLabels": {
-                                    "type": "boolean",
-                                    "default": false,
-                                    "title": "The honorLabels Schema",
-                                    "examples": [
-                                        false
-                                    ]
-                                },
-                                "interval": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The interval Schema",
-                                    "examples": [
-                                        "60s"
-                                    ]
-                                },
-                                "path": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The path Schema",
-                                    "examples": [
-                                        "/metrics"
-                                    ]
-                                },
-                                "relabelings": {
-                                    "type": "array",
-                                    "default": [],
-                                    "title": "The relabelings Schema",
-                                    "items": {},
-                                    "examples": [
-                                        []
-                                    ]
-                                },
-                                "scrapeTimeout": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The scrapeTimeout Schema",
-                                    "examples": [
-                                        "30s"
-                                    ]
-                                },
-                                "scheme": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The scheme Schema",
-                                    "examples": [
-                                        "http"
-                                    ]
-                                },
-                                "tlsConfig": {
-                                    "type": "object",
-                                    "default": {},
-                                    "title": "The tlsConfig Schema",
-                                    "required": [],
-                                    "properties": {},
-                                    "examples": [{}]
-                                }
-                            },
-                            "examples": [{
-                                "enabled": false,
-                                "annotations": {},
-                                "labels": {},
-                                "enableHttp2": true,
-                                "followRedirects": false,
-                                "honorLabels": false,
-                                "interval": "60s",
-                                "path": "/metrics",
-                                "relabelings": [],
-                                "scrapeTimeout": "30s",
-                                "scheme": "http",
-                                "tlsConfig": {}
-                            }]
-                        }
-                    },
-                    "examples": [{
-                        "enabled": true,
-                        "podMonitor": {
-                            "enabled": false,
-                            "annotations": {},
-                            "enableHttp2": true,
-                            "followRedirects": false,
-                            "honorLabels": false,
-                            "labels": {},
-                            "interval": "60s",
-                            "path": "/metrics",
-                            "relabelings": [],
-                            "scrapeTimeout": "30s",
-                            "scheme": "http",
-                            "tlsConfig": {}
-                        },
-                        "serviceMonitor": {
-                            "enabled": false,
-                            "annotations": {},
-                            "labels": {},
-                            "enableHttp2": true,
-                            "followRedirects": false,
-                            "honorLabels": false,
-                            "interval": "60s",
-                            "path": "/metrics",
-                            "relabelings": [],
-                            "scrapeTimeout": "30s",
-                            "scheme": "http",
-                            "tlsConfig": {}
-                        }
-                    }]
-                },
-                "rules": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The rules Schema",
-                    "items": {},
-                    "examples": [
-                        []
-                    ]
-                }
-            },
-            "examples": [{
-                "metrics": {
-                    "enabled": true,
-                    "podMonitor": {
-                        "enabled": false,
-                        "annotations": {},
-                        "enableHttp2": true,
-                        "followRedirects": false,
-                        "honorLabels": false,
-                        "labels": {},
-                        "interval": "60s",
-                        "path": "/metrics",
-                        "relabelings": [],
-                        "scrapeTimeout": "30s",
-                        "scheme": "http",
-                        "tlsConfig": {}
-                    },
-                    "serviceMonitor": {
-                        "enabled": false,
-                        "annotations": {},
-                        "labels": {},
-                        "enableHttp2": true,
-                        "followRedirects": false,
-                        "honorLabels": false,
-                        "interval": "60s",
-                        "path": "/metrics",
-                        "relabelings": [],
-                        "scrapeTimeout": "30s",
-                        "scheme": "http",
-                        "tlsConfig": {}
-                    }
-                },
-                "rules": []
-            }]
-        },
-        "services": {
-            "type": "object",
-            "default": {},
-            "title": "The services Schema",
-            "required": [
-                "http"
-            ],
-            "properties": {
-                "http": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The http Schema",
-                    "required": [
-                        "enabled",
-                        "annotations",
-                        "externalIPs",
-                        "externalTrafficPolicy",
-                        "internalTrafficPolicy",
-                        "ipFamilies",
-                        "labels",
-                        "loadBalancerClass",
-                        "loadBalancerIP",
-                        "loadBalancerSourceRanges",
-                        "port",
-                        "sessionAffinity",
-                        "sessionAffinityConfig",
-                        "type"
-                    ],
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "The enabled Schema",
-                            "examples": [
-                                true
-                            ]
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The annotations Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "externalIPs": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The externalIPs Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "externalTrafficPolicy": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The externalTrafficPolicy Schema",
-                            "examples": [
-                                "Cluster"
-                            ]
-                        },
-                        "internalTrafficPolicy": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The internalTrafficPolicy Schema",
-                            "examples": [
-                                "Cluster"
-                            ]
-                        },
-                        "ipFamilies": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The ipFamilies Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "labels": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The labels Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "loadBalancerClass": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The loadBalancerClass Schema",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "loadBalancerIP": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The loadBalancerIP Schema",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "loadBalancerSourceRanges": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The loadBalancerSourceRanges Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "port": {
-                            "type": "integer",
-                            "default": 0,
-                            "title": "The port Schema",
-                            "examples": [
-                                9187
-                            ]
-                        },
-                        "sessionAffinity": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sessionAffinity Schema",
-                            "examples": [
-                                "None"
-                            ]
-                        },
-                        "sessionAffinityConfig": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The sessionAffinityConfig Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "type": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The type Schema",
-                            "examples": [
-                                "ClusterIP"
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "enabled": true,
-                        "annotations": {},
-                        "externalIPs": [],
-                        "externalTrafficPolicy": "Cluster",
-                        "internalTrafficPolicy": "Cluster",
-                        "ipFamilies": [],
-                        "labels": {},
-                        "loadBalancerClass": "",
-                        "loadBalancerIP": "",
-                        "loadBalancerSourceRanges": [],
-                        "port": 9187,
-                        "sessionAffinity": "None",
-                        "sessionAffinityConfig": {},
-                        "type": "ClusterIP"
-                    }]
-                }
-            },
-            "examples": [{
-                "http": {
-                    "enabled": true,
-                    "annotations": {},
-                    "externalIPs": [],
-                    "externalTrafficPolicy": "Cluster",
-                    "internalTrafficPolicy": "Cluster",
-                    "ipFamilies": [],
-                    "labels": {},
-                    "loadBalancerClass": "",
-                    "loadBalancerIP": "",
-                    "loadBalancerSourceRanges": [],
-                    "port": 9187,
-                    "sessionAffinity": "None",
-                    "sessionAffinityConfig": {},
-                    "type": "ClusterIP"
-                }
-            }]
-        },
-        "serviceAccount": {
-            "type": "object",
-            "default": {},
-            "title": "The serviceAccount Schema",
-            "required": [
-                "existing",
-                "new"
-            ],
-            "properties": {
-                "existing": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The existing Schema",
-                    "required": [
-                        "enabled",
-                        "serviceAccountName"
-                    ],
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "The enabled Schema",
-                            "examples": [
-                                false
-                            ]
-                        },
-                        "serviceAccountName": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The serviceAccountName Schema",
-                            "examples": [
-                                ""
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "enabled": false,
-                        "serviceAccountName": ""
-                    }]
-                },
-                "new": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The new Schema",
-                    "required": [
-                        "annotations",
-                        "labels",
-                        "automountServiceAccountToken",
-                        "imagePullSecrets",
-                        "secrets"
-                    ],
-                    "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The annotations Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "labels": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The labels Schema",
-                            "required": [],
-                            "properties": {},
-                            "examples": [{}]
-                        },
-                        "automountServiceAccountToken": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "The automountServiceAccountToken Schema",
-                            "examples": [
-                                true
-                            ]
-                        },
-                        "imagePullSecrets": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The imagePullSecrets Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        },
-                        "secrets": {
-                            "type": "array",
-                            "default": [],
-                            "title": "The secrets Schema",
-                            "items": {},
-                            "examples": [
-                                []
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "annotations": {},
-                        "labels": {},
-                        "automountServiceAccountToken": true,
-                        "imagePullSecrets": [],
-                        "secrets": []
-                    }]
-                }
-            },
-            "examples": [{
-                "existing": {
-                    "enabled": false,
-                    "serviceAccountName": ""
-                },
-                "new": {
-                    "annotations": {},
-                    "labels": {},
-                    "automountServiceAccountToken": true,
-                    "imagePullSecrets": [],
-                    "secrets": []
-                }
-            }]
-        }
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "nameOverride": {
+      "type": "string"
     },
-    "examples": [{
-        "nameOverride": "",
-        "fullnameOverride": "",
-        "config": {
-            "database": {
-                "existingSecret": {
-                    "enabled": false,
-                    "secretName": ""
+    "fullnameOverride": {
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "database": {
+          "type": "object",
+          "properties": {
+            "existingSecret": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
                 },
-                "secret": {
-                    "annotations": {},
-                    "labels": {},
-                    "databaseUsername": "",
-                    "databasePassword": "",
-                    "databaseConnectionUrl": ""
+                "secretName": {
+                  "type": "string"
                 }
+              },
+              "required": [
+                "enabled",
+                "secretName"
+              ]
             },
-            "exporterConfig": {
-                "existingSecret": {
-                    "enabled": false,
-                    "secretName": ""
+            "secret": {
+              "type": "object",
+              "properties": {
+                "annotations": {
+                  "type": "object"
                 },
-                "secret": {
-                    "annotations": {},
-                    "labels": {},
-                    "exporterConfig": {}
-                }
-            },
-            "webConfig": {
-                "existingSecret": {
-                    "enabled": false,
-                    "secretName": ""
+                "labels": {
+                  "type": "object"
                 },
-                "secret": {
-                    "annotations": {},
-                    "labels": {},
-                    "webConfig": {}
+                "databaseUsername": {
+                  "type": "string"
+                },
+                "databasePassword": {
+                  "type": "string"
+                },
+                "databaseConnectionUrl": {
+                  "type": "string"
                 }
+              },
+              "required": [
+                "annotations",
+                "labels",
+                "databaseUsername",
+                "databasePassword",
+                "databaseConnectionUrl"
+              ]
             }
+          },
+          "required": [
+            "existingSecret",
+            "secret"
+          ]
         },
-        "deployment": {
-            "annotations": {},
-            "labels": {},
-            "additionalContainers": [],
-            "affinity": {},
-            "initContainers": [],
-            "dnsConfig": {},
-            "dnsPolicy": "",
-            "hostname": "",
-            "subdomain": "",
-            "hostNetwork": false,
-            "imagePullSecrets": [],
-            "postgresExporter": {
-                "args": [],
-                "env": [],
-                "envFrom": [],
-                "image": {
-                    "registry": "quay.io",
-                    "repository": "prometheuscommunity/postgres-exporter",
-                    "tag": "",
-                    "pullPolicy": "IfNotPresent"
+        "exporterConfig": {
+          "type": "object",
+          "properties": {
+            "existingSecret": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
                 },
-                "resources": {},
-                "securityContext": {},
-                "volumeMounts": []
-            },
-            "nodeSelector": {},
-            "priorityClassName": "",
-            "replicaCount": 1,
-            "restartPolicy": "",
-            "securityContext": {},
-            "strategy": {
-                "type": "Recreate",
-                "rollingUpdate": {
-                    "maxSurge": 1,
-                    "maxUnavailable": 1
+                "secretName": {
+                  "type": "string"
                 }
+              },
+              "required": [
+                "enabled",
+                "secretName"
+              ]
             },
-            "terminationGracePeriodSeconds": 60,
-            "tolerations": [],
-            "topologySpreadConstraints": [],
-            "volumes": []
-        },
-        "grafana": {
-            "enabled": false,
-            "dashboards": {
-                "businessMetrics": true
-            }
-        },
-        "ingress": {
-            "enabled": false,
-            "className": "nginx",
-            "annotations": {},
-            "labels": {},
-            "hosts": [],
-            "tls": []
-        },
-        "podDisruptionBudget": {},
-        "networkPolicies": {},
-        "prometheus": {
-            "metrics": {
-                "enabled": true,
-                "podMonitor": {
-                    "enabled": false,
-                    "annotations": {},
-                    "enableHttp2": true,
-                    "followRedirects": false,
-                    "honorLabels": false,
-                    "labels": {},
-                    "interval": "60s",
-                    "path": "/metrics",
-                    "relabelings": [],
-                    "scrapeTimeout": "30s",
-                    "scheme": "http",
-                    "tlsConfig": {}
+            "secret": {
+              "type": "object",
+              "properties": {
+                "annotations": {
+                  "type": "object"
                 },
-                "serviceMonitor": {
-                    "enabled": false,
-                    "annotations": {},
-                    "labels": {},
-                    "enableHttp2": true,
-                    "followRedirects": false,
-                    "honorLabels": false,
-                    "interval": "60s",
-                    "path": "/metrics",
-                    "relabelings": [],
-                    "scrapeTimeout": "30s",
-                    "scheme": "http",
-                    "tlsConfig": {}
+                "labels": {
+                  "type": "object"
+                },
+                "exporterConfig": {
+                  "type": "object"
                 }
-            },
-            "rules": []
-        },
-        "services": {
-            "http": {
-                "enabled": true,
-                "annotations": {},
-                "externalIPs": [],
-                "externalTrafficPolicy": "Cluster",
-                "internalTrafficPolicy": "Cluster",
-                "ipFamilies": [],
-                "labels": {},
-                "loadBalancerClass": "",
-                "loadBalancerIP": "",
-                "loadBalancerSourceRanges": [],
-                "port": 9187,
-                "sessionAffinity": "None",
-                "sessionAffinityConfig": {},
-                "type": "ClusterIP"
+              },
+              "required": [
+                "annotations",
+                "labels",
+                "exporterConfig"
+              ]
             }
+          },
+          "required": [
+            "existingSecret",
+            "secret"
+          ]
         },
-        "serviceAccount": {
-            "existing": {
-                "enabled": false,
-                "serviceAccountName": ""
+        "webConfig": {
+          "type": "object",
+          "properties": {
+            "existingSecret": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "secretName": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "secretName"
+              ]
             },
-            "new": {
-                "annotations": {},
-                "labels": {},
-                "automountServiceAccountToken": true,
-                "imagePullSecrets": [],
-                "secrets": []
+            "secret": {
+              "type": "object",
+              "properties": {
+                "annotations": {
+                  "type": "object"
+                },
+                "labels": {
+                  "type": "object"
+                },
+                "webConfig": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "annotations",
+                "labels",
+                "webConfig"
+              ]
             }
+          },
+          "required": [
+            "existingSecret",
+            "secret"
+          ]
         }
-    }]
+      },
+      "required": [
+        "database",
+        "exporterConfig",
+        "webConfig"
+      ]
+    },
+    "deployment": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "additionalContainers": {
+          "type": "array",
+          "items": {}
+        },
+        "affinity": {
+          "type": "object"
+        },
+        "initContainers": {
+          "type": "array",
+          "items": {}
+        },
+        "dnsConfig": {
+          "type": "object"
+        },
+        "dnsPolicy": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "subdomain": {
+          "type": "string"
+        },
+        "hostNetwork": {
+          "type": "boolean"
+        },
+        "imagePullSecrets": {
+          "type": "array",
+          "items": {}
+        },
+        "postgresExporter": {
+          "type": "object",
+          "properties": {
+            "args": {
+              "type": "array",
+              "items": {}
+            },
+            "env": {
+              "type": "array",
+              "items": {}
+            },
+            "envFrom": {
+              "type": "array",
+              "items": {}
+            },
+            "image": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                },
+                "pullPolicy": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "registry",
+                "repository",
+                "tag",
+                "pullPolicy"
+              ]
+            },
+            "resources": {
+              "type": "object"
+            },
+            "securityContext": {
+              "type": "object"
+            },
+            "volumeMounts": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "required": [
+            "args",
+            "env",
+            "envFrom",
+            "image",
+            "resources",
+            "securityContext",
+            "volumeMounts"
+          ]
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "priorityClassName": {
+          "type": "string"
+        },
+        "replicaCount": {
+          "type": "integer"
+        },
+        "restartPolicy": {
+          "type": "string"
+        },
+        "securityContext": {
+          "type": "object"
+        },
+        "strategy": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "rollingUpdate": {
+              "type": "object",
+              "properties": {
+                "maxSurge": {
+                  "type": "integer"
+                },
+                "maxUnavailable": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "maxSurge",
+                "maxUnavailable"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "rollingUpdate"
+          ]
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer"
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {}
+        },
+        "topologySpreadConstraints": {
+          "type": "array",
+          "items": {}
+        },
+        "volumes": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "annotations",
+        "labels",
+        "additionalContainers",
+        "affinity",
+        "initContainers",
+        "dnsConfig",
+        "dnsPolicy",
+        "hostname",
+        "subdomain",
+        "hostNetwork",
+        "imagePullSecrets",
+        "postgresExporter",
+        "nodeSelector",
+        "priorityClassName",
+        "replicaCount",
+        "restartPolicy",
+        "securityContext",
+        "strategy",
+        "terminationGracePeriodSeconds",
+        "tolerations",
+        "topologySpreadConstraints",
+        "volumes"
+      ]
+    },
+    "grafana": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "dashboardDiscoveryLabels": {
+          "type": "object"
+        },
+        "dashboards": {
+          "type": "object",
+          "properties": {
+            "postgresExporter": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "annotations": {
+                  "type": "object"
+                },
+                "labels": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "enabled",
+                "annotations",
+                "labels"
+              ]
+            }
+          },
+          "required": [
+            "postgresExporter"
+          ]
+        }
+      },
+      "required": [
+        "enabled",
+        "dashboardDiscoveryLabels",
+        "dashboards"
+      ]
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "className": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "hosts": {
+          "type": "array",
+          "items": {}
+        },
+        "tls": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "enabled",
+        "className",
+        "annotations",
+        "labels",
+        "hosts",
+        "tls"
+      ]
+    },
+    "podDisruptionBudget": {
+      "type": "object"
+    },
+    "networkPolicies": {
+      "type": "object"
+    },
+    "prometheus": {
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "podMonitor": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "annotations": {
+                  "type": "object"
+                },
+                "enableHttp2": {
+                  "type": "boolean"
+                },
+                "followRedirects": {
+                  "type": "boolean"
+                },
+                "honorLabels": {
+                  "type": "boolean"
+                },
+                "labels": {
+                  "type": "object"
+                },
+                "interval": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "relabelings": {
+                  "type": "array",
+                  "items": {}
+                },
+                "scrapeTimeout": {
+                  "type": "string"
+                },
+                "scheme": {
+                  "type": "string"
+                },
+                "tlsConfig": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "enabled",
+                "annotations",
+                "enableHttp2",
+                "followRedirects",
+                "honorLabels",
+                "labels",
+                "interval",
+                "path",
+                "relabelings",
+                "scrapeTimeout",
+                "scheme",
+                "tlsConfig"
+              ]
+            },
+            "serviceMonitor": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "annotations": {
+                  "type": "object"
+                },
+                "labels": {
+                  "type": "object"
+                },
+                "enableHttp2": {
+                  "type": "boolean"
+                },
+                "followRedirects": {
+                  "type": "boolean"
+                },
+                "honorLabels": {
+                  "type": "boolean"
+                },
+                "interval": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "relabelings": {
+                  "type": "array",
+                  "items": {}
+                },
+                "scrapeTimeout": {
+                  "type": "string"
+                },
+                "scheme": {
+                  "type": "string"
+                },
+                "tlsConfig": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "enabled",
+                "annotations",
+                "labels",
+                "enableHttp2",
+                "followRedirects",
+                "honorLabels",
+                "interval",
+                "path",
+                "relabelings",
+                "scrapeTimeout",
+                "scheme",
+                "tlsConfig"
+              ]
+            }
+          },
+          "required": [
+            "enabled",
+            "podMonitor",
+            "serviceMonitor"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "metrics",
+        "rules"
+      ]
+    },
+    "services": {
+      "type": "object",
+      "properties": {
+        "http": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "annotations": {
+              "type": "object"
+            },
+            "externalIPs": {
+              "type": "array",
+              "items": {}
+            },
+            "externalTrafficPolicy": {
+              "type": "string"
+            },
+            "internalTrafficPolicy": {
+              "type": "string"
+            },
+            "ipFamilies": {
+              "type": "array",
+              "items": {}
+            },
+            "labels": {
+              "type": "object"
+            },
+            "loadBalancerClass": {
+              "type": "string"
+            },
+            "loadBalancerIP": {
+              "type": "string"
+            },
+            "loadBalancerSourceRanges": {
+              "type": "array",
+              "items": {}
+            },
+            "port": {
+              "type": "integer"
+            },
+            "sessionAffinity": {
+              "type": "string"
+            },
+            "sessionAffinityConfig": {
+              "type": "object"
+            },
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "enabled",
+            "annotations",
+            "externalIPs",
+            "externalTrafficPolicy",
+            "internalTrafficPolicy",
+            "ipFamilies",
+            "labels",
+            "loadBalancerClass",
+            "loadBalancerIP",
+            "loadBalancerSourceRanges",
+            "port",
+            "sessionAffinity",
+            "sessionAffinityConfig",
+            "type"
+          ]
+        }
+      },
+      "required": [
+        "http"
+      ]
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "existing": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "serviceAccountName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "enabled",
+            "serviceAccountName"
+          ]
+        },
+        "new": {
+          "type": "object",
+          "properties": {
+            "annotations": {
+              "type": "object"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "automountServiceAccountToken": {
+              "type": "boolean"
+            },
+            "imagePullSecrets": {
+              "type": "array",
+              "items": {}
+            },
+            "secrets": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "required": [
+            "annotations",
+            "labels",
+            "automountServiceAccountToken",
+            "imagePullSecrets",
+            "secrets"
+          ]
+        }
+      },
+      "required": [
+        "existing",
+        "new"
+      ]
+    }
+  },
+  "required": [
+    "nameOverride",
+    "fullnameOverride",
+    "config",
+    "deployment",
+    "grafana",
+    "ingress",
+    "podDisruptionBudget",
+    "networkPolicies",
+    "prometheus",
+    "services",
+    "serviceAccount"
+  ]
 }

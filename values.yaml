@@ -248,12 +248,23 @@ deployment:
   #     secretName: my-secret
 
 ## @section Grafana
-## @param grafana.enabled Enable integration into Grafana.
-## @param grafana.dashboards.businessMetrics Enable deployment of Grafana dashboard `businessMetrics`.
+## @param grafana.enabled Enable integration into Grafana. Require the prometheus operator deployment.
 grafana:
   enabled: false
+
+  ## @param grafana.dashboardDiscoveryLabels Labels that Grafana uses to discover resources. The labels may vary depending on the Grafana deployment.
+  ## @skip grafana.dashboardDiscoveryLabels
+  dashboardDiscoveryLabels:
+    grafana_dashboard: "1"
+
   dashboards:
-    businessMetrics: true
+    ## @param grafana.dashboards.postgresExporter.enabled Enable deployment of Grafana dashboard `postgresExporter`.
+    ## @param grafana.dashboards.postgresExporter.annotations Additional configmap annotations.
+    ## @param grafana.dashboards.postgresExporter.labels Additional configmap labels.
+    postgresExporter:
+      enabled: true
+      annotations: {}
+      labels: {}
 
 ## @section Ingress
 ingress:
