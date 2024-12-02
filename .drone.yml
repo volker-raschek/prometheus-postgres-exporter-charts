@@ -17,7 +17,7 @@ steps:
 - name: helm lint
   commands:
   - helm lint
-  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  image: git.cryptic.systems/volker.raschek/helm:3.16.3
   resources:
     limits:
       cpu: 150
@@ -78,7 +78,7 @@ steps:
 - name: helm unittest
   commands:
   - helm unittest --strict --file 'unittests/**/*.yaml' ./
-  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  image: git.cryptic.systems/volker.raschek/helm:3.16.3
   resources:
     limits:
       cpu: 150
@@ -195,7 +195,7 @@ steps:
       from_secret: helm_repo_password
     HELM_REPO_USERNAME:
       from_secret: helm_repo_username
-  image: git.cryptic.systems/volker.raschek/helm:3.16.1
+  image: git.cryptic.systems/volker.raschek/helm:3.16.3
   resources:
     limits:
       cpu: 150
