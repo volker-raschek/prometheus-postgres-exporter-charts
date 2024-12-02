@@ -116,6 +116,22 @@ replaced:
 +   --set 'prometheus.metrics.serviceMonitor.tlsConfig.keyFile=/etc/prometheus/tls/tls.key'
 ```
 
+### Grafana dashboard
+
+The helm chart includes Grafana dashboards. These can be deployed as a configMap by activating Grafana integration. It
+is assumed that the dashboard is consumed by Grafana or a sidecar container itself and that the dashboard is stored in
+the Grafana container file system so that it is subsequently available to the user. The
+[kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack) deployment
+makes this possible.
+
+```bash
+helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
+  --set 'config.database.secret.databaseUsername=postgres' \
+  --set 'config.database.secret.databasePassword=postgres' \
+  --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
+  --set 'grafana.enabled=true'
+```
+
 ## Parameters
 
 ### Global
