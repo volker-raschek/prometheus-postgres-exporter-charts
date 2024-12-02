@@ -128,11 +128,12 @@ MD044:
   # List of proper names
   names:
     - Git
-    - Gitea
     - GitDevOps
+    - Gitea
     - GitHub
     - GitLab
     - GitOps
+    - kube-prometheus-stack
     - Memcached
     - Oracle
     - ORBIS U
