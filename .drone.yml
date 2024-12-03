@@ -32,6 +32,15 @@ steps:
       cpu: 150
       memory: 150M
 
+- name: markdown link check
+  commands:
+  - "*.md"
+  image: ghcr.io/tcort/markdown-link-check:3.12.2
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+
 - name: email-notification
   environment:
     SMTP_FROM_ADDRESS:
