@@ -62,7 +62,7 @@ for customizations. These can be configured in more detail via `values.yaml`.
 
 The following examples serve as individual configurations and as inspiration for how deployment problems can be solved.
 
-### TLS authentication and encryption
+#### TLS authentication and encryption
 
 The first example shows how to deploy the metric exporter with TLS encryption. The verification of the custom TLS
 certification will be skipped by Prometheus.
@@ -116,7 +116,7 @@ replaced:
 +   --set 'prometheus.metrics.serviceMonitor.tlsConfig.keyFile=/etc/prometheus/tls/tls.key'
 ```
 
-### Grafana dashboard
+#### Grafana dashboard
 
 The helm chart includes Grafana dashboards. These can be deployed as a configMap by activating Grafana integration. It
 is assumed that the dashboard is consumed by Grafana or a sidecar container itself and that the dashboard is stored in
@@ -130,6 +130,31 @@ helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgr
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
   --set 'grafana.enabled=true'
+```
+
+#### Avoid deploying on same node / bare metal host as PostgresDB
+
+As a best practice, avoid running the postgres-exporter on the same node / bare-metal host as the PostgresDB. This is
+because if the postgres-exporter is running on the same node and this node fails, Prometheus can send an alert about the
+failure of the node or that the postgres-exporter cannot be reached. However, it is not possible to react based on the
+metrics that the postgres-exporter explicitly provides. Depending on the configuration of alerts, this may mean that the
+corresponding notifications are not sent to the right person or group of people.
+
+The following example prevent the postgres-exporter from running on nodes with a PostgresDB. The PostgresDB nodes has an
+additional label `database=postgres`. The configuration is carried out in `values.yaml`.
+
+```yaml
+deployment:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: database
+            operator: NotIn
+            values:
+            - postgres
 ```
 
 ## Parameters
