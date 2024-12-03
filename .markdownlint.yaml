@@ -139,6 +139,7 @@ MD044:
     - ORBIS U
     - PostgreSQL
     - Prometheus
+    - prometheus-exporter
     - SSL
     - TLS
   # Include code blocks

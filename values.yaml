@@ -248,7 +248,7 @@ deployment:
   #     secretName: my-secret
 
 ## @section Grafana
-## @param grafana.enabled Enable integration into Grafana. Require the prometheus operator deployment.
+## @param grafana.enabled Enable integration into Grafana. Require the Prometheus operator deployment.
 grafana:
   enabled: false
 
@@ -315,7 +315,7 @@ prometheus:
     ## @param prometheus.metrics.podMonitor.honorLabels Honor labels.
     ## @param prometheus.metrics.podMonitor.labels Additional podMonitor labels.
     ## @param prometheus.metrics.podMonitor.interval Interval at which metrics should be scraped. If not specified Prometheus' global scrape interval is used.
-    ## @param prometheus.metrics.podMonitor.path HTTP path for scraping prometheus metrics.
+    ## @param prometheus.metrics.podMonitor.path HTTP path for scraping Prometheus metrics.
     ## @param prometheus.metrics.podMonitor.relabelings RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields.
     ## @param prometheus.metrics.podMonitor.scrapeTimeout Timeout after which the scrape is ended. If not specified, global Prometheus scrape timeout is used.
     ## @param prometheus.metrics.podMonitor.scheme HTTP scheme to use for scraping. For example `http` or `https`.
@@ -342,7 +342,7 @@ prometheus:
     ## @param prometheus.metrics.serviceMonitor.followRedirects FollowRedirects configures whether scrape requests follow HTTP 3xx redirects.
     ## @param prometheus.metrics.serviceMonitor.honorLabels Honor labels.
     ## @param prometheus.metrics.serviceMonitor.interval Interval at which metrics should be scraped. If not specified Prometheus' global scrape interval is used.
-    ## @param prometheus.metrics.serviceMonitor.path HTTP path for scraping prometheus metrics.
+    ## @param prometheus.metrics.serviceMonitor.path HTTP path for scraping Prometheus metrics.
     ## @param prometheus.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields.
     ## @param prometheus.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended. If not specified, global Prometheus scrape timeout is used.
     ## @param prometheus.metrics.serviceMonitor.scheme HTTP scheme to use for scraping. For example `http` or `https`.
@@ -362,8 +362,8 @@ prometheus:
       scheme: "http"
       tlsConfig: {}
 
-  ## @param prometheus.rules Array of prometheus rules for monitoring the application and triggering alerts.
-  ## @skip prometheus.rules Skip individual prometheus rules.
+  ## @param prometheus.rules Array of Prometheus rules for monitoring the application and triggering alerts.
+  ## @skip prometheus.rules Skip individual Prometheus rules.
   rules: []
   # - alert: ExporterErrors
   #   expr: pg_exporter_last_scrape_error == 1
