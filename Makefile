@@ -24,16 +24,34 @@ NODE_IMAGE_FULLY_QUALIFIED=${NODE_IMAGE_REGISTRY_HOST}/${NODE_IMAGE_REPOSITORY}:
 missing-dot:
 	grep --perl-regexp '## @(param|skip).*[^.]$$' values.yaml
 
-# CONTAINER RUN - PREPARE ENVIRONMENT
+# CONTAINER RUN - README
 # ==============================================================================
 PHONY+=container-run/readme
-container-run/readme:
+container-run/readme: container-run/readme/link container-run/readme/lint container-run/readme/parameters
+
+container-run/readme/link:
 	${CONTAINER_RUNTIME} run \
 		--rm \
 		--volume $(shell pwd):$(shell pwd) \
 		--workdir $(shell pwd) \
 			${NODE_IMAGE_FULLY_QUALIFIED} \
-				npm install && npm run readme:parameters && npm run readme:lint
+				npm install && npm run readme:link
+
+container-run/readme/lint:
+	${CONTAINER_RUNTIME} run \
+		--rm \
+		--volume $(shell pwd):$(shell pwd) \
+		--workdir $(shell pwd) \
+			${NODE_IMAGE_FULLY_QUALIFIED} \
+				npm install && npm run readme:lint
+
+container-run/readme/parameters:
+	${CONTAINER_RUNTIME} run \
+		--rm \
+		--volume $(shell pwd):$(shell pwd) \
+		--workdir $(shell pwd) \
+			${NODE_IMAGE_FULLY_QUALIFIED} \
+				npm install && npm run readme:parameters
 
 # CONTAINER RUN - HELM UNITTESTS
 # ==============================================================================

@@ -1,6 +1,6 @@
 {
-  "name": "qu-seed-chart",
-  "homepage": "https://github.com/dedalus-cis4u/qu-seed-chart.git",
+  "name": "prometheus-postgres-exporter",
+  "homepage": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter.git",
   "license": "MIT",
   "private": true,
   "engineStrict": true,
@@ -9,11 +9,13 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
+    "readme:link": "markdown-link-check *.md",
     "readme:lint": "markdownlint *.md -f",
     "readme:parameters": "readme-generator -v values.yaml -r README.md"
   },
   "devDependencies": {
     "@bitnami/readme-generator-for-helm": "^2.5.0",
+    "markdown-link-check": "^3.13.6",
     "markdownlint-cli": "^0.43.0"
   }
 }
