@@ -23,26 +23,6 @@ steps:
       cpu: 150
       memory: 150M
 
-- name: markdown link checker
-  commands:
-  - npm install
-  - npm run readme:link
-  image: docker.io/library/node:23.3.0-alpine
-  resources:
-    limits:
-      cpu: 150
-      memory: 150M
-
-- name: markdown lint
-  commands:
-  - npm install
-  - npm run readme:lint
-  image: docker.io/library/node:23.3.0-alpine
-  resources:
-    limits:
-      cpu: 150
-      memory: 150M
-
 - name: email-notification
   environment:
     SMTP_FROM_ADDRESS:
@@ -125,7 +105,7 @@ trigger:
 ---
 kind: pipeline
 type: kubernetes
-name: Generate README.md
+name: Generate, compare and lint README.md
 
 clone:
   disable: true
@@ -138,9 +118,11 @@ steps:
 - name: clone repository
   image: git.cryptic.systems/volker.raschek/git:1.4.0
 
-- name: generate README
+- name: execute NPM modules
   commands:
   - npm install
+  - npm run readme:link
+  - npm run readme:lint
   - npm run readme:parameters
   image: docker.io/library/node:23.3.0-alpine
   resources:
