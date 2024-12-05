@@ -12,7 +12,7 @@
       ],
       "datasourceTemplate": "docker",
       "depNameTemplate": "prometheuscommunity/postgres-exporter",
-      "packageNameTemplate": "quay.io/prometheuscommunity/postgres-exporter",
+      "lookupNameTemplate": "quay.io/prometheuscommunity/postgres-exporter",
       "versioningTemplate": "semver"
     },
     {
@@ -25,7 +25,7 @@
       ],
       "datasourceTemplate": "git-tags",
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
-      "packageNameTemplate": "git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
+      "lookupNameTemplate": "git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
       "versioningTemplate": "semver"
     }
   ],
