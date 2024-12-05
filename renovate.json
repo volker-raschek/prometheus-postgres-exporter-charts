@@ -21,7 +21,7 @@
         "^README\\.md$"
       ],
       "matchStrings": [
-        "^CHART_VERSION=(?<currentValue>.*?)$"
+        "^CHART_VERSION=(?<currentValue>.*)$"
       ],
       "datasourceTemplate": "gitea-tags",
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
