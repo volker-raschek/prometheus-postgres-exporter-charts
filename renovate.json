@@ -23,9 +23,9 @@
       "matchStrings": [
         "^CHART_VERSION=(?<currentValue>.*)$"
       ],
-      "datasourceTemplate": "gitea-tags",
+      "datasourceTemplate": "git-tags",
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
-      "registryUrlTemplate": "https://git.cryptic.systems",
+      "packageNameTemplate": "git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
       "versioningTemplate": "semver"
     }
   ],
