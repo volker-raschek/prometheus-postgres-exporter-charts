@@ -46,7 +46,8 @@ version of the chart must be in sync with the `values.yaml`. Newer *minor* versi
 versions can break something!
 
 ```bash
-helm show values prometheus-exporters/prometheus-postgres-exporter --version 0.1.0 > values.yaml
+CHART_VERSION=0.1.0
+helm show values prometheus-exporters/prometheus-postgres-exporter --version "${CHART_VERSION}" > values.yaml
 ```
 
 A complete list of available helm chart versions can be displayed via the following command:
@@ -193,7 +194,7 @@ deployment:
 | Name                                               | Description                                                                                                | Value                                   |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `deployment.annotations`                           | Additional deployment annotations.                                                                         | `{}`                                    |
-| `deployment.labels`                                | Additional ingress labels.                                                                                 | `{}`                                    |
+| `deployment.labels`                                | Additional deployment labels.                                                                              | `{}`                                    |
 | `deployment.additionalContainers`                  | List of additional containers.                                                                             | `[]`                                    |
 | `deployment.affinity`                              | Affinity for the postgres-exporter deployment.                                                             | `{}`                                    |
 | `deployment.initContainers`                        | List of additional init containers.                                                                        | `[]`                                    |

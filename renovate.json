@@ -11,20 +11,34 @@
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
       "datasourceTemplate": "docker",
-      "depNameTemplate": "prometheus-postgres-exporter",
-      "lookupNameTemplate": "quay.io/prometheuscommunity/postgres-exporter"
+      "depNameTemplate": "prometheuscommunity/postgres-exporter",
+      "packageNameTemplate": "quay.io/prometheuscommunity/postgres-exporter",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Detect helm chart version in README",
+      "fileMatch": [
+        "^README\\.md$"
+      ],
+      "matchStrings": [
+        "^CHART_VERSION=(?<currentValue>.*?)$"
+      ],
+      "datasourceTemplate": "git-tags",
+      "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
+      "packageNameTemplate": "git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
+      "versioningTemplate": "semver"
     }
   ],
   "labels": [ "renovate" ],
   "packageRules": [
     {
-      "addLabels": [ "renovate/droneci", "renovate/automerge" ],
+      "addLabels": [ "renovate/automerge", "renovate/droneci" ],
       "automerge": true,
       "matchManagers": "droneci",
       "matchUpdateTypes": [ "minor", "patch"]
     },
     {
-      "addLabels": [ "renovate/markdownlint", "renovate/automerge" ],
+      "addLabels": [ "renovate/automerge", "renovate/npm" ],
       "automerge": true,
       "matchPackageNames": [ "markdownlint-cli", "@bitnami/readme-generator-for-helm" ],
       "matchManagers": [ "npm" ],

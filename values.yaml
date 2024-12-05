@@ -81,7 +81,7 @@ config:
 ## @section Deployment
 deployment:
   ## @param deployment.annotations Additional deployment annotations.
-  ## @param deployment.labels Additional ingress labels.
+  ## @param deployment.labels Additional deployment labels.
   annotations: {}
   labels: {}
 
