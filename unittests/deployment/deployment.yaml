@@ -30,6 +30,8 @@ tests:
   - equal:
       path: spec.replicas
       value: 1
+  - notExists:
+      path: spec.template.spec.affinity
   - contains:
       path: spec.template.spec.containers[0].envFrom
       content:
@@ -101,6 +103,32 @@ tests:
   - equal:
       path: spec.replicas
       value: 3
+
+- it: Test custom affinity
+  set:
+    deployment.affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+              - antarctica-east1
+              - antarctica-west1
+  asserts:
+  - equal:
+      path: spec.template.spec.affinity
+      value:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - antarctica-east1
+                - antarctica-west1
 
 - it: Test additional arguments
   set:

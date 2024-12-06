@@ -21,6 +21,10 @@ spec:
       labels:
         {{- include "prometheus-postgres-exporter.pod.labels" . | nindent 8 }}
     spec:
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: postgres-exporter
         args:
