@@ -216,7 +216,7 @@ deployment:
 | `deployment.postgresExporter.volumeMounts`         | Additional volume mounts.                                                                                  | `[]`                                    |
 | `deployment.nodeSelector`                          | NodeSelector of the postgres-exporter deployment.                                                          | `{}`                                    |
 | `deployment.priorityClassName`                     | PriorityClassName of the postgres-exporter deployment.                                                     | `""`                                    |
-| `deployment.replicaCount`                          | Number of replicas for the postgres-exporter deployment.                                                   | `1`                                     |
+| `deployment.replicas`                              | Number of replicas for the postgres-exporter deployment.                                                   | `1`                                     |
 | `deployment.restartPolicy`                         | Restart policy of the postgres-exporter deployment.                                                        | `""`                                    |
 | `deployment.securityContext`                       | Security context of the postgres-exporter deployment.                                                      | `{}`                                    |
 | `deployment.strategy.type`                         | Strategy type - `Recreate` or `Rollingupdate`.                                                             | `Recreate`                              |
