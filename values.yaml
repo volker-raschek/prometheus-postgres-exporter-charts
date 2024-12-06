@@ -198,8 +198,8 @@ deployment:
   ## @param deployment.priorityClassName PriorityClassName of the postgres-exporter deployment.
   priorityClassName: ""
 
-  ## @param deployment.replicaCount Number of replicas for the postgres-exporter deployment.
-  replicaCount: 1
+  ## @param deployment.replicas Number of replicas for the postgres-exporter deployment.
+  replicas: 1
 
   ## @param deployment.restartPolicy Restart policy of the postgres-exporter deployment.
   restartPolicy: ""

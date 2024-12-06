@@ -259,7 +259,7 @@
         "priorityClassName": {
           "type": "string"
         },
-        "replicaCount": {
+        "replicas": {
           "type": "integer"
         },
         "restartPolicy": {
@@ -326,7 +326,7 @@
         "postgresExporter",
         "nodeSelector",
         "priorityClassName",
-        "replicaCount",
+        "replicas",
         "restartPolicy",
         "securityContext",
         "strategy",

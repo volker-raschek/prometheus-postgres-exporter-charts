@@ -27,6 +27,9 @@ tests:
         app.kubernetes.io/name: prometheus-postgres-exporter
         app.kubernetes.io/version: 0.1.0
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - equal:
+      path: spec.replicas
+      value: 1
   - contains:
       path: spec.template.spec.containers[0].envFrom
       content:
@@ -90,6 +93,14 @@ tests:
       path: spec.template.spec.tolerations
   - notExists:
       path: spec.template.spec.topologySpreadConstraints
+
+- it: Test custom replicas
+  set:
+    deployment.replicas: 3
+  asserts:
+  - equal:
+      path: spec.replicas
+      value: 3
 
 - it: Test additional arguments
   set:

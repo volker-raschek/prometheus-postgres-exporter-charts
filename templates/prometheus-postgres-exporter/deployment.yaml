@@ -12,6 +12,7 @@ metadata:
   name: {{ include "prometheus-postgres-exporter.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
       {{- include "prometheus-postgres-exporter.pod.selectorLabels" . | nindent 6 }}
