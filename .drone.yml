@@ -124,7 +124,7 @@ steps:
   - npm run readme:link
   - npm run readme:lint
   - npm run readme:parameters
-  image: docker.io/library/node:23.3.0-alpine
+  image: docker.io/library/node:23.4.0-alpine
   resources:
     limits:
       cpu: 150
