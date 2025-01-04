@@ -7,12 +7,6 @@ HELM_IMAGE_REPOSITORY=volkerraschek/helm
 HELM_IMAGE_VERSION?=3.16.1 # renovate: datasource=docker registryUrl=https://docker.io depName=volkerraschek/helm
 HELM_IMAGE_FULLY_QUALIFIED=${HELM_IMAGE_REGISTRY_HOST}/${HELM_IMAGE_REPOSITORY}:${HELM_IMAGE_VERSION}
 
-# MARKDOWNLINKCHECKER_IMAGE
-MARKDOWNLINKCHECK_IMAGE_REGISTRY_HOST?=ghcr.io
-MARKDOWNLINKCHECK_IMAGE_REPOSITORY=tcort/markdown-link-check
-MARKDOWNLINKCHECK_IMAGE_VERSION?=3.12.2 # renovate: datasource=docker registryUrl=https://ghcr.io depName=tcort/markdown-link-check
-MARKDOWNLINKCHECK_IMAGE_FULLY_QUALIFIED=${MARKDOWNLINKCHECK_IMAGE_REGISTRY_HOST}/${MARKDOWNLINKCHECK_IMAGE_REPOSITORY}:${MARKDOWNLINKCHECK_IMAGE_VERSION}
-
 # NODE_IMAGE
 NODE_IMAGE_REGISTRY_HOST?=docker.io
 NODE_IMAGE_REPOSITORY=library/node
@@ -89,16 +83,6 @@ container-run/helm-lint:
 		--workdir $(shell pwd) \
 		${HELM_IMAGE_FULLY_QUALIFIED} \
 			lint --values values.yaml .
-
-# CONTAINER RUN - MARKDOWN-LINK-CHECK
-# ==============================================================================
-PHONY+=container-run/markdown-link-check
-container-run/markdown-link-check:
-	${CONTAINER_RUNTIME} run \
-		--rm \
-		--volume $(shell pwd):/work \
-		${MARKDOWNLINKCHECK_IMAGE_FULLY_QUALIFIED} \
-			*.md
 
 # PHONY
 # ==============================================================================
