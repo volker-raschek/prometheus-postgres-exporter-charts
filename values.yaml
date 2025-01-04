@@ -93,6 +93,22 @@ deployment:
 
   ## @param deployment.affinity Affinity for the postgres-exporter deployment.
   affinity: {}
+    # nodeAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #     nodeSelectorTerms:
+    #     - matchExpressions:
+    #       - key: kubernetes.io/os
+    #         operator: In
+    #         values:
+    #         - linux
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #   - weight: 20
+    #     preference:
+    #       matchExpressions:
+    #       - key: kubernetes.io/arch
+    #         operator: In
+    #         values:
+    #         - amd64
 
   ## @param deployment.initContainers List of additional init containers.
   initContainers: []
