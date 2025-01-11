@@ -1,0 +1,40 @@
+name: Helm
+
+on:
+  pull_request:
+    types: [ "opened", "reopened", "synchronize" ]
+  push:
+    tags-ignore:
+    - '**'
+  workflow_dispatch: {}
+
+jobs:
+  helm-lint:
+    container:
+      image: docker.io/volkerraschek/helm:3.16.1
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Install tooling
+      run: |
+        apk update
+        apk add git npm
+    - uses: actions/checkout@v4.2.2
+    - name: Lint helm files
+      run: |
+        helm lint --values values.yaml .
+
+  helm-unittest:
+    container:
+      image: docker.io/volkerraschek/helm:3.16.1
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Install tooling
+      run: |
+        apk update
+        apk add git npm
+    - uses: actions/checkout@v4.2.2
+    - name: Unittest
+      run: |
+        helm unittest --strict --file 'unittests/**/*.yaml' ./

@@ -1,0 +1,44 @@
+name: Markdown linter
+
+on:
+  pull_request:
+    paths: [ "**/*.md" ]
+    types: [ "opened", "reopened", "synchronize" ]
+  push:
+    paths: [ "**/*.md" ]
+    tags-ignore:
+    - '**'
+  workflow_dispatch: {}
+
+jobs:
+  markdown-link-checker:
+    container:
+      image: docker.io/library/node:22.9.0-alpine
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Install tooling
+      run: |
+        apk update
+        apk add git
+    - uses: actions/checkout@v4.2.2
+    - name: Verify links in markdown files
+      run: |
+        npm install
+        npm run readme:link
+
+  markdown-lint:
+    container:
+      image: docker.io/library/node:22.9.0-alpine
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Install tooling
+      run: |
+        apk update
+        apk add git
+    - uses: actions/checkout@v4.2.2
+    - name: Lint markdown files
+      run: |
+        npm install
+        npm run readme:lint

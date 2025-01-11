@@ -1,0 +1,30 @@
+name: Generate README
+
+on:
+  pull_request:
+    paths: [ "README.md", "values.yaml" ]
+    types: [ "opened", "reopened", "synchronize" ]
+  push:
+    paths: [ "README.md", "values.yaml" ]
+    tags-ignore:
+    - '**'
+  workflow_dispatch: {}
+
+jobs:
+  generate-parameters:
+    container:
+      image: docker.io/library/node:22.9.0-alpine
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Install tooling
+      run: |
+        apk update
+        apk add git
+    - uses: actions/checkout@v4.2.2
+    - name: Generate parameter section in README
+      run: |
+        npm install
+        npm run readme:parameters
+    - name: Compare diff
+      run: git diff --exit-code --name-only README.md

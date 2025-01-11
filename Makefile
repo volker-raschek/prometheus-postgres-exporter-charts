@@ -3,13 +3,13 @@ CONTAINER_RUNTIME?=$(shell which podman)
 
 # HELM_IMAGE
 HELM_IMAGE_REGISTRY_HOST?=docker.io
-HELM_IMAGE_REPOSITORY=volkerraschek/helm
+HELM_IMAGE_REPOSITORY?=volkerraschek/helm
 HELM_IMAGE_VERSION?=3.16.1 # renovate: datasource=docker registryUrl=https://docker.io depName=volkerraschek/helm
 HELM_IMAGE_FULLY_QUALIFIED=${HELM_IMAGE_REGISTRY_HOST}/${HELM_IMAGE_REPOSITORY}:${HELM_IMAGE_VERSION}
 
 # NODE_IMAGE
 NODE_IMAGE_REGISTRY_HOST?=docker.io
-NODE_IMAGE_REPOSITORY=library/node
+NODE_IMAGE_REPOSITORY?=library/node
 NODE_IMAGE_VERSION?=22.9.0-alpine # renovate: datasource=docker registryUrl=https://docker.io depName=library/node
 NODE_IMAGE_FULLY_QUALIFIED=${NODE_IMAGE_REGISTRY_HOST}/${NODE_IMAGE_REPOSITORY}:${NODE_IMAGE_VERSION}
 

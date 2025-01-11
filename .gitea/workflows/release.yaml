@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - "**"
+
+jobs:
+  publish-chart:
+    container:
+      image: docker.io/volkerraschek/helm:3.16.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install tooling
+        run: |
+          apk update
+          apk add git npm
+      - uses: actions/checkout@v4
+      - name: Package chart
+        env:
+          HELM_REPO_NAME: upload
+
+          CHARTMUSEUM_PASSWORD: ${{ secrets.CHARTMUSEUM_PASSWORD }}
+          CHARTMUSEUM_REPOSITORY: ${{ vars.CHARMUSEUM_REPOSITORY }}
+          CHARTMUSEUM_USERNAME: ${{ secrets.CHARTMUSEUM_USERNAME }}
+          CHARTMUSEUM_HOSTNAME: ${{ vars.CHARTMUSEUM_HOSTNAME }}
+
+          GITEA_PACKAGE_REGISTRY_TOKEN: ${{ secrets.GIT_CRYPTIC_SYSTEMS_PACKAGE_REGISTRY_TOKEN }}
+          GITEA_SERVER_URL: ${{ github.server_url }}
+        run: |
+          PACKAGE_VERSION=${GITHUB_REF#refs/tags/}
+          REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 1)
+
+          helm dependency build
+          helm package --version "${PACKAGE_VERSION}" ./
+
+          # chart-museum
+          helm repo add --username ${CHARTMUSEUM_USERNAME} --password ${CHARTMUSEUM_PASSWORD} chartmuseum https://${CHARTMUSEUM_HOSTNAME}/${CHARTMUSEUM_REPOSITORY}
+          helm cm-push ${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz chartmuseum
+          helm repo remove chartmuseum
+
+          # gitea
+          helm repo add --username ${REPOSITORY_OWNER} --password ${GITEA_PACKAGE_REGISTRY_TOKEN} gitea ${GITEA_SERVER_URL}/api/packages/${REPOSITORY_OWNER}/helm
+          helm cm-push ${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz gitea
+          helm repo remove gitea
