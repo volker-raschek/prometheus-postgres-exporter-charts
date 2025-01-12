@@ -17,15 +17,13 @@
     },
     {
       "description": "Detect helm chart version in README",
-      "fileMatch": [
-        "^README\\.md$"
-      ],
+      "fileMatch": ["^README\\.md$"],
       "matchStrings": [
         "^CHART_VERSION=(?<currentValue>.*)$"
       ],
       "datasourceTemplate": "git-tags",
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
-      "packageNameTemplate": "git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
+      "packageNameTemplate": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
       "versioningTemplate": "semver"
     }
   ],
@@ -46,6 +44,7 @@
     },
     {
       "addLabels": [ "renovate/automerge", "renovate/documentation" ],
+      "automerge": true,
       "matchDepNames": [
         "volker.raschek/prometheus-postgres-exporter"
       ],
