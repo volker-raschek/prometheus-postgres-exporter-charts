@@ -162,39 +162,39 @@ trigger:
     exclude:
     - tag
 
----
-kind: pipeline
-type: kubernetes
-name: Release
+# ---
+# kind: pipeline
+# type: kubernetes
+# name: Release
 
-clone:
-  disable: true
+# clone:
+#   disable: true
 
-platform:
-  os: linux
+# platform:
+#   os: linux
 
-steps:
-- name: clone repository
-  image: git.cryptic.systems/volker.raschek/git:1.4.0
+# steps:
+# - name: clone repository
+#   image: git.cryptic.systems/volker.raschek/git:1.4.0
 
-- name: release-helm-chart
-  commands:
-  - helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
-  - helm package --version ${DRONE_TAG} .
-  - helm cm-push ${DRONE_REPO_NAME}-${DRONE_TAG}.tgz prometheus-exporters
-  environment:
-    HELM_REPO_PASSWORD:
-      from_secret: helm_repo_password
-    HELM_REPO_USERNAME:
-      from_secret: helm_repo_username
-  image: git.cryptic.systems/volker.raschek/helm:3.16.4
-  resources:
-    limits:
-      cpu: 150
-      memory: 150M
+# - name: release-helm-chart
+#   commands:
+#   - helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
+#   - helm package --version ${DRONE_TAG} .
+#   - helm cm-push ${DRONE_REPO_NAME}-${DRONE_TAG}.tgz prometheus-exporters
+#   environment:
+#     HELM_REPO_PASSWORD:
+#       from_secret: helm_repo_password
+#     HELM_REPO_USERNAME:
+#       from_secret: helm_repo_username
+#   image: git.cryptic.systems/volker.raschek/helm:3.16.4
+#   resources:
+#     limits:
+#       cpu: 150
+#       memory: 150M
 
-trigger:
-  event:
-  - tag
-  repo:
-  - volker.raschek/prometheus-postgres-exporter
+# trigger:
+#   event:
+#   - tag
+#   repo:
+#   - volker.raschek/prometheus-postgres-exporter
