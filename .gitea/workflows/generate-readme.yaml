@@ -20,7 +20,7 @@ jobs:
     - name: Install tooling
       run: |
         apk update
-        apk add git
+        apk add git npm
     - uses: actions/checkout@v4.2.2
     - name: Generate parameter section in README
       run: |
