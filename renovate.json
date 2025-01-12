@@ -43,6 +43,17 @@
       "matchPackageNames": [ "markdownlint-cli", "@bitnami/readme-generator-for-helm" ],
       "matchManagers": [ "npm" ],
       "matchUpdateTypes": [ "minor", "patch"]
+    },
+    {
+      "addLabels": [ "renovate/automerge", "renovate/documentation" ],
+      "matchDepNames": [
+        "volker.raschek/prometheus-postgres-exporter"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ]
     }
   ],
   "rebaseLabel": "renovate/rebase",
