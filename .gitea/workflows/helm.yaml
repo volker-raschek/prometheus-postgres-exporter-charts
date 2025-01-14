@@ -11,7 +11,7 @@ on:
 jobs:
   helm-lint:
     container:
-      image: docker.io/volkerraschek/helm:3.16.1
+      image: docker.io/volkerraschek/helm:3.16.4
     runs-on:
     - ubuntu-latest
     steps:
@@ -26,7 +26,7 @@ jobs:
 
   helm-unittest:
     container:
-      image: docker.io/volkerraschek/helm:3.16.1
+      image: docker.io/volkerraschek/helm:3.16.4
     runs-on:
     - ubuntu-latest
     steps:
