@@ -37,6 +37,20 @@
       "matchUpdateTypes": [ "minor", "patch"]
     },
     {
+      "addLabels": [ "renovate/automerge", "renovate/container" ],
+      "automerge": true,
+      "excludePackagePatterns": [
+        "prometheuscommunity/postgres-exporter"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
       "addLabels": [ "renovate/automerge", "renovate/documentation" ],
       "automerge": true,
       "matchDepNames": [
