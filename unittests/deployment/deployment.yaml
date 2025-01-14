@@ -228,6 +228,13 @@ tests:
         memory: 100MB
   asserts:
   - equal:
+      path: spec.template.spec.containers[0].env
+      value:
+      - name: GOMAXPROCS
+        valueFrom:
+          resourceFieldRef:
+            resource: limits.cpu
+  - equal:
       path: spec.template.spec.containers[0].resources
       value:
         limits:

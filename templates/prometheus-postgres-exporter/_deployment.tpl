@@ -9,6 +9,17 @@
 {{- end }}
 {{- end }}
 
+{{/* env */}}
+
+{{- define "prometheus-postgres-exporter.deployment.env" -}}
+{{- $env := dict "env" (.Values.deployment.postgresExporter.env | default (list) ) }}
+{{- if and (hasKey .Values.deployment.postgresExporter.resources "limits") (hasKey .Values.deployment.postgresExporter.resources.limits "cpu") }}
+{{- $env = merge $env (dict "env" (list (dict "name" "GOMAXPROCS" "valueFrom" (dict "resourceFieldRef" (dict "resource" "limits.cpu"))))) }}
+{{- end }}
+{{ toYaml $env }}
+{{- end -}}
+
+
 {{/* envFrom */}}
 
 {{- define "prometheus-postgres-exporter.deployment.envFrom" -}}

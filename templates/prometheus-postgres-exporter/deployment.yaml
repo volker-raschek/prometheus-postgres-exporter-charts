@@ -34,9 +34,10 @@ spec:
         {{- range .Values.deployment.postgresExporter.args }}
         - {{ . | quote }}
         {{- end }}
-        {{- with .Values.deployment.postgresExporter.env }}
+        {{- $env := (include "prometheus-postgres-exporter.deployment.env" . | fromYaml) }}
+        {{- if and (hasKey $env "env") (gt (len $env.env) 0) }}
         env:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $env.env | nindent 8 }}
         {{- end }}
         {{- $envFrom := (include "prometheus-postgres-exporter.deployment.envFrom" . | fromYaml) }}
         {{- if hasKey $envFrom "envFrom" }}

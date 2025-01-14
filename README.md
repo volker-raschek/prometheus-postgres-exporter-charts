@@ -63,6 +63,35 @@ for customizations. These can be configured in more detail via `values.yaml`.
 
 The following examples serve as individual configurations and as inspiration for how deployment problems can be solved.
 
+#### Avoid CPU throttling by defining a CPU limit
+
+If the application is deployed with a CPU resource limit, Prometheus may throw a CPU throttling warning for the
+application. This has more or less to do with the fact that the application finds the number of CPUs of the host, but
+cannot use the available CPU time to perform computing operations.
+
+The application must be informed that despite several CPUs only a part (limit) of the available computing time is
+available. As this is a Golang application, this can be implemented using `GOMAXPROCS`. The following example is one way
+of defining `GOMAXPROCS` automatically based on the defined CPU limit like `100m`. Please keep in mind, that the CFS
+rate of `100ms` - default on each kubernetes node, is also very important to avoid CPU throttling.
+
+Further information about this topic can be found [here](https://kanishk.io/posts/cpu-throttling-in-containerized-go-apps/).
+
+> [!NOTE]
+> The environment variable `GOMAXPROCS` is set automatically, when a CPU limit is defined. An explicit configuration is
+> not anymore required.
+
+```bash
+helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
+  --set 'config.database.secret.databaseUsername=postgres' \
+  --set 'config.database.secret.databasePassword=postgres' \
+  --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
+  --set 'prometheus.metrics.enabled=true' \
+  --set 'prometheus.metrics.serviceMonitor.enabled=true' \
+  --set 'deployment.postgresExporter.env.name=GOMAXPROCS' \
+  --set 'deployment.postgresExporter.env.valueFrom.resourceFieldRef.resource=limits.cpu' \
+  --set 'deployment.postgresExporter.resources.limits.cpu=100m'
+```
+
 #### TLS authentication and encryption
 
 The first example shows how to deploy the metric exporter with TLS encryption. The verification of the custom TLS
