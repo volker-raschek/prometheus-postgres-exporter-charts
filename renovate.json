@@ -30,12 +30,6 @@
   "labels": [ "renovate" ],
   "packageRules": [
     {
-      "addLabels": [ "renovate/automerge", "renovate/droneci" ],
-      "automerge": true,
-      "matchManagers": "droneci",
-      "matchUpdateTypes": [ "minor", "patch"]
-    },
-    {
       "addLabels": [ "renovate/automerge", "renovate/npm" ],
       "automerge": true,
       "matchPackageNames": [ "markdownlint-cli", "@bitnami/readme-generator-for-helm" ],
