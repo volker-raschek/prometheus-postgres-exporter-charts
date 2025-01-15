@@ -3,7 +3,6 @@
   "assignees": [ "volker.raschek" ],
   "customManagers": [
     {
-      "description": "Update container image reference",
       "fileMatch": [
         "^Chart\\.yaml$"
       ],
@@ -16,14 +15,13 @@
       "versioningTemplate": "semver"
     },
     {
-      "description": "Detect helm chart version in README",
       "fileMatch": ["^README\\.md$"],
       "matchStrings": [
-        "^CHART_VERSION=(?<currentValue>.*)$"
+        "VERSION=(?<currentValue>.*)"
       ],
-      "datasourceTemplate": "git-tags",
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
       "packageNameTemplate": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
+      "datasourceTemplate": "git-tags",
       "versioningTemplate": "semver"
     }
   ],
