@@ -233,6 +233,7 @@ tests:
       - name: GOMAXPROCS
         valueFrom:
           resourceFieldRef:
+            divisor: "1"
             resource: limits.cpu
   - equal:
       path: spec.template.spec.containers[0].resources

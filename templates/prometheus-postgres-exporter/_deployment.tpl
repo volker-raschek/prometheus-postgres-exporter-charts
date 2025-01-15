@@ -14,7 +14,7 @@
 {{- define "prometheus-postgres-exporter.deployment.env" -}}
 {{- $env := dict "env" (.Values.deployment.postgresExporter.env | default (list) ) }}
 {{- if and (hasKey .Values.deployment.postgresExporter.resources "limits") (hasKey .Values.deployment.postgresExporter.resources.limits "cpu") }}
-{{- $env = merge $env (dict "env" (list (dict "name" "GOMAXPROCS" "valueFrom" (dict "resourceFieldRef" (dict "resource" "limits.cpu"))))) }}
+{{- $env = merge $env (dict "env" (list (dict "name" "GOMAXPROCS" "valueFrom" (dict "resourceFieldRef" (dict "divisor" "1" "resource" "limits.cpu"))))) }}
 {{- end }}
 {{ toYaml $env }}
 {{- end -}}
