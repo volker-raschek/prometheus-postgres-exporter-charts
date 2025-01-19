@@ -266,7 +266,7 @@ grafana:
   enabled: false
 
   ## @param grafana.dashboardDiscoveryLabels Labels that Grafana uses to discover resources. The labels may vary depending on the Grafana deployment.
-  ## @skip grafana.dashboardDiscoveryLabels
+  ## @skip grafana.dashboardDiscoveryLabels Skip individual configuration.
   dashboardDiscoveryLabels:
     grafana_dashboard: "1"
 
