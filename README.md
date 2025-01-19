@@ -248,7 +248,7 @@ deployment:
 | `deployment.replicas`                              | Number of replicas for the postgres-exporter deployment.                                                   | `1`                                     |
 | `deployment.restartPolicy`                         | Restart policy of the postgres-exporter deployment.                                                        | `""`                                    |
 | `deployment.securityContext`                       | Security context of the postgres-exporter deployment.                                                      | `{}`                                    |
-| `deployment.strategy.type`                         | Strategy type - `Recreate` or `Rollingupdate`.                                                             | `Recreate`                              |
+| `deployment.strategy.type`                         | Strategy type - `Recreate` or `Rollingupdate`.                                                             | `Rollingupdate`                         |
 | `deployment.strategy.rollingUpdate.maxSurge`       | The maximum number of pods that can be scheduled above the desired number of pods during a rolling update. | `1`                                     |
 | `deployment.strategy.rollingUpdate.maxUnavailable` | The maximum number of pods that can be unavailable during a rolling update.                                | `1`                                     |
 | `deployment.terminationGracePeriodSeconds`         | How long to wait until forcefully kill the pod.                                                            | `60`                                    |

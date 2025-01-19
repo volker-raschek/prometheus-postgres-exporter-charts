@@ -126,3 +126,7 @@ spec:
       volumes:
       {{- toYaml $volumes.volumes | nindent 6 }}
       {{- end }}
+  {{- with .Values.deployment.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}

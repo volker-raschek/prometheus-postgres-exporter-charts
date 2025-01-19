@@ -228,7 +228,7 @@ deployment:
   ## @param deployment.strategy.rollingUpdate.maxSurge The maximum number of pods that can be scheduled above the desired number of pods during a rolling update.
   ## @param deployment.strategy.rollingUpdate.maxUnavailable The maximum number of pods that can be unavailable during a rolling update.
   strategy:
-    type: "Recreate"
+    type: "Rollingupdate"
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1

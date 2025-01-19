@@ -95,6 +95,13 @@ tests:
       path: spec.template.spec.tolerations
   - notExists:
       path: spec.template.spec.topologySpreadConstraints
+  - equal:
+      path: spec.strategy
+      value:
+        type: "Rollingupdate"
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 1
 
 - it: Test custom replicas
   set:
