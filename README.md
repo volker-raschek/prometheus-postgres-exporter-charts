@@ -20,7 +20,7 @@ helm chart is tested for deployment scenarios with **ArgoCD**.
 ## Helm: configuration and installation
 
 1. A helm chart repository must be configured, to pull the helm charts from.
-2. All available parameters are [here](#parameters) in detail document. The parameters can be defined via the helm
+2. All available parameters are [here](#parameters) in detail documented. The parameters can be defined via the helm
    `--set` flag or directly as part of a `values.yaml` file. The following example defines the `prometheus-exporter`
    repository and use the `--set` flag for a basic deployment.
 
