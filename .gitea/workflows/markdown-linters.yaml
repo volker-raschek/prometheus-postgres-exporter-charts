@@ -5,6 +5,8 @@ on:
     paths: [ "**/*.md" ]
     types: [ "opened", "reopened", "synchronize" ]
   push:
+    branches:
+    - '**'
     paths: [ "**/*.md" ]
     tags-ignore:
     - '**'

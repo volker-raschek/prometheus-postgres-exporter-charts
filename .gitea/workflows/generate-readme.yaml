@@ -5,6 +5,8 @@ on:
     paths: [ "README.md", "values.yaml" ]
     types: [ "opened", "reopened", "synchronize" ]
   push:
+    branches:
+    - '**'
     paths: [ "README.md", "values.yaml" ]
     tags-ignore:
     - '**'
