@@ -26,6 +26,9 @@
     }
   ],
   "labels": [ "renovate" ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "addLabels": [ "renovate/automerge", "renovate/npm" ],
