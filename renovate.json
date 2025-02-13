@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "assignees": [ "volker.raschek" ],
+  "assignees": [
+    "volker.raschek"
+  ],
   "customManagers": [
     {
       "fileMatch": [
@@ -25,20 +27,40 @@
       "versioningTemplate": "semver"
     }
   ],
-  "labels": [ "renovate" ],
+  "labels": [
+    "renovate"
+  ],
   "lockFileMaintenance": {
+    "enabled": true
+  },
+  "npm": {
     "enabled": true
   },
   "packageRules": [
     {
-      "addLabels": [ "renovate/automerge", "renovate/npm" ],
+      "addLabels": [
+        "renovate/automerge",
+        "renovate/npm"
+      ],
       "automerge": true,
-      "matchPackageNames": [ "markdownlint-cli", "@bitnami/readme-generator-for-helm" ],
-      "matchManagers": [ "npm" ],
-      "matchUpdateTypes": [ "minor", "patch"]
+      "matchPackageNames": [
+        "@bitnami/readme-generator-for-helm",
+        "markdownlint-cli",
+        "markdown-link-check"
+      ],
+      "matchManagers": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
     },
     {
-      "addLabels": [ "renovate/automerge", "renovate/container" ],
+      "addLabels": [
+        "renovate/automerge",
+        "renovate/container"
+      ],
       "automerge": true,
       "excludePackagePatterns": [
         "prometheuscommunity/postgres-exporter"
@@ -52,7 +74,10 @@
       ]
     },
     {
-      "addLabels": [ "renovate/automerge", "renovate/documentation" ],
+      "addLabels": [
+        "renovate/automerge",
+        "renovate/documentation"
+      ],
       "automerge": true,
       "matchDepNames": [
         "volker.raschek/prometheus-postgres-exporter"
