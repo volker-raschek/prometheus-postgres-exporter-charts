@@ -98,7 +98,7 @@ tests:
   - equal:
       path: spec.strategy
       value:
-        type: "Rollingupdate"
+        type: "RollingUpdate"
         rollingUpdate:
           maxSurge: 1
           maxUnavailable: 1
