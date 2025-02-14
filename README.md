@@ -352,7 +352,7 @@ networkPolicies:
 | --------------------- | ---------------------- | ----- |
 | `podDisruptionBudget` | Pod disruption budget. | `{}`  |
 
-### networkPolicies NetworkPolicies
+### NetworkPolicies
 
 | Name                                  | Description                                                                                           | Value   |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------- |

@@ -311,7 +311,7 @@ podDisruptionBudget: {}
 #  maxUnavailable: 1
 #  minAvailable: 1
 
-## @section networkPolicies NetworkPolicies
+## @section NetworkPolicies
 ## @param networkPolicies.enabled Enable network policies in general.
 networkPolicies:
   enabled: false
