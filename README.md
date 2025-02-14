@@ -187,6 +187,75 @@ deployment:
             - postgres
 ```
 
+### Network policies
+
+Network policies can only take effect, when the used CNI plugin support network policies. The chart supports no custom
+network policy implementation of CNI plugins. It's support only the official API resource of `networking.k8s.io/v1`.
+
+The object networkPolicies can contains multiple networkPolicy definitions. There is currently only one example
+predefined - it's named `default`. Further networkPolicy rules can easy be added by defining additional objects. For example:
+
+> [!NOTE]
+> The structure of each custom network policy must be equal like that of default. For this reason don't forget to define
+> `annotations`, `labels` and the other properties as well.
+
+```yaml
+networkPolicies:
+  enabled: false
+  default: {}
+  my-custom-network-policy: {}
+```
+
+The example below is an excerpt of the `values.yaml` file. The network policy `default` contains ingress rules to allow
+incoming traffic from Prometheus. Additionally two egress rules are defined, to allow the application outgoing access to
+the internal running DNS server `core-dns` and the external running postgres database listen on `10.14.243.12`.
+
+> [!IMPORTANT]
+> Please keep in mind, that the namespace and pod selector labels can be different from environment to environment. For
+> this reason, there is are not default network policy rules defined.
+
+```yaml
+networkPolicies:
+  enabled: true
+  default:
+    enabled: true
+    annotations: {}
+    labels: {}
+    policyTypes:
+    - Egress
+    - Ingress
+    egress:
+    - to:
+      - ipBlock:
+          cidr: 10.14.243.12/32
+      ports:
+      - port: 5432
+        protocol: TCP
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+           k8s-app: kube-dns
+      ports:
+      - port: 53
+        protocol: TCP
+      - port: 53
+        protocol: UDP
+    ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: monitoring
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: prometheus
+      ports:
+      - port: http
+        protocol: TCP
+```
+
 ## Parameters
 
 ### Global
@@ -248,7 +317,7 @@ deployment:
 | `deployment.replicas`                              | Number of replicas for the postgres-exporter deployment.                                                   | `1`                                     |
 | `deployment.restartPolicy`                         | Restart policy of the postgres-exporter deployment.                                                        | `""`                                    |
 | `deployment.securityContext`                       | Security context of the postgres-exporter deployment.                                                      | `{}`                                    |
-| `deployment.strategy.type`                         | Strategy type - `Recreate` or `Rollingupdate`.                                                             | `Rollingupdate`                         |
+| `deployment.strategy.type`                         | Strategy type - `Recreate` or `RollingUpdate`.                                                             | `RollingUpdate`                         |
 | `deployment.strategy.rollingUpdate.maxSurge`       | The maximum number of pods that can be scheduled above the desired number of pods during a rolling update. | `1`                                     |
 | `deployment.strategy.rollingUpdate.maxUnavailable` | The maximum number of pods that can be unavailable during a rolling update.                                | `1`                                     |
 | `deployment.terminationGracePeriodSeconds`         | How long to wait until forcefully kill the pod.                                                            | `60`                                    |
@@ -283,11 +352,17 @@ deployment:
 | --------------------- | ---------------------- | ----- |
 | `podDisruptionBudget` | Pod disruption budget. | `{}`  |
 
-### Network
+### networkPolicies NetworkPolicies
 
-| Name              | Description                                                                                                        | Value |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
-| `networkPolicies` | Deploy network policies based on the used container network interface (CNI) implementation - like calico or weave. | `{}`  |
+| Name                                  | Description                                                                                           | Value   |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicies.enabled`             | Enable network policies in general.                                                                   | `false` |
+| `networkPolicies.default.enabled`     | Enable the network policy for accessing the application by default. For example to scape the metrics. | `false` |
+| `networkPolicies.default.annotations` | Additional network policy annotations.                                                                | `{}`    |
+| `networkPolicies.default.labels`      | Additional network policy labels.                                                                     | `{}`    |
+| `networkPolicies.default.policyTypes` | List of policy types. Supported is ingress, egress or ingress and egress.                             | `[]`    |
+| `networkPolicies.default.egress`      | Concrete egress network policy implementation.                                                        | `[]`    |
+| `networkPolicies.default.ingress`     | Concrete ingress network policy implementation.                                                       | `[]`    |
 
 ### Prometheus
 

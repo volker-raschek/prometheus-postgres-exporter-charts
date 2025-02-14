@@ -224,11 +224,11 @@ deployment:
   securityContext: {}
     # fsGroup: 2000
 
-  ## @param deployment.strategy.type Strategy type - `Recreate` or `Rollingupdate`.
+  ## @param deployment.strategy.type Strategy type - `Recreate` or `RollingUpdate`.
   ## @param deployment.strategy.rollingUpdate.maxSurge The maximum number of pods that can be scheduled above the desired number of pods during a rolling update.
   ## @param deployment.strategy.rollingUpdate.maxUnavailable The maximum number of pods that can be unavailable during a rolling update.
   strategy:
-    type: "Rollingupdate"
+    type: "RollingUpdate"
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
@@ -311,9 +311,77 @@ podDisruptionBudget: {}
 #  maxUnavailable: 1
 #  minAvailable: 1
 
-## @section Network
-## @param networkPolicies Deploy network policies based on the used container network interface (CNI) implementation - like calico or weave.
-networkPolicies: {}
+## @section networkPolicies NetworkPolicies
+## @param networkPolicies.enabled Enable network policies in general.
+networkPolicies:
+  enabled: false
+
+  ## @param networkPolicies.default.enabled Enable the network policy for accessing the application by default. For example to scape the metrics.
+  ## @param networkPolicies.default.annotations Additional network policy annotations.
+  ## @param networkPolicies.default.labels Additional network policy labels.
+  ## @param networkPolicies.default.policyTypes List of policy types. Supported is ingress, egress or ingress and egress.
+  ## @param networkPolicies.default.egress Concrete egress network policy implementation.
+  ## @skip networkPolicies.default.egress Skip individual egress configuration.
+  ## @param networkPolicies.default.ingress Concrete ingress network policy implementation.
+  ## @skip networkPolicies.default.ingress Skip individual ingress configuration.
+  default:
+    enabled: false
+    annotations: {}
+    labels: {}
+    policyTypes: []
+    # - Egress
+    # - Ingress
+    egress: []
+    # Allow outgoing traffic to database host
+    #
+    # - to:
+    #   - ipBlock:
+    #       cidr: 192.168.179.1/32
+    #   ports:
+    #   - port: 5432
+    #     protocol: TCP
+
+    # Allow outgoing DNS traffic to the internal running DNS-Server. For example core-dns.
+    #
+    # - to:
+    #   - namespaceSelector:
+    #       matchLabels:
+    #         kubernetes.io/metadata.name: kube-system
+    #     podSelector:
+    #       matchLabels:
+    #        k8s-app: kube-dns
+    #   ports:
+    #   - port: 53
+    #     protocol: TCP
+    #   - port: 53
+    #     protocol: UDP
+
+    ingress: []
+    # Allow incoming HTTP traffic from prometheus.
+    #
+    # - from:
+    #   - namespaceSelector:
+    #       matchLabels:
+    #         kubernetes.io/metadata.name: monitoring
+    #     podSelector:
+    #       matchLabels:
+    #         app.kubernetes.io/name: prometheus
+    #   ports:
+    #   - port: http
+    #     protocol: TCP
+
+    # Allow incoming HTTP traffic from ingress-nginx.
+    #
+    # - from:
+    #   - namespaceSelector:
+    #       matchLabels:
+    #         kubernetes.io/metadata.name: ingress-nginx
+    #     podSelector:
+    #       matchLabels:
+    #         app.kubernetes.io/name: ingress-nginx
+    #   ports:
+    #   - port: http
+    #     protocol: TCP
 
 ## @section Prometheus
 prometheus:

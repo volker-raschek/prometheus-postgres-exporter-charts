@@ -1,0 +1,118 @@
+chart:
+  appVersion: 0.1.0
+  version: 0.1.0
+suite: NetworkPolicies template (basic)
+release:
+  name: prometheus-postgres-exporter-unittest
+  namespace: testing
+templates:
+- templates/prometheus-postgres-exporter/networkPolicies.yaml
+tests:
+- it: Skip networkPolicies in general disabled.
+  set:
+    networkPolicies.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Skip networkPolicy 'default' when disabled.
+  set:
+    networkPolicies.enabled: true
+    networkPolicies.default.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Loop over networkPolicies
+  set:
+    networkPolicies.enabled: true
+    networkPolicies.default.enabled: false
+    networkPolicies.nginx.enabled: true
+    networkPolicies.prometheus.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 2
+
+- it: Template networkPolicy 'default' without policyTypes, egress and ingress configuration
+  set:
+    networkPolicies.enabled: true
+    networkPolicies.default.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 1
+  - containsDocument:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: prometheus-postgres-exporter-unittest-default
+      namespace: testing
+  - notExists:
+      path: metadata.annotations
+  - equal:
+      path: metadata.labels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-postgres-exporter
+        app.kubernetes.io/version: 0.1.0
+        helm.sh/chart: prometheus-postgres-exporter-0.1.0
+  - equal:
+      path: spec.podSelector.matchLabels
+      value:
+        app.kubernetes.io/instance: prometheus-postgres-exporter-unittest
+        app.kubernetes.io/name: prometheus-postgres-exporter
+  - notExists:
+      path: spec.policyTypes
+  - notExists:
+      path: spec.egress
+  - notExists:
+      path: spec.ingress
+
+- it: Template networkPolicy 'default' with policyTypes, egress and ingress configuration
+  set:
+    networkPolicies.enabled: true
+    networkPolicies.default.enabled: true
+    networkPolicies.default.policyTypes:
+    - Egress
+    - Ingress
+    networkPolicies.default.ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: khv-production
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: prometheus
+    networkPolicies.default.egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: database
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: oracle
+  asserts:
+  - equal:
+      path: spec.policyTypes
+      value:
+      - Egress
+      - Ingress
+  - equal:
+      path: spec.egress
+      value:
+      - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: database
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: oracle
+  - equal:
+      path: spec.ingress
+      value:
+      - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: khv-production
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
