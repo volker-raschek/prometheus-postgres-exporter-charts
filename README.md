@@ -71,7 +71,7 @@ cannot use the available CPU time to perform computing operations.
 
 The application must be informed that despite several CPUs only a part (limit) of the available computing time is
 available. As this is a Golang application, this can be implemented using `GOMAXPROCS`. The following example is one way
-of defining `GOMAXPROCS` automatically based on the defined CPU limit like `100m`. Please keep in mind, that the CFS
+of defining `GOMAXPROCS` automatically based on the defined CPU limit like `1000m`. Please keep in mind, that the CFS
 rate of `100ms` - default on each kubernetes node, is also very important to avoid CPU throttling.
 
 Further information about this topic can be found [here](https://kanishk.io/posts/cpu-throttling-in-containerized-go-apps/).
@@ -79,6 +79,8 @@ Further information about this topic can be found [here](https://kanishk.io/post
 > [!NOTE]
 > The environment variable `GOMAXPROCS` is set automatically, when a CPU limit is defined. An explicit configuration is
 > not anymore required.
+>
+> Please take care the a CPU limit < `1000m` can also lead to CPU throttling. Please read the linked documentation carefully.
 
 ```bash
 helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
@@ -89,7 +91,7 @@ helm install prometheus-postgres-exporter prometheus-exporters/prometheus-postgr
   --set 'prometheus.metrics.serviceMonitor.enabled=true' \
   --set 'deployment.postgresExporter.env.name=GOMAXPROCS' \
   --set 'deployment.postgresExporter.env.valueFrom.resourceFieldRef.resource=limits.cpu' \
-  --set 'deployment.postgresExporter.resources.limits.cpu=100m'
+  --set 'deployment.postgresExporter.resources.limits.cpu=1000m'
 ```
 
 #### TLS authentication and encryption
