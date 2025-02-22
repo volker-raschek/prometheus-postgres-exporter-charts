@@ -46,7 +46,7 @@ version of the chart must be in sync with the `values.yaml`. Newer *minor* versi
 versions can break something!
 
 ```bash
-CHART_VERSION=0.4.0
+CHART_VERSION=0.4.1
 helm show values prometheus-exporters/prometheus-postgres-exporter --version "${CHART_VERSION}" > values.yaml
 ```
 
