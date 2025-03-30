@@ -1,7 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "assignees": [
-    "volker.raschek"
+  "extends": [
+    "local>volker.raschek/renovate-config:default#master",
+    "local>volker.raschek/renovate-config:container#master",
+    "local>volker.raschek/renovate-config:actions#master",
+    "local>volker.raschek/renovate-config:npm#master",
+    "local>volker.raschek/renovate-config:regexp#master"
   ],
   "customManagers": [
     {
@@ -27,40 +31,7 @@
       "versioningTemplate": "semver"
     }
   ],
-  "labels": [
-    "renovate"
-  ],
-  "lockFileMaintenance": {
-    "addLabels": [
-      "renovate/automerge",
-      "renovate/lockFileMaintenance"
-    ],
-    "automerge": true,
-    "enabled": true
-  },
-  "npm": {
-    "enabled": true
-  },
   "packageRules": [
-    {
-      "addLabels": [
-        "renovate/automerge",
-        "renovate/npm"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "@bitnami/readme-generator-for-helm",
-        "markdownlint-cli",
-        "markdown-link-check"
-      ],
-      "matchManagers": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ]
-    },
     {
       "addLabels": [
         "renovate/automerge",
@@ -93,7 +64,5 @@
         "patch"
       ]
     }
-  ],
-  "rebaseLabel": "renovate/rebase",
-  "rebaseWhen": "behind-base-branch"
+  ]
 }
