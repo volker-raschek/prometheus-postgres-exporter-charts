@@ -5,7 +5,7 @@ kind: ConfigMap
 metadata:
   {{- with (include "prometheus-postgres-exporter.configMap.grafanaDashboards.postgresExporter.annotations" . | fromYaml) }}
   annotations:
-    {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- with (include "prometheus-postgres-exporter.configMap.grafanaDashboards.postgresExporter.labels" . | fromYaml) }}
   labels:

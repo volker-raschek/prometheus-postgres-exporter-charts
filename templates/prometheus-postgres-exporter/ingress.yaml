@@ -5,7 +5,7 @@ kind: Ingress
 metadata:
   {{- with (include "prometheus-postgres-exporter.ingress.annotations" . | fromYaml) }}
   annotations:
-    {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- with (include "prometheus-postgres-exporter.ingress.labels" . | fromYaml) }}
   labels:

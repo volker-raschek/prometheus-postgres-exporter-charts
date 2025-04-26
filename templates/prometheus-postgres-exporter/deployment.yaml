@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   {{- with (include "prometheus-postgres-exporter.deployment.annotations" . | fromYaml) }}
   annotations:
-    {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- with (include "prometheus-postgres-exporter.deployment.labels" . | fromYaml) }}
   labels:
