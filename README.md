@@ -3,8 +3,10 @@
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/prometheus-exporters)](https://artifacthub.io/packages/search?repo=prometheus-exporters)
 
 > [!NOTE]
-> This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. You can
-> find the official community chart [here](https://github.com/prometheus-community/helm-charts).
+> This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. If you are
+> looking for the official helm chart, checkout the GitHub project
+> [helm-charts](https://github.com/prometheus-community/helm-charts) of the [Prometheus
+> community](https://github.com/prometheus-community).
 
 This helm chart enables the deployment of a Prometheus metrics exporter for PostgreSQL databases and allows the
 individual configuration of additional containers/initContainers, mounting of volumes, defining additional environment
@@ -19,7 +21,7 @@ helm chart is tested for deployment scenarios with **ArgoCD**.
 ## Helm: configuration and installation
 
 1. A helm chart repository must be configured, to pull the helm charts from.
-2. All available parameters are [here](#parameters) in detail documented. The parameters can be defined via the helm
+2. All available [parameters](#parameters) are documented in detail below. The parameters can be defined via the helm
    `--set` flag or directly as part of a `values.yaml` file. The following example defines the `prometheus-exporter`
    repository and use the `--set` flag for a basic deployment.
 
@@ -73,7 +75,8 @@ available. As this is a Golang application, this can be implemented using `GOMAX
 of defining `GOMAXPROCS` automatically based on the defined CPU limit like `1000m`. Please keep in mind, that the CFS
 rate of `100ms` - default on each kubernetes node, is also very important to avoid CPU throttling.
 
-Further information about this topic can be found [here](https://kanishk.io/posts/cpu-throttling-in-containerized-go-apps/).
+Further information about this topic can be found in one of Kanishk's blog
+[posts](https://kanishk.io/posts/cpu-throttling-in-containerized-go-apps/).
 
 > [!NOTE]
 > The environment variable `GOMAXPROCS` is set automatically, when a CPU limit is defined. An explicit configuration is
@@ -268,25 +271,25 @@ networkPolicies:
 
 ### Configuration
 
-| Name                                              | Description                                                                                                                                                                            | Value   |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `config.database.existingSecret.enabled`          | Mount an existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                            | `false` |
-| `config.database.existingSecret.secretName`       | Name of the existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                         | `""`    |
-| `config.database.secret.annotations`              | Additional annotations of the secret containing the database credentials.                                                                                                              | `{}`    |
-| `config.database.secret.labels`                   | Additional labels of the secret containing the database credentials.                                                                                                                   | `{}`    |
-| `config.database.secret.databaseUsername`         | Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.                                                                                                      | `""`    |
-| `config.database.secret.databasePassword`         | Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.                                                                                                      | `""`    |
-| `config.database.secret.databaseConnectionUrl`    | Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.                                                                                         | `""`    |
-| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporterConfig.yaml`.                                                                                                                     | `false` |
-| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporterConfig.yaml`.                                                                                                                  | `""`    |
-| `config.exporterConfig.secret.annotations`        | Additional annotations of the secret containing the `exporterConfig.yaml`.                                                                                                             | `{}`    |
-| `config.exporterConfig.secret.labels`             | Additional labels of the secret containing the `exporterConfig.yaml`.                                                                                                                  | `{}`    |
-| `config.exporterConfig.secret.exporterConfig`     | Content of the `exporterConfig.yaml`. Further information can be found [here](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta). | `{}`    |
-| `config.webConfig.existingSecret.enabled`         | Mount an existing secret containing the key `webConfig.yaml`.                                                                                                                          | `false` |
-| `config.webConfig.existingSecret.secretName`      | Name of the existing secret containing the key `webConfig.yaml`.                                                                                                                       | `""`    |
-| `config.webConfig.secret.annotations`             | Additional annotations of the secret containing the `webConfig.yaml`.                                                                                                                  | `{}`    |
-| `config.webConfig.secret.labels`                  | Additional labels of the secret containing the `webConfig.yaml`.                                                                                                                       | `{}`    |
-| `config.webConfig.secret.webConfig`               | Content of the `webConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).                                           | `{}`    |
+| Name                                              | Description                                                                                                                                                                                                                          | Value   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `config.database.existingSecret.enabled`          | Mount an existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                                                                          | `false` |
+| `config.database.existingSecret.secretName`       | Name of the existing secret containing the application specific `DATA_SOURCE_` prefixed environment variables.                                                                                                                       | `""`    |
+| `config.database.secret.annotations`              | Additional annotations of the secret containing the database credentials.                                                                                                                                                            | `{}`    |
+| `config.database.secret.labels`                   | Additional labels of the secret containing the database credentials.                                                                                                                                                                 | `{}`    |
+| `config.database.secret.databaseUsername`         | Database username. Will be defined as env `DATA_SOURCE_USER` as part of a secret.                                                                                                                                                    | `""`    |
+| `config.database.secret.databasePassword`         | Database password. Will be defined as env `DATA_SOURCE_PASS` as part of a secret.                                                                                                                                                    | `""`    |
+| `config.database.secret.databaseConnectionUrl`    | Complex database connection URL. Will be defined as env `DATA_SOURCE_URI` as part of a secret.                                                                                                                                       | `""`    |
+| `config.exporterConfig.existingSecret.enabled`    | Mount an existing secret containing the key `exporterConfig.yaml`.                                                                                                                                                                   | `false` |
+| `config.exporterConfig.existingSecret.secretName` | Name of the existing secret containing the key `exporterConfig.yaml`.                                                                                                                                                                | `""`    |
+| `config.exporterConfig.secret.annotations`        | Additional annotations of the secret containing the `exporterConfig.yaml`.                                                                                                                                                           | `{}`    |
+| `config.exporterConfig.secret.labels`             | Additional labels of the secret containing the `exporterConfig.yaml`.                                                                                                                                                                | `{}`    |
+| `config.exporterConfig.secret.exporterConfig`     | Content of the `exporterConfig.yaml`. Further information can be found in the [README](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta) file of the Postgres exporter binary. | `{}`    |
+| `config.webConfig.existingSecret.enabled`         | Mount an existing secret containing the key `webConfig.yaml`.                                                                                                                                                                        | `false` |
+| `config.webConfig.existingSecret.secretName`      | Name of the existing secret containing the key `webConfig.yaml`.                                                                                                                                                                     | `""`    |
+| `config.webConfig.secret.annotations`             | Additional annotations of the secret containing the `webConfig.yaml`.                                                                                                                                                                | `{}`    |
+| `config.webConfig.secret.labels`                  | Additional labels of the secret containing the `webConfig.yaml`.                                                                                                                                                                     | `{}`    |
+| `config.webConfig.secret.webConfig`               | Content of the `webConfig.yaml`. Further [documentation](https://prometheus.io/docs/prometheus/latest/configuration/https/) is available on the official Prometheus website.                                                         | `{}`    |
 
 ### Deployment
 

@@ -35,7 +35,7 @@ config:
 
     ## @param config.exporterConfig.secret.annotations Additional annotations of the secret containing the `exporterConfig.yaml`.
     ## @param config.exporterConfig.secret.labels Additional labels of the secret containing the `exporterConfig.yaml`.
-    ## @param config.exporterConfig.secret.exporterConfig Content of the `exporterConfig.yaml`. Further information can be found [here](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta).
+    ## @param config.exporterConfig.secret.exporterConfig Content of the `exporterConfig.yaml`. Further information can be found in the [README](https://github.com/prometheus-community/postgres_exporter?tab=readme-ov-file#multi-target-support-beta) file of the Postgres exporter binary.
     ## @skip config.exporterConfig.secret.exporterConfig Skip individual postgres exporter configuration.
     secret:
       annotations: {}
@@ -59,7 +59,7 @@ config:
 
     ## @param config.webConfig.secret.annotations Additional annotations of the secret containing the `webConfig.yaml`.
     ## @param config.webConfig.secret.labels Additional labels of the secret containing the `webConfig.yaml`.
-    ## @param config.webConfig.secret.webConfig Content of the `webConfig.yaml`. Further information can be found [here](https://prometheus.io/docs/prometheus/latest/configuration/https/).
+    ## @param config.webConfig.secret.webConfig Content of the `webConfig.yaml`. Further [documentation](https://prometheus.io/docs/prometheus/latest/configuration/https/) is available on the official Prometheus website.
     ## @skip config.webConfig.secret.webConfig Skip individual web configuration.
     secret:
       annotations: {}
