@@ -28,7 +28,7 @@ tests:
       namespace: testing
     template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
-      path: metadata.annotations.checksum/secret-database
+      path: metadata.annotations
     template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: metadata.labels
