@@ -7,35 +7,18 @@ release:
   namespace: testing
 templates:
 - templates/prometheus-postgres-exporter/deployment.yaml
-- templates/prometheus-postgres-exporter/secretDatabase.yaml
-- templates/prometheus-postgres-exporter/secretExporterConfig.yaml
-- templates/prometheus-postgres-exporter/secretWebConfig.yaml
 tests:
 - it: Rendering default
-  set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
   asserts:
   - hasDocuments:
       count: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - containsDocument:
       apiVersion: apps/v1
       kind: Deployment
       name: prometheus-postgres-exporter-unittest
       namespace: testing
-    template: templates/prometheus-postgres-exporter/deployment.yaml
-  - exists:
-      path: metadata.annotations.checksum/secret-database
-    template: templates/prometheus-postgres-exporter/deployment.yaml
-  - exists:
-      path: metadata.annotations.checksum/secret-exporter-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
-  - exists:
-      path: metadata.annotations.checksum/secret-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+  - notExists:
+      path: metadata.annotations
   - equal:
       path: metadata.labels
       value:
@@ -44,33 +27,27 @@ tests:
         app.kubernetes.io/name: prometheus-postgres-exporter
         app.kubernetes.io/version: 0.1.0
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.replicas
       value: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.affinity
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - contains:
       path: spec.template.spec.containers[0].envFrom
       content:
         secretRef:
           name: prometheus-postgres-exporter-unittest-database-env
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].args
       value:
       - --config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml
       - --web.config.file=/etc/prometheus-postgres-exporter/config.d/webConfig.yaml
       - --web.listen-address=:9187
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].volumeMounts
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -82,59 +59,42 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].image
       value: quay.io/prometheuscommunity/postgres-exporter:v0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].imagePullPolicy
       value: IfNotPresent
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.containers[0].resources
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.containers[0].securityContext
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.dnsConfig
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.dnsPolicy
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.hostname
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.hostNetwork
       value: false
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.imagePullSecrets
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.nodeSelector
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.priorityClassName
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.restartPolicy
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.subdomain
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 60
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.tolerations
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - notExists:
       path: spec.template.spec.topologySpreadConstraints
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.strategy
       value:
@@ -142,31 +102,17 @@ tests:
         rollingUpdate:
           maxSurge: 1
           maxUnavailable: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom replicas
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.replicas: 3
   asserts:
   - equal:
       path: spec.replicas
       value: 3
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom affinity
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -190,16 +136,9 @@ tests:
                 values:
                 - antarctica-east1
                 - antarctica-west1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test additional arguments
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.args:
     - "--foo=bar"
     - "--bar=foo"
@@ -212,42 +151,26 @@ tests:
       - --web.listen-address=:9187
       - --foo=bar
       - --bar=foo
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom imageRegistry and imageRepository
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.image.registry: registry.example.local
     deployment.postgresExporter.image.repository: path/special/prometheus-postgres-exporter
   asserts:
   - equal:
       path: spec.template.spec.containers[0].image
       value: registry.example.local/path/special/prometheus-postgres-exporter:v0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom imagePullPolicy
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.image.pullPolicy: Always
   asserts:
   - equal:
       path: spec.template.spec.containers[0].imagePullPolicy
       value: Always
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test config.database.existingSecret
   set:
-    # Normal test values
     config.database.existingSecret.enabled: true
     config.database.existingSecret.secretName: custom-database-secret
   asserts:
@@ -256,16 +179,9 @@ tests:
       content:
         secretRef:
           name: custom-database-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test config.exporterConfig.existingSecret
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     config.exporterConfig.existingSecret.enabled: true
     config.exporterConfig.existingSecret.secretName: exporter-config-secret
   asserts:
@@ -274,7 +190,6 @@ tests:
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -286,16 +201,9 @@ tests:
               name: exporter-config-secret
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test config.webConfig.existingSecret
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     config.webConfig.existingSecret.enabled: true
     config.webConfig.existingSecret.secretName: web-config-secret
   asserts:
@@ -304,7 +212,6 @@ tests:
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -316,16 +223,9 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: web-config-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom resource limits and requests
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.resources:
       limits:
         cpu: 100m
@@ -342,7 +242,6 @@ tests:
           resourceFieldRef:
             divisor: "1"
             resource: limits.cpu
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].resources
       value:
@@ -352,16 +251,9 @@ tests:
         requests:
           cpu: 25m
           memory: 100MB
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test custom securityContext
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.securityContext:
       capabilities:
         add:
@@ -385,16 +277,9 @@ tests:
         readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 1000
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test dnsConfig
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.dnsConfig:
       nameservers:
       - "8.8.8.8"
@@ -406,31 +291,17 @@ tests:
         nameservers:
         - "8.8.8.8"
         - "8.8.4.4"
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test dnsPolicy
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.dnsPolicy: ClusterFirst
   asserts:
   - equal:
       path: spec.template.spec.dnsPolicy
       value: ClusterFirst
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test hostNetwork, hostname, subdomain
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.hostNetwork: true
     deployment.hostname: pg-exporter
     deployment.subdomain: exporters.internal
@@ -438,24 +309,15 @@ tests:
   - equal:
       path: spec.template.spec.hostNetwork
       value: true
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.hostname
       value: pg-exporter
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.subdomain
       value: exporters.internal
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test imagePullSecrets
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.imagePullSecrets:
     - name: my-pull-secret
     - name: my-special-secret
@@ -465,16 +327,9 @@ tests:
       value:
       - name: my-pull-secret
       - name: my-special-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test nodeSelector
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.nodeSelector:
       foo: bar
   asserts:
@@ -482,61 +337,33 @@ tests:
       path: spec.template.spec.nodeSelector
       value:
         foo: bar
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test priorityClassName
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.priorityClassName: my-priority
   asserts:
   - equal:
       path: spec.template.spec.priorityClassName
       value: my-priority
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test restartPolicy
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.restartPolicy: Always
   asserts:
   - equal:
       path: spec.template.spec.restartPolicy
       value: Always
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test terminationGracePeriodSeconds
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.terminationGracePeriodSeconds: 120
   asserts:
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 120
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test tolerations
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.tolerations:
     - key: database/type
       operator: Equal
@@ -550,16 +377,9 @@ tests:
         operator: Equal
         value: postgres
         effect: NoSchedule
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test topologySpreadConstraints
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.topologySpreadConstraints:
     - topologyKey: kubernetes.io/hostname
       whenUnsatisfiable: DoNotSchedule
@@ -575,16 +395,9 @@ tests:
         labelSelector:
           matchLabels:
             app.kubernetes.io/instance: prometheus-postgres-exporter
-    template: templates/prometheus-postgres-exporter/deployment.yaml
 
 - it: Test additional volumeMounts and volumes
   set:
-    # Ensure that the secrets and config maps are well configured.
-    config.database.secret.databaseUsername: "postgres"
-    config.database.secret.databasePassword: "postgres"
-    config.database.secret.databaseConnectionUrl: "localhost:5432/postgres?sslmode=disable"
-
-    # Normal test values
     deployment.postgresExporter.volumeMounts:
     - name: data
       mountPath: /usr/lib/prometheus-postgres-exporter/data
@@ -600,7 +413,6 @@ tests:
         mountPath: /usr/lib/prometheus-postgres-exporter/data
       - name: config-d
         mountPath: /etc/prometheus-postgres-exporter/config.d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -615,4 +427,3 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
