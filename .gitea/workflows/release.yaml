@@ -14,12 +14,19 @@ jobs:
       - name: Install tooling
         run: |
           apk update
-          apk add git npm
+          apk add git npm yq
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add Artifacthub.io annotations
+        run: |
+          NEW_TAG="$(git describe --abbrev=0)"
+          OLD_TAG="$(git describe --abbrev=0 --tags "$(git rev-list --tags --skip=1 --max-count=1)")"
+          .gitea/scripts/add-annotations.sh "${NEW_TAG}" "${OLD_TAG}"
+
       - name: Package chart
         env:
-          HELM_REPO_NAME: upload
-
           CHARTMUSEUM_PASSWORD: ${{ secrets.CHARTMUSEUM_PASSWORD }}
           CHARTMUSEUM_REPOSITORY: ${{ vars.CHARTMUSEUM_REPOSITORY }}
           CHARTMUSEUM_USERNAME: ${{ secrets.CHARTMUSEUM_USERNAME }}
