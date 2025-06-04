@@ -4,13 +4,12 @@ set -e
 
 CHART_FILE="Chart.yaml"
 if [ ! -f "${CHART_FILE}" ]; then
-  echo "ERROR: ${CHART_FILE} not found!"
+  echo "ERROR: ${CHART_FILE} not found!" 1>&2
   exit 1
 fi
 
-
-DEFAULT_NEW_TAG="$(git describe --abbrev=0)"
-DEFAULT_OLD_TAG="$(git describe --abbrev=0 --tags "$(git rev-list --tags --skip=1 --max-count=1)")"
+DEFAULT_NEW_TAG="$(git tag --sort=-version:refname | head -n 1)"
+DEFAULT_OLD_TAG="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)"
 
 if [ -z "${1}" ]; then
   read -p "Enter start tag [${DEFAULT_OLD_TAG}]: " OLD_TAG
@@ -19,7 +18,7 @@ if [ -z "${1}" ]; then
   fi
 
   while [ -z "$(git tag --list "${OLD_TAG}")" ]; do
-    echo "ERROR: Tag '${OLD_TAG}' not found!"
+    echo "ERROR: Tag '${OLD_TAG}' not found!" 1>&2
     read -p "Enter start tag [${DEFAULT_OLD_TAG}]: " OLD_TAG
     if [ -z "${OLD_TAG}" ]; then
       OLD_TAG="${DEFAULT_OLD_TAG}"
@@ -28,29 +27,29 @@ if [ -z "${1}" ]; then
 else
   OLD_TAG=${1}
   if [ -z "$(git tag --list "${OLD_TAG}")" ]; then
-    echo "ERROR: Tag '${OLD_TAG}' not found!"
+    echo "ERROR: Tag '${OLD_TAG}' not found!" 1>&2
     exit 1
   fi
 fi
 
-if [ -z "${1}" ]; then
+if [ -z "${2}" ]; then
   read -p "Enter end tag [${DEFAULT_NEW_TAG}]: " NEW_TAG
   if [ -z "${NEW_TAG}" ]; then
     NEW_TAG="${DEFAULT_NEW_TAG}"
   fi
 
   while [ -z "$(git tag --list "${NEW_TAG}")" ]; do
-    echo "ERROR: Tag '${NEW_TAG}' not found!"
+    echo "ERROR: Tag '${NEW_TAG}' not found!" 1>&2
     read -p "Enter end tag [${DEFAULT_NEW_TAG}]: " NEW_TAG
     if [ -z "${NEW_TAG}" ]; then
       NEW_TAG="${DEFAULT_NEW_TAG}"
     fi
   done
 else
-  NEW_TAG=${1}
+  NEW_TAG=${2}
 
   if [ -z "$(git tag --list "${NEW_TAG}")" ]; then
-    echo "ERROR: Tag '${NEW_TAG}' not found!"
+    echo "ERROR: Tag '${NEW_TAG}' not found!" 1>&2
     exit 1
   fi
 fi
@@ -80,7 +79,9 @@ function map_type_to_kind() {
   esac
 }
 
-COMMIT_TITLES=$(git log "${OLD_TAG}..${NEW_TAG}" --pretty=format:"%s")
+COMMIT_TITLES="$(git log --pretty=format:"%s" "${OLD_TAG}..${NEW_TAG}")"
+
+echo "INFO: Generate change log entries from ${OLD_TAG} until ${NEW_TAG}"
 
 while IFS= read -r line; do
   if [[ "${line}" =~ ^([a-zA-Z]+)(\([^\)]+\))?\:\ (.+)$ ]]; then
@@ -93,11 +94,17 @@ while IFS= read -r line; do
     DESC="${BASH_REMATCH[3]}"
     KIND=$(map_type_to_kind "${TYPE}")
 
+    echo "- ${KIND}: ${DESC}"
+
     yq --inplace ". += [ {\"kind\": \"${KIND}\", \"description\": \"${DESC}\"}]" "${YAML_FILE}"
   fi
 done <<< "${COMMIT_TITLES}"
 
-yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${YAML_FILE}\") | sort_keys(.)" "${CHART_FILE}"
-yq --no-colors --inplace ".version = \"${NEW_TAG}\"" "${CHART_FILE}"
+if [ -s "${YAML_FILE}" ]; then
+  yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${YAML_FILE}\") | sort_keys(.)" "${CHART_FILE}"
+else
+  echo "ERROR: Changelog file is empty: ${YAML_FILE}" 1>&2
+  exit 1
+fi
 
 rm "${YAML_FILE}"
