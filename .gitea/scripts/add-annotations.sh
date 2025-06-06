@@ -54,7 +54,8 @@ else
   fi
 fi
 
-YAML_FILE=$(mktemp)
+CHANGE_LOG_YAML=$(mktemp)
+echo "[]" > "${CHANGE_LOG_YAML}"
 
 function map_type_to_kind() {
   case "${1}" in
@@ -86,25 +87,28 @@ echo "INFO: Generate change log entries from ${OLD_TAG} until ${NEW_TAG}"
 while IFS= read -r line; do
   if [[ "${line}" =~ ^([a-zA-Z]+)(\([^\)]+\))?\:\ (.+)$ ]]; then
     TYPE="${BASH_REMATCH[1]}"
+    KIND=$(map_type_to_kind "${TYPE}")
 
-    if [ "${TYPE}" == "skip" ]; then
+    if [ "${KIND}" == "skip" ]; then
       continue
     fi
 
     DESC="${BASH_REMATCH[3]}"
-    KIND=$(map_type_to_kind "${TYPE}")
 
     echo "- ${KIND}: ${DESC}"
 
-    yq --inplace ". += [ {\"kind\": \"${KIND}\", \"description\": \"${DESC}\"}]" "${YAML_FILE}"
+    jq --arg kind changed --arg description "$DESC" '. += [ $ARGS.named ]' < ${CHANGE_LOG_YAML} > ${CHANGE_LOG_YAML}.new
+    mv ${CHANGE_LOG_YAML}.new ${CHANGE_LOG_YAML}
+
   fi
 done <<< "${COMMIT_TITLES}"
 
-if [ -s "${YAML_FILE}" ]; then
-  yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${YAML_FILE}\") | sort_keys(.)" "${CHART_FILE}"
+if [ -s "${CHANGE_LOG_YAML}" ]; then
+  yq --inplace --input-format json --output-format yml "${CHANGE_LOG_YAML}"
+  yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${CHANGE_LOG_YAML}\") | sort_keys(.)" "${CHART_FILE}"
 else
-  echo "ERROR: Changelog file is empty: ${YAML_FILE}" 1>&2
+  echo "ERROR: Changelog file is empty: ${CHANGE_LOG_YAML}" 1>&2
   exit 1
 fi
 
-rm "${YAML_FILE}"
+rm "${CHANGE_LOG_YAML}"
