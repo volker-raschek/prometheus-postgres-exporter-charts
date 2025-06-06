@@ -20,25 +20,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract meta information
-        run: |
-          echo "NEW_TAG="$(git tag --sort=-version:refname | head -n 1)" >> $GITHUB_ENV
-          echo "OLD_TAG="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)" >> $GITHUB_ENV
-          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)" >> $GITHUB_ENV
-          echo "REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 1)" >> $GITHUB_ENV
-
       - name: Add Artifacthub.io annotations
         run: |
+          NEW_TAG="$(git tag --sort=-version:refname | head -n 1)"
+          OLD_TAG="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)"
           .gitea/scripts/add-annotations.sh "${OLD_TAG}" "${NEW_TAG}"
 
-      - name: Update Helm Chart version in README.md
+      - name: Extract meta information
         run: |
-          sed -i -E "s/^CHART_VERSION=.*/CHART_VERSION=${NEW_TAG}/gm" README.md
+          echo "PACKAGE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)" >> $GITHUB_ENV
+          echo "REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 1)" >> $GITHUB_ENV
 
       - name: Package chart
         run: |
           helm dependency build
-          helm package --version "${NEW_TAG}" ./
+          helm package --version "${PACKAGE_VERSION}" ./
 
       - name: Upload Chart to ChartMuseum
         env:
@@ -48,7 +45,7 @@ jobs:
           CHARTMUSEUM_HOSTNAME: ${{ vars.CHARTMUSEUM_HOSTNAME }}
         run: |
           helm repo add --username ${CHARTMUSEUM_USERNAME} --password ${CHARTMUSEUM_PASSWORD} chartmuseum https://${CHARTMUSEUM_HOSTNAME}/${CHARTMUSEUM_REPOSITORY}
-          helm cm-push ${REPOSITORY_NAME}-${NEW_TAG}.tgz chartmuseum
+          helm cm-push ${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz chartmuseum
           helm repo remove chartmuseum
 
       - name: Upload Chart to Gitea
@@ -57,5 +54,5 @@ jobs:
           GITEA_SERVER_URL: ${{ github.server_url }}
         run: |
           helm repo add --username ${REPOSITORY_OWNER} --password ${GITEA_PACKAGE_REGISTRY_TOKEN} gitea ${GITEA_SERVER_URL}/api/packages/${REPOSITORY_OWNER}/helm
-          helm cm-push ${REPOSITORY_NAME}-${NEW_TAG}.tgz gitea
+          helm cm-push ${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz gitea
           helm repo remove gitea
