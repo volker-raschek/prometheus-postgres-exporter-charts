@@ -11,7 +11,7 @@ jobs:
       image: docker.io/volkerraschek/helm:3.18.2
     runs-on: ubuntu-latest
     steps:
-      - name: Install tooling
+      - name: Install packages via apk
         run: |
           apk update
           apk add git npm jq yq
@@ -29,8 +29,11 @@ jobs:
       - name: Extract meta information
         run: |
           echo "PACKAGE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2 | sed --regexp-extended 's/-charts?//g')" >> $GITHUB_ENV
           echo "REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 1)" >> $GITHUB_ENV
+
+      - name: Update Helm Chart version in README.md
+        run: sed -i -E "s/^CHART_VERSION=.*/CHART_VERSION=${PACKAGE_VERSION}/g" README.md
 
       - name: Package chart
         run: |
