@@ -97,8 +97,8 @@ while IFS= read -r line; do
 
     echo "- ${KIND}: ${DESC}"
 
-    jq --arg kind changed --arg description "$DESC" '. += [ $ARGS.named ]' < ${CHANGE_LOG_YAML} > ${CHANGE_LOG_YAML}.new
-    mv ${CHANGE_LOG_YAML}.new ${CHANGE_LOG_YAML}
+    jq --arg kind "${KIND}" --arg description "${DESC}" '. += [ $ARGS.named ]' < "${CHANGE_LOG_YAML}" > "${CHANGE_LOG_YAML}.new"
+    mv "${CHANGE_LOG_YAML}.new" "${CHANGE_LOG_YAML}"
 
   fi
 done <<< "${COMMIT_TITLES}"
