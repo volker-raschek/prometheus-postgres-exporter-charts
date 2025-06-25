@@ -10,7 +10,7 @@ HELM_IMAGE_FULLY_QUALIFIED=${HELM_IMAGE_REGISTRY_HOST}/${HELM_IMAGE_REPOSITORY}:
 # NODE_IMAGE
 NODE_IMAGE_REGISTRY_HOST?=docker.io
 NODE_IMAGE_REPOSITORY?=library/node
-NODE_IMAGE_VERSION?=24.2.0-alpine # renovate: datasource=docker registryUrl=https://docker.io depName=docker.io/library/node packageName=library/node
+NODE_IMAGE_VERSION?=24.3.0-alpine # renovate: datasource=docker registryUrl=https://docker.io depName=docker.io/library/node packageName=library/node
 NODE_IMAGE_FULLY_QUALIFIED=${NODE_IMAGE_REGISTRY_HOST}/${NODE_IMAGE_REPOSITORY}:${NODE_IMAGE_VERSION}
 
 # MISSING DOT
