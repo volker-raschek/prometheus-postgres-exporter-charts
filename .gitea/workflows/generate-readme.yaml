@@ -15,7 +15,7 @@ on:
 jobs:
   generate-parameters:
     container:
-      image: docker.io/library/node:24.3.0-alpine
+      image: docker.io/library/node:24.4.0-alpine
     runs-on:
     - ubuntu-latest
     steps:
