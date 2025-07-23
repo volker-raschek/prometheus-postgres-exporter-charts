@@ -1,4 +1,5 @@
 # Declare variables to be passed into your templates.
+
 ## @section Global
 ## @param nameOverride Individual release name suffix.
 ## @param fullnameOverride Override the complete release name logic.

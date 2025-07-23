@@ -23,7 +23,7 @@
     {
       "fileMatch": ["^README\\.md$"],
       "matchStrings": [
-        "VERSION=(?<currentValue>.*)"
+        "CHART_VERSION=(?<currentValue>.*)"
       ],
       "depNameTemplate": "volker.raschek/prometheus-postgres-exporter",
       "packageNameTemplate": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
