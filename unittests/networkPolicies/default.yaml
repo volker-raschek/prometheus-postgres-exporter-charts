@@ -6,7 +6,7 @@ release:
   name: prometheus-postgres-exporter-unittest
   namespace: testing
 templates:
-- templates/prometheus-postgres-exporter/networkPolicies.yaml
+- templates/networkPolicies.yaml
 tests:
 - it: Skip networkPolicies in general disabled.
   set:

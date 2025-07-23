@@ -6,7 +6,7 @@ release:
   name: prometheus-postgres-exporter-unittest
   namespace: testing
 templates:
-- templates/prometheus-postgres-exporter/configMapGrafanaDashboardPostgresExporter.yaml
+- templates/configMapGrafanaDashboardPostgresExporter.yaml
 tests:
 - it: Rendering postgresExporter
   asserts:

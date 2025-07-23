@@ -6,10 +6,10 @@ release:
   name: prometheus-postgres-exporter-unittest
   namespace: testing
 templates:
-- templates/prometheus-postgres-exporter/deployment.yaml
-- templates/prometheus-postgres-exporter/secretDatabase.yaml
-- templates/prometheus-postgres-exporter/secretExporterConfig.yaml
-- templates/prometheus-postgres-exporter/secretWebConfig.yaml
+- templates/deployment.yaml
+- templates/secretDatabase.yaml
+- templates/secretExporterConfig.yaml
+- templates/secretWebConfig.yaml
 tests:
 - it: Rendering default
   set:
@@ -20,16 +20,16 @@ tests:
   asserts:
   - hasDocuments:
       count: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - containsDocument:
       apiVersion: apps/v1
       kind: Deployment
       name: prometheus-postgres-exporter-unittest
       namespace: testing
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: metadata.annotations
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: metadata.labels
       value:
@@ -38,20 +38,20 @@ tests:
         app.kubernetes.io/name: prometheus-postgres-exporter
         app.kubernetes.io/version: 0.1.0
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.replicas
       value: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - exists:
       path: spec.template.metadata.annotations.checksum/secret-database
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - exists:
       path: spec.template.metadata.annotations.checksum/secret-exporter-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - exists:
       path: spec.template.metadata.annotations.checksum/secret-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.metadata.labels
       value:
@@ -60,29 +60,29 @@ tests:
         app.kubernetes.io/name: prometheus-postgres-exporter
         app.kubernetes.io/version: 0.1.0
         helm.sh/chart: prometheus-postgres-exporter-0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.affinity
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - contains:
       path: spec.template.spec.containers[0].envFrom
       content:
         secretRef:
           name: prometheus-postgres-exporter-unittest-database-env
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].args
       value:
       - --config.file=/etc/prometheus-postgres-exporter/config.d/exporterConfig.yaml
       - --web.config.file=/etc/prometheus-postgres-exporter/config.d/webConfig.yaml
       - --web.listen-address=:9187
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].volumeMounts
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -94,59 +94,59 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].image
       value: quay.io/prometheuscommunity/postgres-exporter:v0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].imagePullPolicy
       value: IfNotPresent
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.containers[0].resources
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.containers[0].securityContext
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.dnsConfig
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.dnsPolicy
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.hostname
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.hostNetwork
       value: false
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.imagePullSecrets
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.nodeSelector
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.priorityClassName
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.restartPolicy
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.subdomain
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 60
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.tolerations
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - notExists:
       path: spec.template.spec.topologySpreadConstraints
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.strategy
       value:
@@ -154,7 +154,7 @@ tests:
         rollingUpdate:
           maxSurge: 1
           maxUnavailable: 1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom replicas
   set:
@@ -169,7 +169,7 @@ tests:
   - equal:
       path: spec.replicas
       value: 3
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom affinity
   set:
@@ -202,7 +202,7 @@ tests:
                 values:
                 - antarctica-east1
                 - antarctica-west1
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test additional arguments
   set:
@@ -224,7 +224,7 @@ tests:
       - --web.listen-address=:9187
       - --foo=bar
       - --bar=foo
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom imageRegistry and imageRepository
   set:
@@ -240,7 +240,7 @@ tests:
   - equal:
       path: spec.template.spec.containers[0].image
       value: registry.example.local/path/special/prometheus-postgres-exporter:v0.1.0
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom imagePullPolicy
   set:
@@ -255,7 +255,7 @@ tests:
   - equal:
       path: spec.template.spec.containers[0].imagePullPolicy
       value: Always
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test config.database.existingSecret
   set:
@@ -268,7 +268,7 @@ tests:
       content:
         secretRef:
           name: custom-database-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test config.exporterConfig.existingSecret
   set:
@@ -286,7 +286,7 @@ tests:
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -298,7 +298,7 @@ tests:
               name: exporter-config-secret
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test config.webConfig.existingSecret
   set:
@@ -316,7 +316,7 @@ tests:
       value:
       - mountPath: /etc/prometheus-postgres-exporter/config.d
         name: config-d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -328,7 +328,7 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: web-config-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom resource limits and requests
   set:
@@ -354,7 +354,7 @@ tests:
           resourceFieldRef:
             divisor: "1"
             resource: limits.cpu
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.containers[0].resources
       value:
@@ -364,7 +364,7 @@ tests:
         requests:
           cpu: 25m
           memory: 100MB
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test custom securityContext
   set:
@@ -397,7 +397,7 @@ tests:
         readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 1000
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test dnsConfig
   set:
@@ -418,7 +418,7 @@ tests:
         nameservers:
         - "8.8.8.8"
         - "8.8.4.4"
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test dnsPolicy
   set:
@@ -433,7 +433,7 @@ tests:
   - equal:
       path: spec.template.spec.dnsPolicy
       value: ClusterFirst
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test hostNetwork, hostname, subdomain
   set:
@@ -450,15 +450,15 @@ tests:
   - equal:
       path: spec.template.spec.hostNetwork
       value: true
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.hostname
       value: pg-exporter
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.subdomain
       value: exporters.internal
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test imagePullSecrets
   set:
@@ -477,7 +477,7 @@ tests:
       value:
       - name: my-pull-secret
       - name: my-special-secret
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test nodeSelector
   set:
@@ -494,7 +494,7 @@ tests:
       path: spec.template.spec.nodeSelector
       value:
         foo: bar
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test priorityClassName
   set:
@@ -509,7 +509,7 @@ tests:
   - equal:
       path: spec.template.spec.priorityClassName
       value: my-priority
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test restartPolicy
   set:
@@ -524,7 +524,7 @@ tests:
   - equal:
       path: spec.template.spec.restartPolicy
       value: Always
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test terminationGracePeriodSeconds
   set:
@@ -539,7 +539,7 @@ tests:
   - equal:
       path: spec.template.spec.terminationGracePeriodSeconds
       value: 120
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test tolerations
   set:
@@ -562,7 +562,7 @@ tests:
         operator: Equal
         value: postgres
         effect: NoSchedule
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test topologySpreadConstraints
   set:
@@ -587,7 +587,7 @@ tests:
         labelSelector:
           matchLabels:
             app.kubernetes.io/instance: prometheus-postgres-exporter
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
 
 - it: Test additional volumeMounts and volumes
   set:
@@ -612,7 +612,7 @@ tests:
         mountPath: /usr/lib/prometheus-postgres-exporter/data
       - name: config-d
         mountPath: /etc/prometheus-postgres-exporter/config.d
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml
   - equal:
       path: spec.template.spec.volumes
       value:
@@ -627,4 +627,4 @@ tests:
               name: prometheus-postgres-exporter-unittest-exporter-config
           - secret:
               name: prometheus-postgres-exporter-unittest-web-config
-    template: templates/prometheus-postgres-exporter/deployment.yaml
+    template: templates/deployment.yaml

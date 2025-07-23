@@ -6,7 +6,7 @@ release:
   name: prometheus-postgres-exporter-unittest
   namespace: testing
 templates:
-- templates/prometheus-postgres-exporter/serviceHTTP.yaml
+- templates/serviceHTTP.yaml
 tests:
 - it: Skip service when disabled.
   set:

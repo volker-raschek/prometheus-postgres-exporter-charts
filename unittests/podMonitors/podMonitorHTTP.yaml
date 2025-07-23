@@ -6,7 +6,7 @@ release:
   name: prometheus-postgres-exporter-unittest
   namespace: testing
 templates:
-- templates/prometheus-postgres-exporter/podMonitor.yaml
+- templates/podMonitor.yaml
 tests:
 - it: Skip podMonitor when metrics are disabled.
   set:

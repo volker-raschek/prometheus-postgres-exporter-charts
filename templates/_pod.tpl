@@ -16,7 +16,7 @@
 {{- $secret := default (dict "data" (dict)) (lookup "v1" "Secret" .Release.Namespace .Values.config.database.existingSecret.secretName ) }}
 checksum/secret-database: {{ print $secret.spec | sha256sum }}
 {{- else }}
-checksum/secret-database: {{ include (print $.Template.BasePath "/prometheus-postgres-exporter/secretDatabase.yaml") . | sha256sum }}
+checksum/secret-database: {{ include (print $.Template.BasePath "/secretDatabase.yaml") . | sha256sum }}
 {{- end }}
 
 {{/* exporter config */}}
@@ -24,7 +24,7 @@ checksum/secret-database: {{ include (print $.Template.BasePath "/prometheus-pos
 {{- $secret := default (dict "data" (dict)) (lookup "v1" "Secret" .Release.Namespace .Values.config.exporterConfig.existingSecret.secretName ) }}
 checksum/secret-exporter-config: {{ print $secret.spec | sha256sum }}
 {{- else }}
-checksum/secret-exporter-config: {{ include (print $.Template.BasePath "/prometheus-postgres-exporter/secretExporterConfig.yaml") . | sha256sum }}
+checksum/secret-exporter-config: {{ include (print $.Template.BasePath "/secretExporterConfig.yaml") . | sha256sum }}
 {{- end }}
 
 {{/* web config */}}
@@ -32,7 +32,7 @@ checksum/secret-exporter-config: {{ include (print $.Template.BasePath "/prometh
 {{- $secret := default (dict "data" (dict)) (lookup "v1" "Secret" .Release.Namespace .Values.config.webConfig.existingSecret.secretName ) }}
 checksum/secret-web-config: {{ print $secret.spec | sha256sum }}
 {{- else }}
-checksum/secret-web-config: {{ include (print $.Template.BasePath "/prometheus-postgres-exporter/secretWebConfig.yaml") . | sha256sum }}
+checksum/secret-web-config: {{ include (print $.Template.BasePath "/secretWebConfig.yaml") . | sha256sum }}
 {{- end }}
 
 {{- end }}
