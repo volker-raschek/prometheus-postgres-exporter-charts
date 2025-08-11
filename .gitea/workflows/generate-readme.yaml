@@ -23,7 +23,7 @@ jobs:
       run: |
         apk update
         apk add git npm
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4.3.0
     - name: Generate parameter section in README
       run: |
         npm install
