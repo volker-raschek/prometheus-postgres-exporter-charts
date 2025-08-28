@@ -15,7 +15,7 @@ on:
 jobs:
   markdown-link-checker:
     container:
-      image: docker.io/library/node:24.6.0-alpine
+      image: docker.io/library/node:24.7.0-alpine
     runs-on:
     - ubuntu-latest
     steps:
@@ -31,7 +31,7 @@ jobs:
 
   markdown-lint:
     container:
-      image: docker.io/library/node:24.6.0-alpine
+      image: docker.io/library/node:24.7.0-alpine
     runs-on:
     - ubuntu-latest
     steps:
