@@ -156,12 +156,12 @@ replaced:
 
 #### TLS certificate rotation
 
-If Reposilite uses TLS certificates that are mounted as a secret in the container file system like the example
+If the exporter uses TLS certificates that are mounted as a secret in the container file system like the example
 [above](#tls-authentication-and-encryption), the exporter will not automatically apply them when the TLS certificates
 are rotated. Such a rotation can be for example triggered, when the [cert-manager](https://cert-manager.io/) issues new
 TLS certificates before expiring.
 
-Until Reposilite does not support rotating TLS certificate a workaround can be applied. For example stakater's
+Until the exporter does not support rotating TLS certificate a workaround can be applied. For example stakater's
 [reloader](https://github.com/stakater/Reloader) controller can be used to trigger a rolling update. The following
 annotation must be added to instruct the reloader controller to trigger a rolling update, when the mounted configMaps
 and secrets have been changed.
