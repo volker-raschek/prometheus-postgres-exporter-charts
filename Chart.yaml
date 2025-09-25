@@ -9,7 +9,7 @@ name: prometheus-postgres-exporter
 description: Prometheus metric exporter for PostgreSQL
 type: application
 version: "0.1.0"
-appVersion: "0.17.1"
+appVersion: "0.18.0"
 
 # icon: https://annotations.example.com/icon.png
 
