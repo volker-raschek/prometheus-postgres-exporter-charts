@@ -33,7 +33,7 @@ helm chart is tested for deployment scenarios with **ArgoCD**.
 ```bash
 helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
 helm repo update
-CHART_VERSION=0.5.4
+CHART_VERSION=0.5.5
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
@@ -48,7 +48,7 @@ version of the chart must be in sync with the `values.yaml`. Newer *minor* versi
 versions can break something!
 
 ```bash
-CHART_VERSION=0.5.4
+CHART_VERSION=0.5.5
 helm show values --version "${CHART_VERSION}" prometheus-exporters/prometheus-postgres-exporter > values.yaml
 ```
 
@@ -86,7 +86,7 @@ Further information about this topic can be found in one of Kanishk's blog
 > Please take care the a CPU limit < `1000m` can also lead to CPU throttling. Please read the linked documentation carefully.
 
 ```bash
-CHART_VERSION=0.5.4
+CHART_VERSION=0.5.5
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
@@ -108,7 +108,7 @@ certification will be skipped by Prometheus.
 > `tls.key` and `tls.crt` of the secret can be mounted into the container filesystem for TLS authentication / encryption.
 
 ```bash
-CHART_VERSION=0.5.4
+CHART_VERSION=0.5.5
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
@@ -132,7 +132,7 @@ certificate for the metrics exporter - TLS certificate verification can be enabl
 replaced:
 
 ```diff
-  CHART_VERSION=0.5.4
+  CHART_VERSION=0.5.5
   helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
     --set 'config.database.secret.databaseUsername=postgres' \
     --set 'config.database.secret.databasePassword=postgres' \
@@ -191,7 +191,7 @@ the Grafana container file system so that it is subsequently available to the us
 makes this possible.
 
 ```bash
-CHART_VERSION=0.5.4
+CHART_VERSION=0.5.5
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
