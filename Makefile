@@ -4,7 +4,7 @@ CONTAINER_RUNTIME?=$(shell which podman)
 # HELM_IMAGE
 HELM_IMAGE_REGISTRY_HOST?=docker.io
 HELM_IMAGE_REPOSITORY?=volkerraschek/helm
-HELM_IMAGE_VERSION?=3.19.0 # renovate: datasource=docker registryUrl=https://docker.io depName=volkerraschek/helm
+HELM_IMAGE_VERSION?=3.19.0 # renovate: datasource=docker registryUrl=https://docker.io depName=docker.io/volkerraschek/helm
 HELM_IMAGE_FULLY_QUALIFIED=${HELM_IMAGE_REGISTRY_HOST}/${HELM_IMAGE_REPOSITORY}:${HELM_IMAGE_VERSION}
 
 # NODE_IMAGE

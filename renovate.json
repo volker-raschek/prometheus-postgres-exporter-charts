@@ -35,7 +35,14 @@
   ],
   "packageRules": [
     {
-      "groupName": "Update Node.JS",
+      "groupName": "Update docker.io/volkerraschek/helm",
+      "matchDepNames": [
+        "docker.io/volkerraschek/helm",
+        "volkerraschek/helm"
+      ]
+    },
+    {
+      "groupName": "Update docker.io/library/node",
       "matchDepNames": [
         "docker.io/library/node",
         "library/node"
