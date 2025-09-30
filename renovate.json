@@ -9,6 +9,7 @@
   ],
   "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": [
         "^Chart\\.yaml$"
       ],
@@ -21,6 +22,7 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "fileMatch": ["^README\\.md$"],
       "matchStrings": [
         "CHART_VERSION=(?<currentValue>.*)"
@@ -32,6 +34,13 @@
     }
   ],
   "packageRules": [
+    {
+      "groupName": "Update Node.JS",
+      "matchDepNames": [
+        "docker.io/library/node",
+        "library/node"
+      ]
+    },
     {
       "addLabels": [
         "renovate/automerge",
