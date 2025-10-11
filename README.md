@@ -16,7 +16,10 @@ Chapter [configuration and installation](#helm-configuration-and-installation) d
 and use it to deploy the exporter. It also contains further configuration examples.
 
 Furthermore, this helm chart contains unit tests to detect regressions and stabilize the deployment. Additionally, this
-helm chart is tested for deployment scenarios with **ArgoCD**.
+helm chart is tested for deployment scenarios with **ArgoCD**, but please keep in mind, that this chart supports the
+*[Automatically Roll Deployment](https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments)*
+concept of Helm, which can trigger unexpected rolling releases. Further configuration instructions are described in a
+separate [chapter](#argocd).
 
 ## Helm: configuration and installation
 
@@ -291,6 +294,35 @@ networkPolicies:
       ports:
       - port: http
         protocol: TCP
+```
+
+## ArgoCD
+
+### Daily execution of rolling updates
+
+The behavior whereby ArgoCD triggers a rolling update even though nothing appears to have changed often occurs in
+connection with the helm concept `checksum/secret`, `checksum/configmap` or more generally, [Automatically Roll
+Deployments](https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments).
+
+The problem with combining this concept with ArgoCD is that ArgoCD re-renders the Helm chart every time. Even if the
+content of the config map or secret has not changed, there may be minimal differences (e.g., whitespace, chart version,
+Helm render order, different timestamps).
+
+This changes the SHA256 hash, Argo sees a drift and trigger a rolling update of the deployment. Among other things, this
+can lead to unnecessary notifications from ArgoCD.
+
+To avoid this, the annotation with the shasum must be ignored. Below is a diff that adds the `Application` to ignore all
+annotations with the prefix `checksum`.
+
+```diff
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  spec:
++   ignoreDifferences:
++   - group: apps/v1
++     kind: Deployment
++     jqPathExpressions:
++     - '.spec.template.metadata.annotations | with_entries(select(.key | startswith("checksum")))'
 ```
 
 ## Parameters
