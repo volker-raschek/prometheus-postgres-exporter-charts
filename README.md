@@ -103,7 +103,7 @@ helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheu
 
 #### TLS authentication and encryption
 
-The first example shows how to deploy the metric exporter with TLS encryption. The verification of the custom TLS
+The example shows how to deploy the metric exporter with TLS encryption. The verification of the custom TLS
 certification will be skipped by Prometheus.
 
 > [!WARNING]

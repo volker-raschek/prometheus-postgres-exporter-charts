@@ -31,6 +31,16 @@
       "packageNameTemplate": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
       "datasourceTemplate": "git-tags",
       "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "fileMatch": [
+        ".vscode/settings\\.json$"
+      ],
+      "matchStrings": [
+        "https:\\/\\/raw\\.githubusercontent\\.com\\/(?<depName>[^\\s]+?)\\/(?<currentValue>v[0-9.]+?)\\/schema\\/helm-testsuite\\.json"
+      ]
     }
   ],
   "packageRules": [
@@ -39,6 +49,15 @@
       "matchDepNames": [
         "docker.io/volkerraschek/helm",
         "volkerraschek/helm"
+      ]
+    },
+    {
+      "groupName": "Update helm plugin 'unittest'",
+      "matchDepNames": [
+        "helm-unittest/helm-unittest"
+      ],
+      "matchDatasources": [
+        "github-releases"
       ]
     },
     {
