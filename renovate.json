@@ -52,12 +52,17 @@
       ]
     },
     {
+      "automerge": true,
       "groupName": "Update helm plugin 'unittest'",
       "matchDepNames": [
         "helm-unittest/helm-unittest"
       ],
       "matchDatasources": [
         "github-releases"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
       ]
     },
     {
