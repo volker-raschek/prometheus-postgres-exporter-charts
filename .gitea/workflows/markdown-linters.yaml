@@ -16,8 +16,7 @@ jobs:
   markdown-link-checker:
     container:
       image: docker.io/library/node:25.2.1-alpine
-    runs-on:
-    - ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Install tooling
       run: |
@@ -32,8 +31,7 @@ jobs:
   markdown-lint:
     container:
       image: docker.io/library/node:25.2.1-alpine
-    runs-on:
-    - ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Install tooling
       run: |

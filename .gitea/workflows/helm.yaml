@@ -12,31 +12,26 @@ on:
 
 jobs:
   helm-lint:
-    container:
-      image: docker.io/volkerraschek/helm:3.19.2
-    runs-on:
-    - ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-    - name: Install tooling
-      run: |
-        apk update
-        apk add git npm
     - uses: actions/checkout@v5.0.1
+    - uses: azure/setup-helm@v4.3.0
+      with:
+        version: v4.0.0 # renovate: datasource=github-releases depName=helm/helm
     - name: Lint helm files
       run: |
         helm lint --values values.yaml .
 
   helm-unittest:
-    container:
-      image: docker.io/volkerraschek/helm:3.19.2
-    runs-on:
-    - ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-    - name: Install tooling
-      run: |
-        apk update
-        apk add git npm
     - uses: actions/checkout@v5.0.1
-    - name: Unittest
-      run: |
-        helm unittest --strict --file 'unittests/**/*.yaml' ./
+    - uses: azure/setup-helm@v4.3.0
+      with:
+        version: v4.0.0 # renovate: datasource=github-releases depName=helm/helm
+    - env:
+        HELM_UNITTEST_VERSION: v1.0.0 #renovate: datasource=github-releases depName=helm-unittest/helm-unittest
+      name: Install helm-unittest
+      run: helm plugin install --verify=false --version "${HELM_UNITTEST_VERSION}" https://github.com/helm-unittest/helm-unittest
+    - name: Execute helm unittests
+      run: helm unittest --strict --file 'unittests/**/*.yaml' .
