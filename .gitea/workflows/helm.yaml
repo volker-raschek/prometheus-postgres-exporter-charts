@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v5.0.1
     - uses: azure/setup-helm@v4.3.0
       with:
-        version: v4.0.0 # renovate: datasource=github-releases depName=helm/helm
+        version: v4.0.1 # renovate: datasource=github-releases depName=helm/helm
     - name: Lint helm files
       run: |
         helm lint --values values.yaml .
@@ -28,7 +28,7 @@ jobs:
     - uses: actions/checkout@v5.0.1
     - uses: azure/setup-helm@v4.3.0
       with:
-        version: v4.0.0 # renovate: datasource=github-releases depName=helm/helm
+        version: v4.0.1 # renovate: datasource=github-releases depName=helm/helm
     - env:
         HELM_UNITTEST_VERSION: v1.0.0 #renovate: datasource=github-releases depName=helm-unittest/helm-unittest
       name: Install helm-unittest
