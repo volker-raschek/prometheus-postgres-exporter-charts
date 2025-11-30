@@ -166,18 +166,13 @@ TLS certificates before expiring.
 
 Until the exporter does not support rotating TLS certificate a workaround can be applied. For example stakater's
 [reloader](https://github.com/stakater/Reloader) controller can be used to trigger a rolling update. The following
-annotation must be added to instruct the reloader controller to trigger a rolling update, when the mounted configMaps
-and secrets have been changed.
+annotation must be added to instruct the reloader controller to trigger a rolling update, when the mounted secret has
+been changed.
 
-```yaml
-deployment:
-  annotations:
-    reloader.stakater.com/auto: "true"
-```
-
-Instead of triggering a rolling update for configMap and secret resources, this action can also be defined for
-individual items. For example, when the secret named `prometheus-postgresql-exporter-http` is mounted and the reloader
-controller should only listen for changes of this secret:
+> [!IMPORTANT]
+> The Helm chart already adds annotations to trigger a rolling release. Helm describes this approach under
+> [Automatically Roll Deployments](https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments).
+> For this reason, **only external** configMaps or secrets need to be monitored by reloader.
 
 ```yaml
 deployment:
