@@ -22,7 +22,7 @@ jobs:
       run: |
         apk update
         apk add git npm
-    - uses: actions/checkout@v5.0.1
+    - uses: actions/checkout@v6.0.1
     - name: Verify links in markdown files
       run: |
         npm install
@@ -37,7 +37,7 @@ jobs:
       run: |
         apk update
         apk add git
-    - uses: actions/checkout@v5.0.1
+    - uses: actions/checkout@v6.0.1
     - name: Lint markdown files
       run: |
         npm install
