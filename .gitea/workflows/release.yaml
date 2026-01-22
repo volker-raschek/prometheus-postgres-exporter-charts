@@ -16,7 +16,7 @@ jobs:
           apk update
           apk add git npm jq yq
 
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
