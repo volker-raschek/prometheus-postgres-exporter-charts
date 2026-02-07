@@ -1,61 +1,65 @@
 #!/bin/bash
 
-set -e
+set -e -o pipefail
 
-CHART_FILE="Chart.yaml"
-if [ ! -f "${CHART_FILE}" ]; then
-  echo "ERROR: ${CHART_FILE} not found!" 1>&2
+chart_file="Chart.yaml"
+if [ ! -f "${chart_file}" ]; then
+  echo "ERROR: ${chart_file} not found!" 1>&2
   exit 1
 fi
 
-DEFAULT_NEW_TAG="$(git tag --sort=-version:refname | head -n 1)"
-DEFAULT_OLD_TAG="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)"
+default_new_tag="$(git tag --sort=-version:refname | head -n 1)"
+default_old_tag="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)"
 
 if [ -z "${1}" ]; then
-  read -p "Enter start tag [${DEFAULT_OLD_TAG}]: " OLD_TAG
-  if [ -z "${OLD_TAG}" ]; then
-    OLD_TAG="${DEFAULT_OLD_TAG}"
+  echo "Enter start tag [${default_old_tag}]:"
+  read -r old_tag
+  if [ -z "${old_tag}" ]; then
+    old_tag="${default_old_tag}"
   fi
 
-  while [ -z "$(git tag --list "${OLD_TAG}")" ]; do
-    echo "ERROR: Tag '${OLD_TAG}' not found!" 1>&2
-    read -p "Enter start tag [${DEFAULT_OLD_TAG}]: " OLD_TAG
-    if [ -z "${OLD_TAG}" ]; then
-      OLD_TAG="${DEFAULT_OLD_TAG}"
+  while [ -z "$(git tag --list "${old_tag}")" ]; do
+    echo "ERROR: Tag '${old_tag}' not found!" 1>&2
+    echo "Enter start tag [${default_old_tag}]:"
+    read -r old_tag
+    if [ -z "${old_tag}" ]; then
+      old_tag="${default_old_tag}"
     fi
   done
 else
-  OLD_TAG=${1}
-  if [ -z "$(git tag --list "${OLD_TAG}")" ]; then
-    echo "ERROR: Tag '${OLD_TAG}' not found!" 1>&2
+  old_tag=${1}
+  if [ -z "$(git tag --list "${old_tag}")" ]; then
+    echo "ERROR: Tag '${old_tag}' not found!" 1>&2
     exit 1
   fi
 fi
 
 if [ -z "${2}" ]; then
-  read -p "Enter end tag [${DEFAULT_NEW_TAG}]: " NEW_TAG
-  if [ -z "${NEW_TAG}" ]; then
-    NEW_TAG="${DEFAULT_NEW_TAG}"
+  echo "Enter end tag [${default_new_tag}]:"
+  read -r new_tag
+  if [ -z "${new_tag}" ]; then
+    new_tag="${default_new_tag}"
   fi
 
-  while [ -z "$(git tag --list "${NEW_TAG}")" ]; do
-    echo "ERROR: Tag '${NEW_TAG}' not found!" 1>&2
-    read -p "Enter end tag [${DEFAULT_NEW_TAG}]: " NEW_TAG
-    if [ -z "${NEW_TAG}" ]; then
-      NEW_TAG="${DEFAULT_NEW_TAG}"
+  while [ -z "$(git tag --list "${new_tag}")" ]; do
+    echo "ERROR: Tag '${new_tag}' not found!" 1>&2
+    echo "Enter end tag [${default_new_tag}]:"
+    read -r new_tag
+    if [ -z "${new_tag}" ]; then
+      new_tag="${default_new_tag}"
     fi
   done
 else
-  NEW_TAG=${2}
+  new_tag=${2}
 
-  if [ -z "$(git tag --list "${NEW_TAG}")" ]; then
-    echo "ERROR: Tag '${NEW_TAG}' not found!" 1>&2
+  if [ -z "$(git tag --list "${new_tag}")" ]; then
+    echo "ERROR: Tag '${new_tag}' not found!" 1>&2
     exit 1
   fi
 fi
 
-CHANGE_LOG_YAML=$(mktemp)
-echo "[]" > "${CHANGE_LOG_YAML}"
+change_log_yaml=$(mktemp)
+echo "[]" > "${change_log_yaml}"
 
 function map_type_to_kind() {
   case "${1}" in
@@ -80,35 +84,42 @@ function map_type_to_kind() {
   esac
 }
 
-COMMIT_TITLES="$(git log --pretty=format:"%s" "${OLD_TAG}..${NEW_TAG}")"
+commit_titles="$(git log --pretty=format:"%s" "${old_tag}..${new_tag}")"
 
-echo "INFO: Generate change log entries from ${OLD_TAG} until ${NEW_TAG}"
+echo "INFO: Generate change log entries from ${old_tag} until ${new_tag}"
 
 while IFS= read -r line; do
   if [[ "${line}" =~ ^([a-zA-Z]+)(\([^\)]+\))?\:\ (.+)$ ]]; then
-    TYPE="${BASH_REMATCH[1]}"
-    KIND=$(map_type_to_kind "${TYPE}")
+    type="${BASH_REMATCH[1]}"
+    kind=$(map_type_to_kind "${type}")
 
-    if [ "${KIND}" == "skip" ]; then
+    if [ "${kind}" == "skip" ]; then
       continue
     fi
 
-    DESC="${BASH_REMATCH[3]}"
+    desc="${BASH_REMATCH[3]}"
 
-    echo "- ${KIND}: ${DESC}"
+    echo "- ${kind}: ${desc}"
 
-    jq --arg kind "${KIND}" --arg description "${DESC}" '. += [ $ARGS.named ]' < "${CHANGE_LOG_YAML}" > "${CHANGE_LOG_YAML}.new"
-    mv "${CHANGE_LOG_YAML}.new" "${CHANGE_LOG_YAML}"
+    jq --arg kind "${kind}" --arg description "${desc}" '. += [ $ARGS.named ]' < "${change_log_yaml}" > "${change_log_yaml}.new"
+    mv "${change_log_yaml}.new" "${change_log_yaml}"
 
   fi
-done <<< "${COMMIT_TITLES}"
+done <<< "${commit_titles}"
 
-if [ -s "${CHANGE_LOG_YAML}" ]; then
-  yq --inplace --input-format json --output-format yml "${CHANGE_LOG_YAML}"
-  yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${CHANGE_LOG_YAML}\") | sort_keys(.)" "${CHART_FILE}"
+if [ -s "${change_log_yaml}" ]; then
+  yq --inplace --input-format json --output-format yml "${change_log_yaml}"
+  yq --no-colors --inplace ".annotations.\"artifacthub.io/changes\" |= loadstr(\"${change_log_yaml}\") | sort_keys(.)" "${chart_file}"
 else
-  echo "ERROR: Changelog file is empty: ${CHANGE_LOG_YAML}" 1>&2
+  echo "ERROR: Changelog file is empty: ${change_log_yaml}" 1>&2
   exit 1
 fi
 
-rm "${CHANGE_LOG_YAML}"
+rm "${change_log_yaml}"
+
+regexp=".*-alpha-[0-9]+(\.[0-9]+){,2}$"
+if [[ "${new_tag}" =~ $regexp ]]; then
+  yq --inplace '.annotations."artifacthub.io/prerelease" = "true"' "${chart_file}"
+else
+  yq --inplace '.annotations."artifacthub.io/prerelease" = "false"' "${chart_file}"
+fi
