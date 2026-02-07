@@ -1,24 +1,25 @@
 annotations:
+  artifacthub.io/license: MIT
   artifacthub.io/links: |
     - name: Prometheus PostgreSQL exporter (binary)
       url: https://github.com/prometheus-community/postgres_exporter
     - name: support
       url: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter/issues
+  artifacthub.io/operator: "false"
+  artifacthub.io/prerelease: "false"
 apiVersion: v2
-name: prometheus-postgres-exporter
+appVersion: "0.18.1"
 description: Prometheus metric exporter for PostgreSQL
+home: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
+# icon: https://annotations.example.com/icon.png
+keywords:
+  - prometheus
+  - prometheus-exporter
+  - postgres-postgres-exporter
+  - postgres-exporter
+name: prometheus-postgres-exporter
+sources:
+  - https://github.com/prometheus-community/postgres_exporter
+  - https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
 type: application
 version: "0.1.0"
-appVersion: "0.18.1"
-
-# icon: https://annotations.example.com/icon.png
-
-keywords:
-- prometheus
-- prometheus-exporter
-- postgres-postgres-exporter
-- postgres-exporter
-
-sources:
-- https://github.com/prometheus-community/postgres_exporter
-- https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
