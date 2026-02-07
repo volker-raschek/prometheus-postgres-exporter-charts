@@ -45,13 +45,6 @@
   ],
   "packageRules": [
     {
-      "groupName": "Update docker.io/volkerraschek/helm",
-      "matchDepNames": [
-        "docker.io/volkerraschek/helm",
-        "volkerraschek/helm"
-      ]
-    },
-    {
       "automerge": true,
       "groupName": "Update helm plugin 'unittest'",
       "matchDepNames": [
