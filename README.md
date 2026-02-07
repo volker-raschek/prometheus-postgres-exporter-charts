@@ -23,7 +23,8 @@ separate [chapter](#argocd).
 
 ## Helm: configuration and installation
 
-1. A helm chart repository must be configured, to pull the helm charts from.
+1. A helm chart repository must be configured, to pull the helm charts from. The helm charts can either be pulled from
+   the classic helm chart repository or OCI registry.
 2. All available [parameters](#parameters) are documented in detail below. The parameters can be defined via the helm
    `--set` flag or directly as part of a `values.yaml` file. The following example defines the `prometheus-exporter`
    repository and use the `--set` flag for a basic deployment.
@@ -38,6 +39,18 @@ helm repo add prometheus-postgres-exporters https://git.cryptic.systems/promethe
 helm repo update
 CHART_VERSION=0.5.5
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
+  --set 'config.database.secret.databaseUsername=postgres' \
+  --set 'config.database.secret.databasePassword=postgres' \
+  --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
+  --set 'prometheus.metrics.enabled=true' \
+  --set 'prometheus.metrics.serviceMonitor.enabled=true'
+```
+
+Alternatively, the deployment of the helm charts can also be done via an OCI registry:
+
+```bash
+CHART_VERSION=0.5.5
+helm install "oci://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter:${CHART_VERSION}" \
   --set 'config.database.secret.databaseUsername=postgres' \
   --set 'config.database.secret.databasePassword=postgres' \
   --set 'config.database.secret.databaseConnectionUrl="postgres.example.local:5432/postgres?ssl=disable"' \
