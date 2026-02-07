@@ -8,7 +8,7 @@ annotations:
   artifacthub.io/operator: "false"
   artifacthub.io/prerelease: "false"
 apiVersion: v2
-appVersion: "0.18.1"
+appVersion: "0.19.0"
 description: Prometheus metric exporter for PostgreSQL
 home: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
 # icon: https://annotations.example.com/icon.png
