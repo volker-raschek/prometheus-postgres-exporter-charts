@@ -1,5 +1,10 @@
 name: Release
 
+env:
+  GPG_PRIVATE_KEY_FILE: ${{ runner.temp }}/private.key
+  GPG_PRIVATE_KEY_FINGERPRINT: ${{ vars.GPG_PRIVATE_KEY_FINGERPRINT }}
+  GPG_PRIVATE_KEY_PASSPHRASE_FILE: ${{ runner.temp }}/passphrase.txt
+
 on:
   push:
     tags:
@@ -28,6 +33,38 @@ jobs:
           helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git --version "${HELM_UNITTEST_VERSION}" 1> /dev/null
           helm plugin list
 
+      - name: GPG configuration
+        env:
+          GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          # Configure GPG and GPG Agent
+          mkdir --parents "${HOME}/.gnupg"
+          chmod 0700 "${HOME}/.gnupg"
+
+          cat > "${HOME}/.gnupg/gpg.conf" <<EOF
+          use-agent
+          pinentry-mode loopback
+          EOF
+
+          cat > "${HOME}/.gnupg/gpg-agent.conf" <<EOF
+          allow-loopback-pinentry
+          max-cache-ttl 86400
+          default-cache-ttl 86400
+          EOF
+
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
+
+          # Import GPG private key
+          cat 1> "${GPG_PRIVATE_KEY_PASSPHRASE_FILE}" <<< "${GPG_PRIVATE_KEY_PASSPHRASE}"
+          cat 1> "${GPG_PRIVATE_KEY_FILE}" <<< "${GPG_PRIVATE_KEY}"
+          gpg --batch --yes --passphrase-fd 0 --import "${GPG_PRIVATE_KEY_FILE}" <<< "${GPG_PRIVATE_KEY_PASSPHRASE}"
+
+          # Export GPG keyring
+          gpg --batch --yes --export "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/pubring.gpg"
+          gpg --batch --yes --passphrase-fd 0 --export-secret-keys "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/secring.gpg" <<< "${GPG_PRIVATE_KEY_PASSPHRASE}"
+
       - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
@@ -40,10 +77,10 @@ jobs:
 
       - name: Extract meta information
         run: |
-          echo "GITEA_SERVER_HOSTNAME=$(echo "${GITHUB_SERVER_URL}" | cut -d '/' -f 3)" >> $GITHUB_ENV
+          echo "GITEA_SERVER_HOSTNAME=$(echo "${GITHUB_SERVER_URL}" | cut --delimiter '/' --fields 3)" >> $GITHUB_ENV
           echo "PACKAGE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2 | sed --regexp-extended 's/-charts?//g')" >> $GITHUB_ENV
-          echo "REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 1)" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY} | cut --delimiter '/' --fields 2 | sed --regexp-extended 's/-charts?//g')" >> $GITHUB_ENV
+          echo "REPOSITORY_OWNER=$(echo ${GITHUB_REPOSITORY} | cut --delimiter '/' --fields 1)" >> $GITHUB_ENV
 
       - name: Update Helm Chart version in README.md
         run: sed -i -E "s/^CHART_VERSION=.*/CHART_VERSION=${PACKAGE_VERSION}/g" README.md
@@ -51,7 +88,12 @@ jobs:
       - name: Package chart
         run: |
           helm dependency build
-          helm package --version "${PACKAGE_VERSION}" ./
+          helm package \
+            --sign \
+            --key "$(gpg --with-colons --list-keys "${GPG_PRIVATE_KEY_FINGERPRINT}" | grep uid | cut --delimiter ':' --fields 10)" \
+            --keyring "${HOME}/.gnupg/secring.gpg" \
+            --passphrase-file "${GPG_PRIVATE_KEY_PASSPHRASE_FILE}" \
+            --version "${PACKAGE_VERSION}" ./
 
       - uses: docker/login-action@v3.7.0
         with:
@@ -71,13 +113,15 @@ jobs:
         env:
           GITEA_REGISTRY_TOKEN: ${{ secrets.GIT_CRYPTIC_SYSTEMS_PACKAGE_REGISTRY_TOKEN }}
         run: |
-          curl \
-            --fail \
-            --show-error \
-            --request POST \
-            --user "${REPOSITORY_OWNER}:${GITEA_REGISTRY_TOKEN}" \
-            --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
-              https://git.cryptic.systems/api/packages/${REPOSITORY_OWNER}/helm/api/charts
+          for package in "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz"*; do
+            curl \
+              --fail \
+              --show-error \
+              --request POST \
+              --user "${REPOSITORY_OWNER}:${GITEA_REGISTRY_TOKEN}" \
+              --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
+                https://git.cryptic.systems/api/packages/${REPOSITORY_OWNER}/helm/api/charts
+          done
 
       - name: Upload Chart to Chartmuseum (Helm)
         env:
@@ -93,3 +137,13 @@ jobs:
             --user "${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD}" \
             --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
               https://${CHARTMUSEUM_HOSTNAME}/api/${CHARTMUSEUM_REPOSITORY}/charts
+
+          if [ -f "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" ]; then
+            curl \
+              --fail \
+              --show-error \
+              --request POST \
+              --user "${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD}" \
+              --upload-file ${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov \
+                https://${CHARTMUSEUM_HOSTNAME}/api/${CHARTMUSEUM_REPOSITORY}/prov
+          fi
