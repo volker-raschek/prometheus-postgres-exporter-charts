@@ -113,15 +113,23 @@ jobs:
         env:
           GITEA_REGISTRY_TOKEN: ${{ secrets.GIT_CRYPTIC_SYSTEMS_PACKAGE_REGISTRY_TOKEN }}
         run: |
-          for package in "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz"*; do
+          curl \
+            --fail \
+            --show-error \
+            --request POST \
+            --user "${REPOSITORY_OWNER}:${GITEA_REGISTRY_TOKEN}" \
+            --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
+              https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/charts
+
+          if [ -f "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" ]; then
             curl \
               --fail \
               --show-error \
               --request POST \
-              --user "${REPOSITORY_OWNER}:${GITEA_REGISTRY_TOKEN}" \
-              --upload-file "${package}" \
-                https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/charts
-          done
+              --user "${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD}" \
+              --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" \
+                https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/prov
+          fi
 
       - name: Upload Chart to Chartmuseum (Helm)
         env:
