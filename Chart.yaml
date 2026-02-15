@@ -7,6 +7,9 @@ annotations:
       url: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter/issues
   artifacthub.io/operator: "false"
   artifacthub.io/prerelease: "false"
+  artifacthub.io/signKey: |
+    fingerprint: 3B0CE9853CAD76076260025383D342258456906E
+    url: https://keys.openpgp.org/vks/v1/by-fingerprint/3B0CE9853CAD76076260025383D342258456906E
 apiVersion: v2
 appVersion: "0.19.0"
 description: Prometheus metric exporter for PostgreSQL
