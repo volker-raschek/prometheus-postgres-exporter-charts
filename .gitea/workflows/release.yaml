@@ -119,8 +119,8 @@ jobs:
               --show-error \
               --request POST \
               --user "${REPOSITORY_OWNER}:${GITEA_REGISTRY_TOKEN}" \
-              --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
-                https://git.cryptic.systems/api/packages/${REPOSITORY_OWNER}/helm/api/charts
+              --upload-file "${package}" \
+                https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/charts
           done
 
       - name: Upload Chart to Chartmuseum (Helm)
