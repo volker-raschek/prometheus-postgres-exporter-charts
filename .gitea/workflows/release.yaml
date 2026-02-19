@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: sigstore/cosign-installer@v4.0.0
         with:
-          cosign-release: "v2.6.2" # renovate: datasource=github-tags depName=sigstore/cosign
+          cosign-release: "v3.0.5" # renovate: datasource=github-tags depName=sigstore/cosign
 
       - uses: azure/setup-helm@v4.3.1
         with:
