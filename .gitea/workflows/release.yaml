@@ -95,7 +95,7 @@ jobs:
             --passphrase-file "${GPG_PRIVATE_KEY_PASSPHRASE_FILE}" \
             --version "${PACKAGE_VERSION}" ./
 
-      - uses: docker/login-action@v3.7.0
+      - uses: docker/login-action@v4.0.0
         with:
           registry: ${{ github.server_url }}
           username: ${{ github.repository_owner }}
