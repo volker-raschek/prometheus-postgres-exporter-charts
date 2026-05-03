@@ -14,7 +14,7 @@ jobs:
   publish-chart:
     runs-on: ubuntu-latest
     steps:
-      - uses: volker-raschek/cosign-installer@v4.1.2-rc3
+      - uses: volker-raschek/cosign-installer@v4.1.2-rc4
         with:
           cosign-release: "v3.0.6" # renovate: datasource=github-tags depName=sigstore/cosign
 
