@@ -127,15 +127,15 @@ jobs:
           #
           #   https://github.com/helm/helm/issues/31866
           #
-          if [ -f "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" ]; then
-            curl \
-              --fail \
-              --show-error \
-              --request POST \
-              --user "${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD}" \
-              --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" \
-                https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/prov
-          fi
+          # if [ -f "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" ]; then
+          #   curl \
+          #     --fail \
+          #     --show-error \
+          #     --request POST \
+          #     --user "${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD}" \
+          #     --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" \
+          #       https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/prov
+          # fi
 
       - name: Upload Chart to Chartmuseum (Helm)
         env:
