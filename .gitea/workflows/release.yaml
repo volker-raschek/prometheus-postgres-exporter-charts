@@ -121,6 +121,12 @@ jobs:
             --upload-file "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz" \
               https://${GITEA_SERVER_HOSTNAME}/api/packages/${REPOSITORY_OWNER}/helm/api/charts
 
+          # NOTE:
+          # Gitea does currently not support uploading Helm chart provenance files, so we skip this step for now. Once
+          # Gitea supports this, we can simply uncomment the following lines to upload the provenance file as well.
+          #
+          #   https://github.com/helm/helm/issues/31866
+          #
           if [ -f "${REPOSITORY_NAME}-${PACKAGE_VERSION}.tgz.prov" ]; then
             curl \
               --fail \
