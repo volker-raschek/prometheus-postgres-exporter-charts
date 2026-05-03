@@ -35,7 +35,7 @@ separate [chapter](#argocd).
 > time is not possible.
 
 ```bash
-helm repo add prometheus-exporters https://git.cryptic.systems/api/packages/volker.raschek/helm
+helm repo add prometheus-exporters https://charts.cryptic.systems/prometheus-exporters
 helm repo update
 CHART_VERSION=0.5.12
 helm install --version "${CHART_VERSION}" prometheus-postgres-exporter prometheus-exporters/prometheus-postgres-exporter \
