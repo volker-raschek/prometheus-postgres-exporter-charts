@@ -1,6 +1,6 @@
 # Prometheus PostgreSQL exporter
 
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/prometheus-postgres-exporter)](https://artifacthub.io/packages/search?repo=prometheus-postgres-exporter)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/prometheus-exporters)](https://artifacthub.io/packages/search?repo=prometheus-exporters)
 
 > [!NOTE]
 > This is not the official *community* helm chart of the Prometheus metric exporter for PostgreSQL databases. If you are
