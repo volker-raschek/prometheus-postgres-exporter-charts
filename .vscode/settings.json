@@ -3,7 +3,7 @@
     ".gitea/workflows/*.yaml": "github-actions-workflow"
   },
   "yaml.schemas": {
-    "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v1.0.3/schema/helm-testsuite.json": [
+    "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v1.1.0/schema/helm-testsuite.json": [
       "/unittests/**/*.yaml"
     ]
   },
