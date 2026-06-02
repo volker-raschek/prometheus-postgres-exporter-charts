@@ -10,7 +10,7 @@ jobs:
     name: "Upload artifacthub-repo.yml to OCI registry"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6.0.2
+    - uses: actions/checkout@v6.0.3
     - uses: docker/login-action@v4.2.0
       with:
         registry: ${{ github.server_url }}

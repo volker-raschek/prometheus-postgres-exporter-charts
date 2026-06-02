@@ -65,7 +65,7 @@ jobs:
           gpg --batch --yes --export "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/pubring.gpg"
           gpg --batch --yes --passphrase-fd 0 --export-secret-keys "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/secring.gpg" <<< "${GPG_PRIVATE_KEY_PASSPHRASE}"
 
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
