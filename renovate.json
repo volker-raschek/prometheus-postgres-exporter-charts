@@ -4,6 +4,7 @@
     "local>volker.raschek/renovate-config:default#master",
     "local>volker.raschek/renovate-config:container#master",
     "local>volker.raschek/renovate-config:actions#master",
+    "local>volker.raschek/renovate-config:helm#master",
     "local>volker.raschek/renovate-config:npm#master",
     "local>volker.raschek/renovate-config:regexp#master"
   ],
@@ -31,33 +32,9 @@
       "packageNameTemplate": "https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter",
       "datasourceTemplate": "git-tags",
       "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "datasourceTemplate": "github-releases",
-      "fileMatch": [
-        ".vscode/settings\\.json$"
-      ],
-      "matchStrings": [
-        "https:\\/\\/raw\\.githubusercontent\\.com\\/(?<depName>[^\\s]+?)\\/(?<currentValue>v[0-9.]+?)\\/schema\\/helm-testsuite\\.json"
-      ]
     }
   ],
   "packageRules": [
-    {
-      "automerge": true,
-      "groupName": "Update helm plugin 'unittest'",
-      "matchDepNames": [
-        "helm-unittest/helm-unittest"
-      ],
-      "matchDatasources": [
-        "github-releases"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ]
-    },
     {
       "groupName": "Update docker.io/library/node",
       "matchDepNames": [
