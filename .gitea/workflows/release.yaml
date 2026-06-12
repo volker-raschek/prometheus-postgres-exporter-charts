@@ -25,7 +25,7 @@ jobs:
       - name: Install helm plugins
         env:
           HELM_SIGSTORE_VERSION: "0.3.0" # renovate: datasource=github-tags depName=sigstore/helm-sigstore extractVersion='^v(?<version>\d+\.\d+\.\d+)$'
-          HELM_SCHEMA_VALUES_VERSION: "2.4.0" # renovate: datasource=github-tags depName=losisin/helm-values-schema-json extractVersion='^v(?<version>\d+\.\d+\.\d+)$'
+          HELM_SCHEMA_VALUES_VERSION: "2.5.0" # renovate: datasource=github-tags depName=losisin/helm-values-schema-json extractVersion='^v(?<version>\d+\.\d+\.\d+)$'
           HELM_UNITTEST_VERSION: "1.1.1" # renovate: datasource=github-tags depName=helm-unittest/helm-unittest extractVersion='^v(?<version>\d+\.\d+\.\d+)$'
         run: |
           helm plugin install --verify=false https://github.com/sigstore/helm-sigstore.git --version "${HELM_SIGSTORE_VERSION}" 1> /dev/null
