@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6.0.3
-    - uses: azure/setup-helm@v5.0.0
+    - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
       with:
         version: "v4.2.2" # renovate: datasource=github-tags depName=helm/helm
     - name: Lint helm files
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6.0.3
-    - uses: azure/setup-helm@v5.0.0
+    - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
       with:
         version: "v4.2.2" # renovate: datasource=github-tags depName=helm/helm
     - env:
