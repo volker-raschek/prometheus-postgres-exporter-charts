@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: volker-raschek/cosign-installer@v4.1.3-rc3
         with:
-          cosign-release: "v3.1.1" # renovate: datasource=github-tags depName=sigstore/cosign
+          cosign-release: "v3.1.2" # renovate: datasource=github-tags depName=sigstore/cosign
 
       - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
         with:
