@@ -14,7 +14,7 @@ jobs:
   publish-chart:
     runs-on: ubuntu-latest
     steps:
-      - uses: volker-raschek/cosign-installer@v4.1.3-rc3
+      - uses: volker-raschek/cosign-installer@7643eed6736a199595ed2a31e9979ec353a88adb # v4.1.3-rc3
         with:
           cosign-release: "v3.1.2" # renovate: datasource=github-tags depName=sigstore/cosign
 
@@ -65,7 +65,7 @@ jobs:
           gpg --batch --yes --export "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/pubring.gpg"
           gpg --batch --yes --passphrase-fd 0 --export-secret-keys "${GPG_PRIVATE_KEY_FINGERPRINT}" 1> "${HOME}/.gnupg/secring.gpg" <<< "${GPG_PRIVATE_KEY_PASSPHRASE}"
 
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
 
