@@ -69,11 +69,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add Artifacthub.io annotations
-        run: |
-          NEW_TAG="$(git tag --sort=-version:refname | head -n 1)"
-          OLD_TAG="$(git tag --sort=-version:refname | head -n 2 | tail -n 1)"
-          .gitea/scripts/add-annotations.sh "${OLD_TAG}" "${NEW_TAG}"
+      - uses: volker-raschek/ah-annotations@v0.1.2
 
       - name: Extract meta information
         run: |
