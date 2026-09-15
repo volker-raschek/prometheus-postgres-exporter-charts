@@ -69,7 +69,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: volker-raschek/ah-annotations@7959e52208294befed11210aef0c8e9299cc6a23 # v0.2.2
+      - uses: volker-raschek/ah-annotations@db3cdb4828f664cd195bf4fd660aaa6f4959234c # v0.2.3
 
       - name: Extract meta information
         run: |
