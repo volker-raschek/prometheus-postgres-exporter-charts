@@ -2,6 +2,8 @@ charts
 cosign*
 node_modules
 target
-values2.yml
-values2.yaml
+!values.yaml
+!values.yml
+values*.yaml
+values*.yml
 *.tgz

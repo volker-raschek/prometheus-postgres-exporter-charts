@@ -1,3 +1,4 @@
+---
 annotations:
   artifacthub.io/license: MIT
   artifacthub.io/links: |
@@ -5,13 +6,13 @@ annotations:
       url: https://github.com/prometheus-community/postgres_exporter
     - name: support
       url: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter/issues
-  artifacthub.io/operator: "false"
-  artifacthub.io/prerelease: "false"
+  artifacthub.io/operator: 'false'
+  artifacthub.io/prerelease: 'false'
   artifacthub.io/signKey: |
     fingerprint: 3B0CE9853CAD76076260025383D342258456906E
     url: https://keys.openpgp.org/vks/v1/by-fingerprint/3B0CE9853CAD76076260025383D342258456906E
 apiVersion: v2
-appVersion: "0.20.1"
+appVersion: 0.20.1
 description: Prometheus metric exporter for PostgreSQL
 home: https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
 # icon: https://annotations.example.com/icon.png
@@ -25,4 +26,4 @@ sources:
   - https://github.com/prometheus-community/postgres_exporter
   - https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
 type: application
-version: "0.1.0"
+version: 0.1.0
