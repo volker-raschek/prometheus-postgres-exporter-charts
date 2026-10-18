@@ -74,5 +74,16 @@
         "patch"
       ]
     }
-  ]
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "install-tool node",
+      "make readme"
+    ],
+    "fileFilters": [
+      "README.md",
+      "values.yaml"
+    ],
+    "executionMode": "update"
+  }
 }

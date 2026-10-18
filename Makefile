@@ -1,12 +1,6 @@
 # CONTAINER_RUNTIME
 CONTAINER_RUNTIME?=$(shell which podman)
 
-# HELM_IMAGE
-HELM_IMAGE_REGISTRY_HOST?=docker.io
-HELM_IMAGE_REPOSITORY?=volkerraschek/helm
-HELM_IMAGE_VERSION?=3.19.2 # renovate: datasource=docker registryUrl=https://docker.io depName=volkerraschek/helm
-HELM_IMAGE_FULLY_QUALIFIED=${HELM_IMAGE_REGISTRY_HOST}/${HELM_IMAGE_REPOSITORY}:${HELM_IMAGE_VERSION}
-
 # NODE_IMAGE
 NODE_IMAGE_REGISTRY_HOST?=docker.io
 NODE_IMAGE_REPOSITORY?=library/node
@@ -17,6 +11,25 @@ NODE_IMAGE_FULLY_QUALIFIED=${NODE_IMAGE_REGISTRY_HOST}/${NODE_IMAGE_REPOSITORY}:
 # ==============================================================================
 missing-dot:
 	grep --perl-regexp '## @(param|skip).*[^.]$$' values.yaml
+
+# README
+# ==============================================================================
+readme: readme/link readme/lint readme/parameters
+
+readme/link:
+	npm install && npm run readme:link
+
+readme/lint:
+	npm install && npm run readme:lint
+
+readme/parameters:
+	npm install && npm run readme:parameters
+
+# HELM UNITTESTS
+# ==============================================================================
+PHONY+=helm/unittest
+helm/unittest:
+	helm unittest --strict --file 'unittests/**/*.yaml' ./
 
 # CONTAINER RUN - README
 # ==============================================================================
@@ -46,32 +59,6 @@ container-run/readme/parameters:
 		--workdir $(shell pwd) \
 			${NODE_IMAGE_FULLY_QUALIFIED} \
 				npm install && npm run readme:parameters
-
-# CONTAINER RUN - HELM UNITTESTS
-# ==============================================================================
-PHONY+=container-run/helm-unittests
-container-run/helm-unittests:
-	${CONTAINER_RUNTIME} run \
-		--env HELM_REPO_PASSWORD=${CHART_SERVER_PASSWORD} \
-		--env HELM_REPO_USERNAME=${CHART_SERVER_USERNAME} \
-		--rm \
-		--volume $(shell pwd):$(shell pwd) \
-		--workdir $(shell pwd) \
-			${HELM_IMAGE_FULLY_QUALIFIED} \
-				unittest --strict --file 'unittests/**/*.yaml' ./
-
-# CONTAINER RUN - HELM UPDATE DEPENDENCIES
-# ==============================================================================
-PHONY+=container-run/helm-update-dependencies
-container-run/helm-update-dependencies:
-	${CONTAINER_RUNTIME} run \
-		--env HELM_REPO_PASSWORD=${CHART_SERVER_PASSWORD} \
-		--env HELM_REPO_USERNAME=${CHART_SERVER_USERNAME} \
-		--rm \
-		--volume $(shell pwd):$(shell pwd) \
-		--workdir $(shell pwd) \
-			${HELM_IMAGE_FULLY_QUALIFIED} \
-				dependency update
 
 # CONTAINER RUN - MARKDOWN-LINT
 # ==============================================================================
