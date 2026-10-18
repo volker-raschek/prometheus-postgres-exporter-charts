@@ -23,7 +23,8 @@ keywords:
   - postgres-exporter
 name: prometheus-postgres-exporter
 sources:
-  - https://github.com/prometheus-community/postgres_exporter
   - https://git.cryptic.systems/volker.raschek/prometheus-postgres-exporter
+  - https://github.com/prometheus-community/postgres_exporter
+  - https://hub.docker.com/r/prometheuscommunity/postgres-exporter
 type: application
 version: 0.1.0
