@@ -15,7 +15,7 @@
         "^Chart\\.yaml$"
       ],
       "matchStrings": [
-        "^appVersion: \"?(?<currentValue>[^\"\\s]+)\"?\\s*$"
+        "appVersion: \"?(?<currentValue>[^\"\\s]+)\"?\\s*"
       ],
       "datasourceTemplate": "docker",
       "depNameTemplate": "prometheuscommunity/postgres-exporter",
